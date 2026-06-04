@@ -1,5 +1,6 @@
 import { Typewriter } from "./components/Typewriter";
 import { HorizonGrid } from "./components/HorizonGrid";
+import { TrackedLink } from "./components/TrackedLink";
 
 export default function Home() {
   return (
@@ -53,10 +54,9 @@ export default function Home() {
         >
           Projects
         </h2>
-        <a
+        <TrackedLink
           href="https://pokememory.com"
-          target="_blank"
-          rel="noopener noreferrer"
+          event="pokememory_click"
           className="project-card block p-8 rounded-lg"
         >
           <div className="flex items-center justify-between mb-4">
@@ -81,7 +81,7 @@ export default function Home() {
             A spaced repetition app for Pokémon fans. Learn and remember Pokémon
             details using science-backed memory techniques.
           </p>
-        </a>
+        </TrackedLink>
       </section>
 
       <hr className="divider mx-6 md:mx-auto md:max-w-3xl" />
