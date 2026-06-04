@@ -1,5 +1,5 @@
 import { Typewriter } from "./components/Typewriter";
-import { LightCycle } from "./components/LightCycle";
+import { HorizonGrid } from "./components/HorizonGrid";
 
 export default function Home() {
   return (
@@ -19,8 +19,7 @@ export default function Home() {
           <Typewriter text="Software for the fun of it." />
         </div>
         <div className="horizon-grid-container">
-          <div className="horizon-grid-lines" />
-          <LightCycle />
+          <HorizonGrid />
         </div>
       </section>
 
