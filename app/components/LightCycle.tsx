@@ -2,33 +2,35 @@
 import { useEffect, useRef } from 'react';
 
 const CYAN = '#00e5ff';
-const TRAIL_GLOW = 'rgba(0, 229, 255, 0.6)';
+const TRAIL = 'rgba(0, 229, 255, 0.5)';
+const GRID = 40;
 
-type Waypoint = { x: number; y: number };
+type Pt = { x: number; y: number };
 
-function buildPath(w: number, h: number): Waypoint[] {
-  // Spawn from left edge, move right, turn down or up, exit right or bottom
-  const midY = h * 0.35 + Math.random() * h * 0.3;
-  const turnX = w * 0.2 + Math.random() * w * 0.5;
-  const goDown = Math.random() > 0.5;
+function snap(v: number) {
+  return Math.round(v / GRID) * GRID;
+}
 
-  return [
-    { x: -20, y: midY },
-    { x: turnX, y: midY },
-    { x: turnX, y: goDown ? h + 20 : -20 },
-  ];
+function buildPath(w: number, h: number): Pt[] {
+  const fromRight = Math.random() > 0.5;
+  // Enter from left or right at a snapped row in the lower half
+  const entryY = snap(h * 0.45 + Math.random() * h * 0.4);
+  // Turn somewhere across the canvas, snapped to a column
+  const turnX = snap(w * 0.2 + Math.random() * w * 0.6);
+
+  return fromRight
+    ? [{ x: w + 20, y: entryY }, { x: turnX, y: entryY }, { x: turnX, y: -20 }]
+    : [{ x: -20, y: entryY }, { x: turnX, y: entryY }, { x: turnX, y: -20 }];
 }
 
 export function LightCycle() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    // Don't run on touch-only devices
     if (window.matchMedia('(hover: none)').matches) return;
 
     const canvas = canvasRef.current;
     if (!canvas) return;
-
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
@@ -45,14 +47,11 @@ export function LightCycle() {
 
     function runCycle() {
       if (!canvas || !ctx) return;
-      const w = canvas.width;
-      const h = canvas.height;
-      const waypoints = buildPath(w, h);
-
+      const waypoints = buildPath(canvas.width, canvas.height);
       let wpIndex = 1;
-      const trail: Waypoint[] = [{ ...waypoints[0] }];
-      const speed = 3;
-      let pos = { ...waypoints[0] };
+      const trail: Pt[] = [{ ...waypoints[0] }];
+      const speed = 2.5;
+      const pos = { ...waypoints[0] };
 
       function step() {
         if (!canvas || !ctx) return;
@@ -62,7 +61,8 @@ export function LightCycle() {
         const dist = Math.sqrt(dx * dx + dy * dy);
 
         if (dist <= speed) {
-          pos = { ...target };
+          pos.x = target.x;
+          pos.y = target.y;
           trail.push({ ...pos });
           wpIndex++;
           if (wpIndex >= waypoints.length) {
@@ -76,45 +76,40 @@ export function LightCycle() {
           trail.push({ ...pos });
         }
 
-        // Keep trail length bounded
-        if (trail.length > 400) trail.shift();
+        if (trail.length > 600) trail.shift();
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Draw trail
         if (trail.length > 1) {
+          // Glow trail
           ctx.beginPath();
           ctx.moveTo(trail[0].x, trail[0].y);
-          for (let i = 1; i < trail.length; i++) {
-            ctx.lineTo(trail[i].x, trail[i].y);
-          }
-          ctx.strokeStyle = TRAIL_GLOW;
-          ctx.lineWidth = 2;
+          for (let i = 1; i < trail.length; i++) ctx.lineTo(trail[i].x, trail[i].y);
+          ctx.strokeStyle = TRAIL;
+          ctx.lineWidth = 3;
           ctx.shadowColor = CYAN;
-          ctx.shadowBlur = 10;
+          ctx.shadowBlur = 12;
           ctx.stroke();
 
-          // Bright core line
+          // Bright core
           ctx.beginPath();
           ctx.moveTo(trail[0].x, trail[0].y);
-          for (let i = 1; i < trail.length; i++) {
-            ctx.lineTo(trail[i].x, trail[i].y);
-          }
+          for (let i = 1; i < trail.length; i++) ctx.lineTo(trail[i].x, trail[i].y);
           ctx.strokeStyle = CYAN;
           ctx.lineWidth = 1.5;
-          ctx.shadowBlur = 4;
+          ctx.shadowBlur = 5;
           ctx.stroke();
         }
 
-        // Draw head
+        // Head
         ctx.shadowColor = CYAN;
-        ctx.shadowBlur = 18;
+        ctx.shadowBlur = 20;
         ctx.fillStyle = '#ffffff';
         ctx.beginPath();
-        ctx.arc(pos.x, pos.y, 3.5, 0, Math.PI * 2);
+        ctx.arc(pos.x, pos.y, 3, 0, Math.PI * 2);
         ctx.fill();
-
         ctx.shadowBlur = 0;
+
         animId = requestAnimationFrame(step);
       }
 
@@ -122,12 +117,9 @@ export function LightCycle() {
     }
 
     function scheduleNext() {
-      // 8-14 second gap between appearances
-      const delay = 8000 + Math.random() * 6000;
-      scheduleId = setTimeout(runCycle, delay);
+      scheduleId = setTimeout(runCycle, 8000 + Math.random() * 6000);
     }
 
-    // First run after a short initial delay
     scheduleId = setTimeout(runCycle, 3000);
 
     return () => {
@@ -141,7 +133,13 @@ export function LightCycle() {
     <canvas
       ref={canvasRef}
       className="pointer-events-none absolute inset-0 w-full h-full"
-      style={{ zIndex: 5 }}
+      style={{
+        zIndex: 6,
+        transform: 'perspective(300px) rotateX(65deg)',
+        transformOrigin: 'top center',
+        maskImage: 'linear-gradient(to bottom, transparent 0%, black 50%)',
+        WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 50%)',
+      }}
     />
   );
 }

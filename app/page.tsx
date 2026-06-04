@@ -18,9 +18,9 @@ export default function Home() {
         <div className="relative z-10">
           <Typewriter text="Software for the fun of it." />
         </div>
-        <LightCycle />
         <div className="horizon-grid-container">
           <div className="horizon-grid-lines" />
+          <LightCycle />
         </div>
       </section>
 
