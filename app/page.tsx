@@ -1,23 +1,27 @@
+import { Typewriter } from "./components/Typewriter";
+import { LightCycle } from "./components/LightCycle";
+
 export default function Home() {
   return (
     <main style={{ fontFamily: "var(--font-inter)" }}>
 
       {/* Hero */}
-      <section className="flex flex-col items-center justify-center min-h-screen px-6 text-center">
+      <section className="relative flex flex-col items-center justify-center min-h-screen px-6 text-center overflow-hidden">
         <h1
-          className="neon-purple text-4xl tracking-wide sm:text-5xl sm:tracking-widest md:text-7xl lg:text-8xl font-black uppercase mb-6 leading-tight"
+          className="neon-flicker text-4xl tracking-wide sm:text-5xl sm:tracking-widest md:text-7xl lg:text-8xl font-black uppercase mb-6 leading-tight relative z-10"
           style={{ fontFamily: "var(--font-orbitron)", color: "var(--text)" }}
         >
           Frazzled
           <br />
           Productions
         </h1>
-        <p
-          className="neon-cyan text-xl md:text-2xl font-medium tracking-wide"
-          style={{ fontFamily: "var(--font-space-grotesk)", color: "var(--cyan)" }}
-        >
-          Software for the fun of it.
-        </p>
+        <div className="relative z-10">
+          <Typewriter text="Software for the fun of it." />
+        </div>
+        <LightCycle />
+        <div className="horizon-grid-container">
+          <div className="horizon-grid-lines" />
+        </div>
       </section>
 
       <hr className="divider mx-6 md:mx-auto md:max-w-3xl" />
@@ -93,8 +97,8 @@ export default function Home() {
         </h2>
         <a
           href="mailto:hello@frazzledproductions.com"
-          className="neon-cyan text-xl md:text-2xl font-medium transition-opacity hover:opacity-80"
-          style={{ fontFamily: "var(--font-space-grotesk)", color: "var(--cyan)" }}
+          className="gradient-text text-xl md:text-2xl font-medium transition-opacity hover:opacity-80"
+          style={{ fontFamily: "var(--font-space-grotesk)" }}
         >
           hello@frazzledproductions.com
         </a>

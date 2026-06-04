@@ -18,29 +18,103 @@ body {
   background-size: 60px 60px;
 }
 
-.neon-purple {
-  text-shadow:
-    0 0 20px var(--purple),
-    0 0 40px var(--purple),
-    0 0 80px rgba(123, 47, 255, 0.4);
+/* CRT scanlines */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.12) 2px,
+    rgba(0, 0, 0, 0.12) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
 }
 
-.neon-cyan {
-  text-shadow:
-    0 0 10px var(--cyan),
-    0 0 20px rgba(0, 229, 255, 0.5);
+/* Neon flicker */
+@keyframes neon-flicker {
+  0%, 18%, 22%, 25%, 53%, 57%, 100% {
+    text-shadow:
+      0 0 20px var(--purple),
+      0 0 40px var(--purple),
+      0 0 80px rgba(123, 47, 255, 0.4);
+  }
+  20%, 24%, 55% {
+    text-shadow: none;
+    opacity: 0.75;
+  }
+}
+
+.neon-flicker {
+  animation: neon-flicker 9s infinite;
+}
+
+/* Gradient text (tagline) */
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.gradient-text {
+  background: linear-gradient(90deg, var(--cyan), var(--purple), var(--pink), var(--cyan));
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-shift 5s ease infinite;
+}
+
+/* Pulsing project card */
+@keyframes card-pulse {
+  0%, 100% { box-shadow: 0 0 15px rgba(123, 47, 255, 0.15); }
+  50% { box-shadow: 0 0 35px rgba(123, 47, 255, 0.4); }
 }
 
 .project-card {
   background: rgba(123, 47, 255, 0.05);
   border: 1px solid var(--purple);
-  box-shadow: 0 0 20px rgba(123, 47, 255, 0.15);
+  animation: card-pulse 3s ease-in-out infinite;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .project-card:hover {
   border-color: var(--cyan);
-  box-shadow: 0 0 30px rgba(0, 229, 255, 0.25);
+  box-shadow: 0 0 40px rgba(0, 229, 255, 0.3) !important;
+  animation-play-state: paused;
+}
+
+/* Synthwave horizon grid */
+.horizon-grid-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+@keyframes grid-scroll {
+  from { background-position: 0 0; }
+  to { background-position: 0 40px; }
+}
+
+.horizon-grid-lines {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(123, 47, 255, 0.7) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(123, 47, 255, 0.4) 1px, transparent 1px);
+  background-size: 40px 40px;
+  transform: perspective(300px) rotateX(65deg);
+  transform-origin: top center;
+  mask-image: linear-gradient(to bottom, transparent 0%, black 50%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 50%);
+  animation: grid-scroll 1.5s linear infinite;
 }
 
 .divider {
