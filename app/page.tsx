@@ -1,65 +1,115 @@
-import Image from "next/image";
-
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <main style={{ fontFamily: "var(--font-inter)" }}>
+
+      {/* Hero */}
+      <section className="flex flex-col items-center justify-center min-h-screen px-6 text-center">
+        <h1
+          className="neon-purple text-4xl tracking-wide sm:text-5xl sm:tracking-widest md:text-7xl lg:text-8xl font-black uppercase mb-6 leading-tight"
+          style={{ fontFamily: "var(--font-orbitron)", color: "var(--text)" }}
+        >
+          Frazzled
+          <br />
+          Productions
+        </h1>
+        <p
+          className="neon-cyan text-xl md:text-2xl font-medium tracking-wide"
+          style={{ fontFamily: "var(--font-space-grotesk)", color: "var(--cyan)" }}
+        >
+          Software for the fun of it.
+        </p>
+      </section>
+
+      <hr className="divider mx-6 md:mx-auto md:max-w-3xl" />
+
+      {/* About */}
+      <section className="max-w-3xl mx-auto px-6 py-24">
+        <h2
+          className="text-xs tracking-widest uppercase mb-8"
+          style={{ fontFamily: "var(--font-orbitron)", color: "var(--pink)" }}
+        >
+          About
+        </h2>
+        <p
+          className="text-lg md:text-xl leading-relaxed"
+          style={{ color: "var(--text-muted)" }}
+        >
+          Frazzled Productions is an independent software studio based in London.
+          We build digital products — apps, tools, and platforms — with a focus on
+          craft and longevity. Currently shipping Pokememory, with more in the works.
+        </p>
+      </section>
+
+      <hr className="divider mx-6 md:mx-auto md:max-w-3xl" />
+
+      {/* Projects */}
+      <section className="max-w-3xl mx-auto px-6 py-24">
+        <h2
+          className="text-xs tracking-widest uppercase mb-8"
+          style={{ fontFamily: "var(--font-orbitron)", color: "var(--pink)" }}
+        >
+          Projects
+        </h2>
+        <a
+          href="https://pokememory.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="project-card block p-8 rounded-lg"
+        >
+          <div className="flex items-center justify-between mb-4">
+            <h3
+              className="text-2xl font-bold"
+              style={{ fontFamily: "var(--font-space-grotesk)", color: "var(--text)" }}
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              Pokememory
+            </h3>
+            <span
+              className="text-xs tracking-widest px-3 py-1 rounded-full border"
+              style={{
+                fontFamily: "var(--font-orbitron)",
+                color: "var(--cyan)",
+                borderColor: "var(--cyan)",
+              }}
             >
-              Learning
-            </a>{" "}
-            center.
+              Live
+            </span>
+          </div>
+          <p style={{ color: "var(--text-muted)" }} className="leading-relaxed">
+            A spaced repetition app for Pokémon fans. Learn and remember Pokémon
+            details using science-backed memory techniques.
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+        </a>
+      </section>
+
+      <hr className="divider mx-6 md:mx-auto md:max-w-3xl" />
+
+      {/* Contact */}
+      <section className="max-w-3xl mx-auto px-6 py-24">
+        <h2
+          className="text-xs tracking-widest uppercase mb-8"
+          style={{ fontFamily: "var(--font-orbitron)", color: "var(--pink)" }}
+        >
+          Contact
+        </h2>
+        <a
+          href="mailto:hello@frazzledproductions.com"
+          className="neon-cyan text-xl md:text-2xl font-medium transition-opacity hover:opacity-80"
+          style={{ fontFamily: "var(--font-space-grotesk)", color: "var(--cyan)" }}
+        >
+          hello@frazzledproductions.com
+        </a>
+      </section>
+
+      {/* Footer */}
+      <footer className="max-w-3xl mx-auto px-6 py-12 border-t border-[#7b2fff]/20">
+        <p
+          className="text-xs leading-relaxed"
+          style={{ color: "rgba(123, 47, 255, 0.5)" }}
+        >
+          FRAZZLED PRODUCTIONS LTD &nbsp;|&nbsp; Company No. 17258540 &nbsp;|&nbsp; 71-75 Shelton Street, Covent Garden, London, WC2H 9JQ
+        </p>
+      </footer>
+
+    </main>
   );
 }

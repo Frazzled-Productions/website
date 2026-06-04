@@ -1,26 +1,51 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --bg: #12001f;
+  --purple: #7b2fff;
+  --pink: #ff2d78;
+  --cyan: #00e5ff;
+  --text: #e8e0ff;
+  --text-muted: #c9b8ff;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  background-image:
+    linear-gradient(rgba(123, 47, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(123, 47, 255, 0.06) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.neon-purple {
+  text-shadow:
+    0 0 20px var(--purple),
+    0 0 40px var(--purple),
+    0 0 80px rgba(123, 47, 255, 0.4);
+}
+
+.neon-cyan {
+  text-shadow:
+    0 0 10px var(--cyan),
+    0 0 20px rgba(0, 229, 255, 0.5);
+}
+
+.project-card {
+  background: rgba(123, 47, 255, 0.05);
+  border: 1px solid var(--purple);
+  box-shadow: 0 0 20px rgba(123, 47, 255, 0.15);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.project-card:hover {
+  border-color: var(--cyan);
+  box-shadow: 0 0 30px rgba(0, 229, 255, 0.25);
+}
+
+.divider {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--purple), transparent);
+  opacity: 0.4;
 }
