@@ -38,8 +38,8 @@ export default function Home() {
           style={{ color: "var(--text-muted)" }}
         >
           Frazzled Productions is an independent software studio based in London.
-          We build digital products — apps, tools, and platforms — with a focus on
-          craft and longevity. Currently shipping Pokememory, with more in the works.
+          We build digital products (apps, tools, and platforms) with a focus on
+          craft and longevity. Currently shipping Poké Memory, with more in the works.
         </p>
       </section>
 
@@ -64,7 +64,7 @@ export default function Home() {
               className="text-2xl font-bold"
               style={{ fontFamily: "var(--font-space-grotesk)", color: "var(--text)" }}
             >
-              Pokememory
+              Poké Memory
             </h3>
             <span
               className="text-xs tracking-widest px-3 py-1 rounded-full border"
