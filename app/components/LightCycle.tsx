@@ -4,19 +4,27 @@ import { useEffect, useRef } from 'react';
 const CYAN = '#00e5ff';
 const TRAIL = 'rgba(0, 229, 255, 0.5)';
 const GRID = 40;
+const SCROLL_MS = 1500; // must match globals.css grid-scroll duration
 
 type Pt = { x: number; y: number };
 
-function snap(v: number) {
-  return Math.round(v / GRID) * GRID;
+// Current grid-scroll phase in pixels (0..GRID)
+function gridOffset() {
+  return (performance.now() % SCROLL_MS) / SCROLL_MS * GRID;
+}
+
+// Snap value to nearest grid line given current scroll phase
+function snapY(v: number, offset: number) {
+  return Math.round((v - offset) / GRID) * GRID + offset;
 }
 
 function buildPath(w: number, h: number): Pt[] {
+  const offset = gridOffset();
   const fromRight = Math.random() > 0.5;
-  // Enter from left or right at a snapped row in the lower half
-  const entryY = snap(h * 0.45 + Math.random() * h * 0.4);
-  // Turn somewhere across the canvas, snapped to a column
-  const turnX = snap(w * 0.2 + Math.random() * w * 0.6);
+  const rawY = h * 0.4 + Math.random() * h * 0.35;
+  const entryY = snapY(rawY, offset);
+  // Keep horizontal leg short so drift doesn't push the cycle off-canvas
+  const turnX = Math.round((w * 0.25 + Math.random() * w * 0.5) / GRID) * GRID;
 
   return fromRight
     ? [{ x: w + 20, y: entryY }, { x: turnX, y: entryY }, { x: turnX, y: -20 }]
@@ -49,12 +57,18 @@ export function LightCycle() {
       if (!canvas || !ctx) return;
       const waypoints = buildPath(canvas.width, canvas.height);
       let wpIndex = 1;
-      const trail: Pt[] = [{ ...waypoints[0] }];
+      // Trail stores actual drawn positions (base Y + drift at recording time)
+      const trail: Pt[] = [];
       const speed = 2.5;
       const pos = { ...waypoints[0] };
+      const startOffset = gridOffset();
 
       function step() {
         if (!canvas || !ctx) return;
+
+        // How far the grid has scrolled since cycle started (in canvas pre-perspective px)
+        const drift = (gridOffset() - startOffset + GRID) % GRID;
+
         const target = waypoints[wpIndex];
         const dx = target.x - pos.x;
         const dy = target.y - pos.y;
@@ -63,8 +77,8 @@ export function LightCycle() {
         if (dist <= speed) {
           pos.x = target.x;
           pos.y = target.y;
-          trail.push({ ...pos });
           wpIndex++;
+          trail.push({ x: pos.x, y: pos.y + drift });
           if (wpIndex >= waypoints.length) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             scheduleNext();
@@ -73,15 +87,14 @@ export function LightCycle() {
         } else {
           pos.x += (dx / dist) * speed;
           pos.y += (dy / dist) * speed;
-          trail.push({ ...pos });
+          trail.push({ x: pos.x, y: pos.y + drift });
         }
 
-        if (trail.length > 600) trail.shift();
+        if (trail.length > 500) trail.shift();
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         if (trail.length > 1) {
-          // Glow trail
           ctx.beginPath();
           ctx.moveTo(trail[0].x, trail[0].y);
           for (let i = 1; i < trail.length; i++) ctx.lineTo(trail[i].x, trail[i].y);
@@ -91,7 +104,6 @@ export function LightCycle() {
           ctx.shadowBlur = 12;
           ctx.stroke();
 
-          // Bright core
           ctx.beginPath();
           ctx.moveTo(trail[0].x, trail[0].y);
           for (let i = 1; i < trail.length; i++) ctx.lineTo(trail[i].x, trail[i].y);
@@ -101,12 +113,11 @@ export function LightCycle() {
           ctx.stroke();
         }
 
-        // Head
         ctx.shadowColor = CYAN;
         ctx.shadowBlur = 20;
         ctx.fillStyle = '#ffffff';
         ctx.beginPath();
-        ctx.arc(pos.x, pos.y, 3, 0, Math.PI * 2);
+        ctx.arc(pos.x, pos.y + drift, 3, 0, Math.PI * 2);
         ctx.fill();
         ctx.shadowBlur = 0;
 
