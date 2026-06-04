@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Orbitron, Space_Grotesk, Inter } from "next/font/google";
+import { CursorGlow } from "./components/CursorGlow";
 import "./globals.css";
 
 const orbitron = Orbitron({
@@ -33,7 +34,10 @@ export default function RootLayout({
       lang="en"
       className={`${orbitron.variable} ${spaceGrotesk.variable} ${inter.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        <CursorGlow />
+        {children}
+      </body>
     </html>
   );
 }
