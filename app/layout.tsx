@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Orbitron, Space_Grotesk, Inter } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import { CursorGlow } from "./components/CursorGlow";
 import "./globals.css";
 
@@ -37,6 +38,7 @@ export default function RootLayout({
       <body>
         <CursorGlow />
         {children}
+        <Analytics />
       </body>
     </html>
   );
