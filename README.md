@@ -23,6 +23,14 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) to view the site. The page auto-updates as you edit files under `app/`.
 
+## Configuration
+
+Environment variables (see `.env.example`):
+
+| Variable | Description |
+| --- | --- |
+| `KOFI_URL` | Full URL of the studio's Ko-fi page (e.g. `https://ko-fi.com/frazzledproductions`). The home page's **Support** section only renders when this is set, so the donation mechanism stays off the live site until it is configured in Vercel. |
+
 ## Scripts
 
 | Command | Description |

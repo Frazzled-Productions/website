@@ -105,3 +105,89 @@ body::after {
   background: linear-gradient(90deg, transparent, var(--purple), transparent);
   opacity: 0.4;
 }
+
+/* Support / donation button */
+.kofi-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1.6rem;
+  border-radius: 9999px;
+  border: 1px solid var(--pink);
+  color: var(--text);
+  background: rgba(255, 45, 120, 0.08);
+  box-shadow: 0 0 18px rgba(255, 45, 120, 0.25);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.kofi-button:hover {
+  border-color: var(--cyan);
+  background: rgba(0, 229, 255, 0.08);
+  box-shadow: 0 0 32px rgba(0, 229, 255, 0.35);
+}
+
+/* Donation modal overlay (Ko-fi panel embedded in an on-page lightbox) */
+.kofi-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: rgba(8, 0, 18, 0.8);
+  backdrop-filter: blur(6px);
+}
+
+.kofi-modal-panel {
+  /* margin auto centres the panel when it fits and lets the backdrop scroll it
+     when it does not. No overflow here, so the panel grows to its content and
+     never clips the close button or shows a sideways scrollbar. */
+  position: relative;
+  margin: auto;
+  width: 100%;
+  max-width: 420px;
+  padding: 1rem;
+  border: 1px solid var(--pink);
+  border-radius: 16px;
+  background: var(--bg);
+  box-shadow: 0 0 50px rgba(255, 45, 120, 0.35);
+}
+
+.kofi-modal-iframe {
+  width: 100%;
+  height: 580px;
+  border: 0;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.kofi-modal-close {
+  position: absolute;
+  top: -14px;
+  right: -14px;
+  width: 36px;
+  height: 36px;
+  border-radius: 9999px;
+  border: 1px solid var(--cyan);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 0 18px rgba(0, 229, 255, 0.35);
+}
+
+.kofi-modal-fallback {
+  display: block;
+  margin-top: 0.75rem;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  transition: opacity 0.3s ease;
+}
+
+.kofi-modal-fallback:hover {
+  opacity: 0.7;
+}

@@ -1,8 +1,14 @@
 import { Typewriter } from "./components/Typewriter";
 import { HorizonGrid } from "./components/HorizonGrid";
 import { TrackedLink } from "./components/TrackedLink";
+import { SupportButton } from "./components/SupportButton";
 
 export default function Home() {
+  // Donation mechanism (issue #7). The Ko-fi page URL lives in an env var, so the
+  // Support section only renders once a destination is configured. This keeps a dead
+  // link off the live site and lets it go live by setting KOFI_URL in Vercel.
+  const kofiUrl = process.env.KOFI_URL;
+
   return (
     <main style={{ fontFamily: "var(--font-inter)" }}>
 
@@ -83,6 +89,31 @@ export default function Home() {
           </p>
         </TrackedLink>
       </section>
+
+      {kofiUrl && (
+        <>
+          <hr className="divider mx-6 md:mx-auto md:max-w-3xl" />
+
+          {/* Support */}
+          <section className="max-w-3xl mx-auto px-6 py-24">
+            <h2
+              className="text-xs tracking-widest uppercase mb-8"
+              style={{ fontFamily: "var(--font-orbitron)", color: "var(--pink)" }}
+            >
+              Support
+            </h2>
+            <p
+              className="text-lg md:text-xl leading-relaxed mb-8"
+              style={{ color: "var(--text-muted)" }}
+            >
+              Frazzled Productions is independent and self-funded. If something we
+              have made brightened your day, you can chip in to help cover running
+              costs and keep us building. Entirely optional, with no perks or strings.
+            </p>
+            <SupportButton kofiUrl={kofiUrl} />
+          </section>
+        </>
+      )}
 
       <hr className="divider mx-6 md:mx-auto md:max-w-3xl" />
 
