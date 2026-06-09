@@ -1,6 +1,7 @@
 import { Typewriter } from "./components/Typewriter";
 import { HorizonGrid } from "./components/HorizonGrid";
 import { TrackedLink } from "./components/TrackedLink";
+import { SupportButton } from "./components/SupportButton";
 
 export default function Home() {
   // Donation mechanism (issue #7). The Ko-fi page URL lives in an env var, so the
@@ -109,15 +110,7 @@ export default function Home() {
               have made brightened your day, you can chip in to help cover running
               costs and keep us building. Entirely optional, with no perks or strings.
             </p>
-            <TrackedLink
-              href={kofiUrl}
-              event="support_click"
-              className="kofi-button text-base font-medium"
-            >
-              <span style={{ fontFamily: "var(--font-space-grotesk)" }}>
-                Support the studio
-              </span>
-            </TrackedLink>
+            <SupportButton kofiUrl={kofiUrl} />
           </section>
         </>
       )}
