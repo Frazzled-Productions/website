@@ -43,20 +43,29 @@ Environment variables (see `.env.example`):
 | `npm run dev` | Start the development server |
 | `npm run build` | Create a production build |
 | `npm run start` | Serve the production build |
-| `npm run lint` | Run ESLint |
+| `npm run lint` | Run ESLint, then the project structure check below |
 | `npm run typecheck` | Type-check with `tsc --noEmit` |
 | `npm run check:node-version` | Check that nothing contradicts the Node major in `.nvmrc` |
+| `npm run check:structure` | Check the **Project structure** block below against the contents of `app/` |
 
 ## Project structure
 
 ```
 app/
-  layout.tsx          Root layout, fonts, and metadata
-  page.tsx            Single-page content (hero, about, projects, contact)
+  layout.tsx          Root layout, fonts, metadata, cursor glow, and analytics
+  page.tsx            Single-page content (hero, about, projects, support, contact)
   globals.css         Global styles and synthwave theme
-  components/         Visual effects (HorizonGrid, CursorGlow, Typewriter)
-public/               Static assets
+  icon.svg            Monogram favicon (Next.js app icon convention)
+  components/
+    CursorGlow.tsx    Cursor-following glow, mounted site-wide in the layout
+    HorizonGrid.tsx   Animated horizon and light cycles behind the hero
+    SupportButton.tsx Ko-fi donation button and its on-page modal
+    TrackedLink.tsx   External link that fires a Vercel Analytics event on click
+    Typewriter.tsx    Types out the hero tagline
 ```
+
+`npm run check:structure` fails if this block and the contents of `app/` disagree, so it cannot
+quietly go stale again.
 
 ## CI
 
