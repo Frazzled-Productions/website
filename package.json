@@ -6,8 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
-    "typecheck": "tsc --noEmit"
+    "lint": "eslint && npm run check:structure",
+    "typecheck": "tsc --noEmit",
+    "check:structure": "node scripts/check-readme-structure.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
