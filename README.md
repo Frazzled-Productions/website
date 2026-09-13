@@ -6,6 +6,7 @@ It is a single-page synthwave-styled site introducing the studio and its project
 
 ## Tech stack
 
+- [Node.js 24](https://nodejs.org) (pinned in `.nvmrc`)
 - [Next.js 16](https://nextjs.org) (App Router)
 - [React 19](https://react.dev)
 - [Tailwind CSS v4](https://tailwindcss.com)
@@ -13,6 +14,10 @@ It is a single-page synthwave-styled site introducing the studio and its project
 - Deployed on [Vercel](https://vercel.com)
 
 ## Getting started
+
+This repo runs on Node.js 24. The major lives in [`.nvmrc`](.nvmrc), so `nvm use` (or `fnm use`)
+picks it up, and `engines` in `package.json` is what Vercel reads when it chooses a build runtime.
+Nothing else should restate it: `npm run check:node-version` fails if anything does and disagrees.
 
 Install dependencies and run the development server:
 
@@ -40,6 +45,7 @@ Environment variables (see `.env.example`):
 | `npm run start` | Serve the production build |
 | `npm run lint` | Run ESLint |
 | `npm run typecheck` | Type-check with `tsc --noEmit` |
+| `npm run check:node-version` | Check that nothing contradicts the Node major in `.nvmrc` |
 
 ## Project structure
 
