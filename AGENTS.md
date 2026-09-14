@@ -15,6 +15,13 @@ name, issue-first process). Repo-local: `npm run dev` to run, `npm run lint` bef
 auto-push every commit on this repo (no need to ask). External API identifiers (CSS `color` etc.)
 stay American per the standard.
 
+Node major: `.nvmrc` is the home of record, chosen to match `poke-memory` and the shared CI
+workflow's own documented example. `package.json` `engines` restates it only because Vercel and npm
+cannot read `.nvmrc`; nothing else should. Workflows take it via
+`node-version-file: .nvmrc`, never a `node-version:` literal, and `npm run check:node-version` fails
+if any of those drift apart (issue #14). One literal is still outstanding in
+`.github/workflows/ci.yml`, which that check reports and `docs/plans/14-question.md` explains.
+
 <!-- BEGIN:nextjs-agent-rules -->
 # This is NOT the Next.js you know
 
