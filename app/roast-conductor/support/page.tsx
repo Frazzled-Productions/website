@@ -103,6 +103,17 @@ export default function RoastConductorSupportPage() {
         how long your oven takes to preheat.
       </p>
 
+      <h3>Can I try recipe links?</h3>
+      <p>
+        Yes. Try recipe links with our{" "}
+        <Link href="/roast-conductor/sample-recipe">sample recipe</Link> for crisp
+        roast potatoes. Copy the page&apos;s address, then in the menu editor add a
+        dish and choose <strong>From a recipe link</strong>. Roast Conductor reads the
+        method and shows each step with its time and temperature for you to check
+        before it joins your plan. Building dishes from recipe links is part of the
+        one-time unlock.
+      </p>
+
       <h3>Dinner is running late. What do I do?</h3>
       <p>
         In cook mode, tap <strong>Running late</strong>. Every step that has not
