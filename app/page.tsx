@@ -2,6 +2,7 @@ import { Typewriter } from "./components/Typewriter";
 import { HorizonGrid } from "./components/HorizonGrid";
 import { TrackedLink } from "./components/TrackedLink";
 import { SupportButton } from "./components/SupportButton";
+import Link from "next/link";
 
 export default function Home() {
   // Donation mechanism (issue #7). The Ko-fi page URL lives in an env var, so the
@@ -46,7 +47,8 @@ export default function Home() {
         >
           Frazzled Productions is an independent software studio based in London.
           We build digital products (apps, tools, and platforms) with a focus on
-          craft and longevity. Currently shipping Poké Memory, with more in the works.
+          craft and longevity. Currently shipping Poké Memory, with Roast Conductor
+          coming soon to iPhone.
         </p>
       </section>
 
@@ -88,6 +90,34 @@ export default function Home() {
             details using science-backed memory techniques.
           </p>
         </TrackedLink>
+        <Link
+          href="/roast-conductor"
+          className="project-card block p-8 rounded-lg mt-6"
+        >
+          <div className="flex items-center justify-between mb-4">
+            <h3
+              className="text-2xl font-bold"
+              style={{ fontFamily: "var(--font-space-grotesk)", color: "var(--text)" }}
+            >
+              Roast Conductor
+            </h3>
+            <span
+              className="text-xs tracking-widest px-3 py-1 rounded-full border"
+              style={{
+                fontFamily: "var(--font-orbitron)",
+                color: "var(--cyan)",
+                borderColor: "var(--cyan)",
+              }}
+            >
+              Soon
+            </span>
+          </div>
+          <p style={{ color: "var(--text-muted)" }} className="leading-relaxed">
+            An iPhone app that plans a Sunday roast or Christmas dinner backwards
+            from the time you want to eat, with one-oven clash warnings and alarms
+            that ring through silent mode.
+          </p>
+        </Link>
       </section>
 
       {kofiUrl && (

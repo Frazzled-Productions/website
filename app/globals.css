@@ -191,3 +191,64 @@ body::after {
 .kofi-modal-fallback:hover {
   opacity: 0.7;
 }
+
+/* Roast Conductor pages: navigation and long-form text (support, privacy) */
+.rc-nav-link {
+  color: var(--text-muted);
+  transition: color 0.3s ease;
+}
+
+.rc-nav-link:hover {
+  color: var(--cyan);
+}
+
+.rc-prose {
+  color: var(--text-muted);
+  line-height: 1.75;
+}
+
+.rc-prose h2 {
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  font-family: var(--font-space-grotesk);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.rc-prose h3 {
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+  font-family: var(--font-space-grotesk);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.rc-prose p,
+.rc-prose ul {
+  margin-bottom: 1rem;
+}
+
+.rc-prose ul {
+  padding-left: 1.25rem;
+  list-style: disc;
+}
+
+.rc-prose li {
+  margin-bottom: 0.4rem;
+}
+
+.rc-prose a {
+  color: var(--cyan);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.rc-prose a:hover {
+  opacity: 0.8;
+}
+
+.rc-prose strong {
+  color: var(--text);
+}
