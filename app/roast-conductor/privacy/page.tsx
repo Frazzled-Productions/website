@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Roast Conductor privacy policy | Frazzled Productions",
   description:
-    "How the Roast Conductor iPhone app handles your data: no account, no tracking, menus stay on your iPhone, and RevenueCat manages the one-time unlock.",
+    "How the Roast Conductor app for iPhone, iPad and Apple Watch handles your data: no account, no tracking, menus stay on your devices, and RevenueCat manages the one-time unlock.",
 };
 
 const contactEmail = "hello@frazzledproductions.com";
@@ -17,11 +17,16 @@ export default function RoastConductorPrivacyPage() {
       >
         Roast Conductor privacy policy
       </h1>
-      <p>Effective 10 October 2026</p>
+      <p>Effective 11 October 2026</p>
+      <p>
+        <strong>Changes:</strong> on 11 October 2026 we added how the app handles
+        reminders, widgets, the Apple Watch app and your region. None of these sends
+        data to us, and nothing else changed.
+      </p>
 
       <p className="text-lg">
         <strong>In short:</strong> Roast Conductor has no accounts, no adverts, no
-        analytics tools and no tracking. Your menus and plans stay on your iPhone.
+        analytics tools and no tracking. Your menus and plans stay on your devices.
         The only data that leaves your device is the record of your one-time
         purchase, which our payment partner RevenueCat processes under an anonymous
         ID so the unlock works and can be restored.
@@ -36,23 +41,46 @@ export default function RoastConductorPrivacyPage() {
         <a href={`mailto:${contactEmail}`}>{contactEmail}</a>.
       </p>
 
-      <h2>What stays on your iPhone</h2>
+      <h2>What stays on your devices</h2>
       <p>
-        Everything you make in the app is stored only on your iPhone and is never
-        sent to us:
+        Everything you make in the app is stored only on your iPhone or iPad and is
+        never sent to us:
       </p>
       <ul>
-        <li>your menus, dishes, steps, serving times and plans</li>
+        <li>your menus, dishes, steps, serving times, plans and any helpers&apos; names you add</li>
         <li>your settings, such as oven type, temperature unit and preheat time</li>
         <li>
           cook mode alarms, notifications and the Live Activity, which are scheduled
           and shown by iOS on your device
         </li>
+        <li>
+          reminders, such as fridge, day-before and leftovers reminders, which are
+          local notifications created and scheduled on your device, not sent from a
+          server
+        </li>
+        <li>
+          the data the widgets show, which they read from a copy the app keeps on
+          the same device
+        </li>
       </ul>
       <p>
+        <strong>Apple Watch.</strong> If you use the Apple Watch app, your iPhone
+        sends your current cook and upcoming dinners to your paired Apple Watch using
+        Apple&apos;s WatchConnectivity, where the watch app keeps a copy to show you,
+        and the watch sends back the steps you mark done. This goes between your own
+        devices; nothing is sent to us.
+      </p>
+      <p>
+        <strong>Your region.</strong> The app chooses the UK or US edition (for
+        example °C or °F, kilograms or pounds) from your device&apos;s language and
+        region settings, read on the device. It does not use your location and does
+        not send your region to us.
+      </p>
+      <p>
         We do not run any servers for the app and you do not create an account.
-        Deleting the app deletes this data. If you back up your iPhone to iCloud or a
-        computer, Apple includes app data in that backup under Apple&apos;s own terms.
+        Deleting the app deletes this data. If you back up your iPhone or iPad to
+        iCloud or a computer, Apple includes app data in that backup under
+        Apple&apos;s own terms.
       </p>
 
       <h2>Your purchase (RevenueCat)</h2>
@@ -106,17 +134,18 @@ export default function RoastConductorPrivacyPage() {
       <h2>Importing a recipe from a link</h2>
       <p>
         With the unlock, you can build a dish from a recipe web page by pasting its
-        link. When you do:
+        link, or by pasting the method itself. When you do:
       </p>
       <ul>
         <li>
-          your iPhone fetches that public web page directly from the website you
+          for a link, your device fetches that public web page directly from the website you
           linked to, the same way Safari would, so that website sees an ordinary
           request from your device
         </li>
         <li>
-          the page is read on your iPhone, using on-device Apple Intelligence where
-          it is available, and nothing about it is sent to us or to any AI service
+          the page (or the method you pasted) is read on your device, using
+          on-device Apple Intelligence where it is available, and nothing about it is
+          sent to us or to any AI service
         </li>
         <li>
           the app saves only the dish, its steps, its ingredients list and the link,
