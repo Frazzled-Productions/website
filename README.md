@@ -67,6 +67,8 @@ app/
     layout.tsx        Shared header, navigation and footer for the Loop Year pages
     privacy/
       page.tsx        Loop Year privacy policy (linked from App Store Connect and the app)
+    support/
+      page.tsx        Loop Year support page and FAQ (the App Store support URL)
   roast-conductor/
     layout.tsx        Shared header, navigation and footer for the Roast Conductor pages
     page.tsx          Roast Conductor product page
