@@ -1,7 +1,8 @@
 import Link from "next/link";
 
-// Shared frame for the Loop Year pages. App Store Connect links to the privacy policy
-// directly, so it needs a way back to the studio home page. Reuses the Roast Conductor
+// Shared frame for the Loop Year pages (support, privacy). App Store Connect links to
+// both directly, so each one needs a way back to the other and to the studio home
+// page. Reuses the Roast Conductor
 // page styles (rc-nav-link, rc-prose) so the app pages look alike.
 export default function LoopYearLayout({
   children,
@@ -23,6 +24,9 @@ export default function LoopYearLayout({
           className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm"
           style={{ fontFamily: "var(--font-space-grotesk)" }}
         >
+          <Link href="/loop-year/support" className="rc-nav-link">
+            Loop Year support
+          </Link>
           <Link href="/loop-year/privacy" className="rc-nav-link">
             Loop Year privacy policy
           </Link>
