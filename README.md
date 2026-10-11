@@ -63,6 +63,10 @@ app/
     SupportButton.tsx Ko-fi donation button and its on-page modal
     TrackedLink.tsx   External link that fires a Vercel Analytics event on click
     Typewriter.tsx    Types out the hero tagline
+  loop-year/
+    layout.tsx        Shared header, navigation and footer for the Loop Year pages
+    privacy/
+      page.tsx        Loop Year privacy policy (linked from App Store Connect and the app)
   roast-conductor/
     layout.tsx        Shared header, navigation and footer for the Roast Conductor pages
     page.tsx          Roast Conductor product page
