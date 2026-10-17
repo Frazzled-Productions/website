@@ -171,6 +171,10 @@ export default function Home() {
           style={{ color: "rgba(123, 47, 255, 0.5)" }}
         >
           FRAZZLED PRODUCTIONS LTD &nbsp;|&nbsp; Company No. 17258540 &nbsp;|&nbsp; 71-75 Shelton Street, Covent Garden, London, WC2H 9JQ
+          &nbsp;|&nbsp;{" "}
+          <Link href="/privacy" className="underline transition-opacity hover:opacity-80">
+            Privacy
+          </Link>
         </p>
       </footer>
 
