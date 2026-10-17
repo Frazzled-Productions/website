@@ -7,6 +7,7 @@ export const metadata: Metadata = {
 };
 
 const contactEmail = "hello@frazzledproductions.com";
+const privacyEmail = "privacy@frazzledproductions.com";
 
 export default function LoopYearPrivacyPage() {
   return (
@@ -17,7 +18,7 @@ export default function LoopYearPrivacyPage() {
       >
         Loop Year privacy policy
       </h1>
-      <p>Effective 11 October 2026</p>
+      <p>Effective 17 October 2026</p>
 
       <p className="text-lg">
         <strong>In short:</strong> Loop Year has no accounts, no adverts, no
@@ -204,9 +205,11 @@ export default function LoopYearPrivacyPage() {
         to have it corrected or deleted, and to object to how it is used.
         Because the purchase record is anonymous, we may need your help to find
         it (for example, the date you bought the unlock). Email{" "}
-        <a href={`mailto:${contactEmail}`}>{contactEmail}</a> and we will
-        respond within one month. You can also complain to the UK Information
-        Commissioner&apos;s Office at{" "}
+        <a href={`mailto:${contactEmail}`}>{contactEmail}</a> and we will respond
+        within one month. If you are unhappy with how we use your data, email{" "}
+        <a href={`mailto:${privacyEmail}`}>{privacyEmail}</a>. We will
+        acknowledge your complaint within 30 days and try to resolve it. You can
+        also complain to the UK Information Commissioner&apos;s Office at{" "}
         <a href="https://ico.org.uk" target="_blank" rel="noopener noreferrer">
           ico.org.uk
         </a>

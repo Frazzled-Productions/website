@@ -7,6 +7,7 @@ export const metadata: Metadata = {
 };
 
 const contactEmail = "hello@frazzledproductions.com";
+const privacyEmail = "privacy@frazzledproductions.com";
 
 export default function RoastConductorPrivacyPage() {
   return (
@@ -17,11 +18,12 @@ export default function RoastConductorPrivacyPage() {
       >
         Roast Conductor privacy policy
       </h1>
-      <p>Effective 11 October 2026</p>
+      <p>Effective 17 October 2026</p>
       <p>
         <strong>Changes:</strong> on 11 October 2026 we added how the app handles
         reminders, widgets, the Apple Watch app and your region. None of these sends
-        data to us, and nothing else changed.
+        data to us, and nothing else changed. On 17 October 2026 we added how to
+        complain to us about how we use your data.
       </p>
 
       <p className="text-lg">
@@ -174,8 +176,10 @@ export default function RoastConductorPrivacyPage() {
         purchase record is anonymous, we may need your help to find it (for example,
         the date you bought the unlock). Email{" "}
         <a href={`mailto:${contactEmail}`}>{contactEmail}</a> and we will respond
-        within one month. You can also complain to the UK Information
-        Commissioner&apos;s Office at{" "}
+        within one month. If you are unhappy with how we use your data, email{" "}
+        <a href={`mailto:${privacyEmail}`}>{privacyEmail}</a>. We will
+        acknowledge your complaint within 30 days and try to resolve it. You can
+        also complain to the UK Information Commissioner&apos;s Office at{" "}
         <a href="https://ico.org.uk" target="_blank" rel="noopener noreferrer">
           ico.org.uk
         </a>
