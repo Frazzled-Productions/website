@@ -3,7 +3,7 @@
 The company website for [Frazzled Productions](https://frazzledproductions.com), an independent software studio based in London.
 
 It is a single-page synthwave-styled site introducing the studio and its projects, currently [Poké Memory](https://pokememory.com), plus pages for the Roast Conductor iPhone app
-(product, support, privacy policy and a sample recipe) under `/roast-conductor`.
+(product, support, privacy policy and a sample recipe) under `/roast-conductor`, and the website's own privacy notice at `/privacy`.
 
 ## Tech stack
 
@@ -69,6 +69,8 @@ app/
       page.tsx        Loop Year privacy policy (linked from App Store Connect and the app)
     support/
       page.tsx        Loop Year support page and FAQ (the App Store support URL)
+  privacy/
+    page.tsx          Website privacy notice (analytics, tracked link events, Ko-fi), linked from the footer
   roast-conductor/
     layout.tsx        Shared header, navigation and footer for the Roast Conductor pages
     page.tsx          Roast Conductor product page
