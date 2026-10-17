@@ -47,6 +47,7 @@ const free = [
   "The planner, oven clash fixes and running late",
   "Cook mode alarms and the Live Activity",
   "Widgets, Siri and Shortcuts, and the iPad layout",
+  "Starters and puddings, each served on time",
   "Tips, the Day before list and reminders",
   "Sharing the plan as a picture, PDF or text",
   "The Christmas and Easter themes",
@@ -60,7 +61,7 @@ const unlock = [
   "The air fryer and microwave, planned alongside the oven",
   "Reverse sear and slow roast",
   "Make-ahead sides, started the day before",
-  "Starters and puddings, each served on time, and jobs shared out among your helpers",
+  "Choosing when each course is served, moving any dish to the starter or pudding, and sharing jobs out among your helpers",
   "Cooking for any number of guests, and a shopping list from your recipes",
   "The Apple Watch app: the step under way, a countdown and Done from your wrist",
 ];

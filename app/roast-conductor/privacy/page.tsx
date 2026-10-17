@@ -23,15 +23,20 @@ export default function RoastConductorPrivacyPage() {
         <strong>Changes:</strong> on 11 October 2026 we added how the app handles
         reminders, widgets, the Apple Watch app and your region. None of these sends
         data to us, and nothing else changed. On 17 October 2026 we added how to
-        complain to us about how we use your data.
+        complain to us about how we use your data. Later the same day we made the
+        policy more precise: the device identifier RevenueCat receives, the copy the
+        widget and Apple Watch app keep after the app is deleted, how a recipe page is
+        fetched and what an import saves, and saving a plan picture to Photos.
       </p>
 
       <p className="text-lg">
         <strong>In short:</strong> Roast Conductor has no accounts, no adverts, no
         analytics tools and no tracking. Your menus and plans stay on your devices.
-        The only data that leaves your device is the record of your one-time
-        purchase, which our payment partner RevenueCat processes under an anonymous
-        ID so the unlock works and can be restored.
+        Nothing you make in the app is sent to us. Apart from fetching a recipe page
+        when you paste its link, the only data the app sends off your device is about
+        your one-time purchase: our payment partner RevenueCat processes it under an
+        anonymous ID, with the technical details listed below, so the unlock works and
+        can be restored.
       </p>
 
       <h2>Who we are</h2>
@@ -80,9 +85,12 @@ export default function RoastConductorPrivacyPage() {
       </p>
       <p>
         We do not run any servers for the app and you do not create an account.
-        Deleting the app deletes this data. If you back up your iPhone or iPad to
-        iCloud or a computer, Apple includes app data in that backup under
-        Apple&apos;s own terms.
+        Deleting the app deletes this data, apart from a small copy of your next
+        dinner and any cook in progress that the widget and Apple Watch app keep in
+        your device&apos;s keychain (iOS&apos;s secure storage), which iOS does not
+        remove when an app is deleted. It never leaves your devices. If you back up
+        your iPhone or iPad to iCloud or a computer, Apple includes app data in that
+        backup under Apple&apos;s own terms.
       </p>
 
       <h2>Your purchase (RevenueCat)</h2>
@@ -106,7 +114,8 @@ export default function RoastConductorPrivacyPage() {
         </li>
         <li>
           technical details needed to deliver the service, such as the app version,
-          iOS version, device model, country and IP address
+          iOS version, device model, country and IP address, and the identifier iOS
+          gives the app on your device (not your advertising identifier)
         </li>
       </ul>
       <p>
@@ -140,9 +149,9 @@ export default function RoastConductorPrivacyPage() {
       </p>
       <ul>
         <li>
-          for a link, your device fetches that public web page directly from the website you
-          linked to, the same way Safari would, so that website sees an ordinary
-          request from your device
+          for a link, your device fetches that public web page directly from the
+          website you linked to, much as Safari would; the request names Roast
+          Conductor as the app asking
         </li>
         <li>
           the page (or the method you pasted) is read on your device, using
@@ -150,8 +159,8 @@ export default function RoastConductorPrivacyPage() {
           sent to us or to any AI service
         </li>
         <li>
-          the app saves only the dish, its steps, its ingredients list and the link,
-          never the full page
+          the app saves only the dish, its steps, its ingredients list, how many it
+          serves and the link, never the full page
         </li>
       </ul>
 
@@ -160,7 +169,11 @@ export default function RoastConductorPrivacyPage() {
         <li>No accounts or sign-in.</li>
         <li>No analytics or advertising tools in the app, and no tracking.</li>
         <li>No selling or sharing of your data.</li>
-        <li>No access to your contacts, location, photos, camera or microphone.</li>
+        <li>No access to your contacts, location, camera or microphone.</li>
+        <li>
+          The app never reads your photos. It only saves a plan picture to Photos
+          when you choose Save Image.
+        </li>
       </ul>
       <p>
         If you have chosen in iOS Settings to share analytics with app developers,
