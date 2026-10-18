@@ -79,9 +79,10 @@ export default function RoastConductorPrivacyPage() {
       </p>
       <p>
         <strong>Your region.</strong> The app chooses the UK or US edition (for
-        example °C or °F, kilograms or pounds) from your device&apos;s language and
-        region settings, read on the device. It does not use your location and does
-        not send your region to us.
+        example °C or °F, kilograms or pounds) from your device&apos;s region setting,
+        read on the device. The US and Canada get the US edition; Canada follows
+        Health Canada&apos;s guidance. It does not use your location and does not
+        send your region to us.
       </p>
       <p>
         We do not run any servers for the app and you do not create an account.
