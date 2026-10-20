@@ -18,7 +18,7 @@ export default function RoastConductorPrivacyPage() {
       >
         Roast Conductor privacy policy
       </h1>
-      <p>Effective 17 October 2026</p>
+      <p>Effective 20 October 2026</p>
       <p>
         <strong>Changes:</strong> on 11 October 2026 we added how the app handles
         reminders, widgets, the Apple Watch app and your region. None of these sends
@@ -26,13 +26,17 @@ export default function RoastConductorPrivacyPage() {
         complain to us about how we use your data. Later the same day we made the
         policy more precise: the device identifier RevenueCat receives, the copy the
         widget and Apple Watch app keep after the app is deleted, how a recipe page is
-        fetched and what an import saves, and saving a plan picture to Photos.
+        fetched and what an import saves, and saving a plan picture to Photos. On 20
+        October 2026 we added Cook together, which shares a menu you choose with the
+        people you invite through your own iCloud account.
       </p>
 
       <p className="text-lg">
         <strong>In short:</strong> Roast Conductor has no accounts, no adverts, no
-        analytics tools and no tracking. Your menus and plans stay on your devices.
-        Nothing you make in the app is sent to us. Apart from fetching a recipe page
+        analytics tools and no tracking. Your menus and plans stay on your devices. If
+        you choose Cook together, the menu you share is kept in your iCloud account and
+        shared, through Apple&apos;s iCloud, with the people you invite. We never see
+        it. Nothing you make in the app is sent to us. Apart from fetching a recipe page
         when you paste its link, the only data the app sends off your device is about
         your one-time purchase: our payment partner RevenueCat processes it under an
         anonymous ID, with the technical details listed below, so the unlock works and
@@ -50,8 +54,8 @@ export default function RoastConductorPrivacyPage() {
 
       <h2>What stays on your devices</h2>
       <p>
-        Everything you make in the app is stored only on your iPhone or iPad and is
-        never sent to us:
+        Everything you make in the app is stored only on your iPhone or iPad, except a
+        menu you share with Cook together, described below, and is never sent to us:
       </p>
       <ul>
         <li>your menus, dishes, steps, serving times, plans and any helpers&apos; names you add</li>
@@ -92,6 +96,23 @@ export default function RoastConductorPrivacyPage() {
         remove when an app is deleted. It never leaves your devices. If you back up
         your iPhone or iPad to iCloud or a computer, Apple includes app data in that
         backup under Apple&apos;s own terms.
+      </p>
+
+      <h2>Cooking together (iCloud sharing)</h2>
+      <p>
+        When you share a menu live with Cook together, Roast Conductor stores it in
+        your iCloud account using Apple&apos;s CloudKit and shares it with the people
+        you invite: the menu&apos;s name, dishes, steps and times, your helpers&apos;
+        names and your own name as you give it, which steps were ticked Done, when and
+        by whom, and the name each person picks for themselves. The meal details are
+        encrypted with iCloud&apos;s end-to-end field encryption. People you invite
+        can see the plan and your name and contact as iCloud shows it on the invite.
+      </p>
+      <p>
+        We run no server for this and cannot read it; Apple stores it under its own
+        terms and privacy policy. Stop sharing (or delete the menu) to remove it from
+        everyone else&apos;s devices; anyone can leave a plan shared with them. If you
+        sign out of iCloud, plans shared with you are removed from this device.
       </p>
 
       <h2>Your purchase (RevenueCat)</h2>
@@ -167,7 +188,7 @@ export default function RoastConductorPrivacyPage() {
 
       <h2>What we do not do</h2>
       <ul>
-        <li>No accounts or sign-in.</li>
+        <li>No accounts or sign-in (Cook together uses your own iCloud account).</li>
         <li>No analytics or advertising tools in the app, and no tracking.</li>
         <li>No selling or sharing of your data.</li>
         <li>No access to your contacts, location, camera or microphone.</li>
