@@ -104,15 +104,24 @@ export default function RoastConductorPrivacyPage() {
         your iCloud account using Apple&apos;s CloudKit and shares it with the people
         you invite: the menu&apos;s name, dishes, steps and times, your helpers&apos;
         names and your own name as you give it, which steps were ticked Done, when and
-        by whom, and the name each person picks for themselves. The meal details are
-        encrypted with iCloud&apos;s end-to-end field encryption. People you invite
-        can see the plan and your name and contact as iCloud shows it on the invite.
+        by whom, and who each person says they are in the plan and when their device
+        last checked in. Anyone you invite can read and change the plan. People you
+        invite can also see your name and contact as iCloud shows it on the invite.
+      </p>
+      <p>
+        The plan itself (dishes, steps, times, names and who ticked what) is stored in
+        iCloud&apos;s encrypted fields, which Apple cannot read. The menu&apos;s name
+        is shown on the invite, so iCloud holds it unencrypted, along with technical
+        details such as record IDs and when changes were made.
       </p>
       <p>
         We run no server for this and cannot read it; Apple stores it under its own
-        terms and privacy policy. Stop sharing (or delete the menu) to remove it from
-        everyone else&apos;s devices; anyone can leave a plan shared with them. If you
-        sign out of iCloud, plans shared with you are removed from this device.
+        terms and privacy policy. Stop sharing (or delete the menu) to remove the plan
+        from everyone else&apos;s devices and from your iCloud. Deleting the app does
+        not remove a shared plan from iCloud: stop sharing first. Anyone can leave a
+        plan shared with them; leaving removes only their access, and the steps they
+        ticked stay in your copy of the plan until you stop sharing. If you sign out of
+        iCloud, plans shared with you are removed from this device.
       </p>
 
       <h2>Your purchase (RevenueCat)</h2>
@@ -190,7 +199,7 @@ export default function RoastConductorPrivacyPage() {
       <ul>
         <li>No accounts or sign-in (Cook together uses your own iCloud account).</li>
         <li>No analytics or advertising tools in the app, and no tracking.</li>
-        <li>No selling or sharing of your data.</li>
+        <li>We never sell your data, and we share it only with the people you choose.</li>
         <li>No access to your contacts, location, camera or microphone.</li>
         <li>
           The app never reads your photos. It only saves a plan picture to Photos
