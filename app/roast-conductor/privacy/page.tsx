@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Roast Conductor privacy policy | Frazzled Productions",
   description:
-    "How the Roast Conductor app for iPhone, iPad and Apple Watch handles your data: no account, no tracking, menus stay on your devices, and RevenueCat manages the one-time unlock.",
+    "How the Roast Conductor app for iPhone, iPad and Apple Watch handles your data: no account, no tracking, menus stay on your devices unless you share one with Cook together, and RevenueCat manages the one-time unlock.",
 };
 
 const contactEmail = "hello@frazzledproductions.com";
@@ -18,6 +18,7 @@ export default function RoastConductorPrivacyPage() {
       >
         Roast Conductor privacy policy
       </h1>
+      {/* Set this, and the Changes line's date, to the day this PR merges (owner, at merge). */}
       <p>Effective 20 October 2026</p>
       <p>
         <strong>Changes:</strong> on 11 October 2026 we added how the app handles
@@ -37,8 +38,9 @@ export default function RoastConductorPrivacyPage() {
         you choose Cook together, the menu you share is kept in your iCloud account and
         shared, through Apple&apos;s iCloud, with the people you invite. We never see
         it. Nothing you make in the app is sent to us. Apart from fetching a recipe page
-        when you paste its link, the only data the app sends off your device is about
-        your one-time purchase: our payment partner RevenueCat processes it under an
+        when you paste its link, and a menu you choose to share with Cook together
+        (which goes only to your own iCloud), the only data the app sends off your
+        device is about your one-time purchase: our payment partner RevenueCat processes it under an
         anonymous ID, with the technical details listed below, so the unlock works and
         can be restored.
       </p>
@@ -102,22 +104,27 @@ export default function RoastConductorPrivacyPage() {
       <p>
         When you share a menu live with Cook together, Roast Conductor stores it in
         your iCloud account using Apple&apos;s CloudKit and shares it with the people
-        you invite: the menu&apos;s name, dishes, steps and times, your helpers&apos;
-        names and your own name as you give it, which steps were ticked Done, when and
+        you invite: the menu&apos;s name, dishes, steps and times, the dishes&apos;
+        ingredients and recipe links, how many you are cooking for, the jobs for the day
+        before, your helpers&apos; names and your own name as you give it, which steps
+        were ticked Done, when and
         by whom, and who each person says they are in the plan and when their device
         last checked in. Anyone you invite can read and change the plan. People you
         invite can also see your name and contact as iCloud shows it on the invite.
       </p>
       <p>
         The plan itself (dishes, steps, times, names and who ticked what) is stored in
-        iCloud&apos;s encrypted fields, which Apple cannot read. The menu&apos;s name
+        iCloud&apos;s encrypted fields, which Apple says it cannot read. The menu&apos;s name
         is shown on the invite, so iCloud holds it unencrypted, along with technical
         details such as record IDs and when changes were made.
       </p>
       <p>
         We run no server for this and cannot read it; Apple stores it under its own
         terms and privacy policy. Stop sharing (or delete the menu) to remove the plan
-        from everyone else&apos;s devices and from your iCloud. Deleting the app does
+        from everyone else&apos;s devices and from your iCloud: it removes everyone at
+        once. You can also see what you share in your iPhone&apos;s iCloud settings
+        (Settings, then your Apple Account, then iCloud). A copy someone saves to their
+        own menus stays on their device after you stop sharing. Deleting the app does
         not remove a shared plan from iCloud: stop sharing first. Anyone can leave a
         plan shared with them; leaving removes only their access, and the steps they
         ticked stay in your copy of the plan until you stop sharing. If you sign out of
