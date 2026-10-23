@@ -1,0 +1,36 @@
+# Dependabot version updates, copied from the reference in Frazzled-Productions/.github
+# (templates/dependabot.yml, ops A10). cooldown makes a new release wait 7 days before a PR
+# is opened; security updates bypass it. Minor and patch bumps arrive as one grouped PR;
+# majors arrive one per PR and are a decision for Fraser.
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    cooldown:
+      default-days: 7
+    # TypeScript 7 drops the JS compiler API that next build still needs (the same block as
+    # poke-memory #1921). Remove once Next.js supports the native compiler.
+    ignore:
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+    groups:
+      npm-minor-patch:
+        applies-to: version-updates
+        update-types: ["minor", "patch"]
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    cooldown:
+      default-days: 7
+    groups:
+      actions-minor-patch:
+        applies-to: version-updates
+        update-types: ["minor", "patch"]

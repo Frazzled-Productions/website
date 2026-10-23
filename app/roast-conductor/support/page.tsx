@@ -64,6 +64,7 @@ export default function RoastConductorSupportPage() {
         <li>preheating, your oven type, hob rings, and editing any step&apos;s time and temperature</li>
         <li>unlimited saved menus, each with up to four dishes</li>
         <li>widgets, Siri and Shortcuts, and the iPad layout</li>
+        <li>the built-in starters and puddings, each planned to be ready when it is served</li>
         <li>tips, the Day before list, fridge and leftovers reminders</li>
         <li>sharing the plan as a picture, PDF or text</li>
         <li>the Christmas and Easter themes</li>
@@ -79,7 +80,7 @@ export default function RoastConductorSupportPage() {
         <li>the air fryer and microwave, planned alongside the oven</li>
         <li>reverse sear and slow roast methods</li>
         <li>make-ahead sides, started the day before</li>
-        <li>starters and puddings, and sharing jobs out among your helpers</li>
+        <li>choosing when each course is served, moving any dish to the starter or pudding, and sharing jobs out among your helpers</li>
         <li>cooking for any number of guests, and a shopping list</li>
         <li>the Apple Watch app</li>
       </ul>
@@ -168,10 +169,12 @@ export default function RoastConductorSupportPage() {
 
       <h3>How do courses and helpers work?</h3>
       <p>
-        With the unlock, you can add a starter and a pudding to a menu. Each course is
-        planned to be ready when it is served. You can also add your helpers to a menu and share the jobs out among
-        them, so each person has their own list. Sharing the plan as a picture, PDF or
-        text is free for everyone.
+        Starters and puddings are free. Add one from the Starters or Puddings section
+        when you add a dish, and each course is planned to be ready when it is served.
+        The unlock lets you choose when each course is served, move any dish to the
+        starter or pudding, and add your helpers to a menu and share the jobs out
+        among them, so each person has their own list. Sharing the plan as a picture,
+        PDF or text is free for everyone.
       </p>
 
       <h3>What reminders does the app send, and how do I turn them off?</h3>
@@ -202,8 +205,11 @@ export default function RoastConductorSupportPage() {
       <h3>Does Roast Conductor need an account or collect my data?</h3>
       <p>
         No account is needed. Your menus and plans stay on your iPhone or iPad (and
-        your Apple Watch, if you use it). The only data that leaves your devices for
-        anyone else is the record of your purchase, so it can be restored.
+        your Apple Watch, if you use it), unless you share a menu with Cook together,
+        which keeps it in your iCloud and shares it with the people you invite. Apart
+        from fetching a recipe page when you paste its link, and Cook together, the
+        only data that leaves your devices is about your purchase, so it can be
+        restored.
         The <Link href="/roast-conductor/privacy">privacy policy</Link> has the details.
       </p>
 
@@ -247,13 +253,14 @@ export default function RoastConductorSupportPage() {
         under <strong>General</strong>, then <strong>Language &amp; Region</strong>.
       </p>
 
-      <h3>I updated and my menus disappeared. What do I do?</h3>
+      <h3>My menus have disappeared. What do I do?</h3>
       <p>
-        If you test Roast Conductor through TestFlight, never install an older build
-        over a newer one: an older build may not be able to open menus saved by a
-        newer one, so they look as if they have gone. Install the latest build from TestFlight
-        again and your menus should come back. If they do not, email us before
-        deleting the app, as deleting it removes your menus for good.
+        Your menus are saved only on the iPhone or iPad you made them on, and are not
+        synced between devices. On a new device they come across only if you set it
+        up from an iCloud or computer backup of the old one. If menus have gone from
+        the same device, make sure Roast Conductor is up to date in the App Store,
+        then email us before deleting the app, as deleting it removes your menus for
+        good.
       </p>
 
       <h2>Contact</h2>

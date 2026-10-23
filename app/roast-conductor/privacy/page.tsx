@@ -3,10 +3,11 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Roast Conductor privacy policy | Frazzled Productions",
   description:
-    "How the Roast Conductor app for iPhone, iPad and Apple Watch handles your data: no account, no tracking, menus stay on your devices, and RevenueCat manages the one-time unlock.",
+    "How the Roast Conductor app for iPhone, iPad and Apple Watch handles your data: no account, no tracking, menus stay on your devices unless you share one with Cook together, and RevenueCat manages the one-time unlock.",
 };
 
 const contactEmail = "hello@frazzledproductions.com";
+const privacyEmail = "privacy@frazzledproductions.com";
 
 export default function RoastConductorPrivacyPage() {
   return (
@@ -17,19 +18,30 @@ export default function RoastConductorPrivacyPage() {
       >
         Roast Conductor privacy policy
       </h1>
-      <p>Effective 11 October 2026</p>
+      <p>Effective 23 October 2026</p>
       <p>
         <strong>Changes:</strong> on 11 October 2026 we added how the app handles
         reminders, widgets, the Apple Watch app and your region. None of these sends
-        data to us, and nothing else changed.
+        data to us, and nothing else changed. On 17 October 2026 we added how to
+        complain to us about how we use your data. Later the same day we made the
+        policy more precise: the device identifier RevenueCat receives, the copy the
+        widget and Apple Watch app keep after the app is deleted, how a recipe page is
+        fetched and what an import saves, and saving a plan picture to Photos. On 23
+        October 2026 we added Cook together, which shares a menu you choose with the
+        people you invite through your own iCloud account.
       </p>
 
       <p className="text-lg">
         <strong>In short:</strong> Roast Conductor has no accounts, no adverts, no
-        analytics tools and no tracking. Your menus and plans stay on your devices.
-        The only data that leaves your device is the record of your one-time
-        purchase, which our payment partner RevenueCat processes under an anonymous
-        ID so the unlock works and can be restored.
+        analytics tools and no tracking. Your menus and plans stay on your devices. If
+        you choose Cook together, the menu you share is kept in your iCloud account and
+        shared, through Apple&apos;s iCloud, with the people you invite. We never see
+        it. Nothing you make in the app is sent to us. Apart from fetching a recipe page
+        when you paste its link, and a menu you choose to share with Cook together
+        (which goes only to your own iCloud), the only data the app sends off your
+        device is about your one-time purchase: our payment partner RevenueCat processes it under an
+        anonymous ID, with the technical details listed below, so the unlock works and
+        can be restored.
       </p>
 
       <h2>Who we are</h2>
@@ -43,8 +55,8 @@ export default function RoastConductorPrivacyPage() {
 
       <h2>What stays on your devices</h2>
       <p>
-        Everything you make in the app is stored only on your iPhone or iPad and is
-        never sent to us:
+        Everything you make in the app is stored only on your iPhone or iPad, except a
+        menu you share with Cook together, described below, and is never sent to us:
       </p>
       <ul>
         <li>your menus, dishes, steps, serving times, plans and any helpers&apos; names you add</li>
@@ -72,15 +84,49 @@ export default function RoastConductorPrivacyPage() {
       </p>
       <p>
         <strong>Your region.</strong> The app chooses the UK or US edition (for
-        example °C or °F, kilograms or pounds) from your device&apos;s language and
-        region settings, read on the device. It does not use your location and does
-        not send your region to us.
+        example °C or °F, kilograms or pounds) from your device&apos;s region setting,
+        read on the device. The US and Canada get the US edition; Canada follows
+        Health Canada&apos;s guidance. It does not use your location and does not
+        send your region to us.
       </p>
       <p>
         We do not run any servers for the app and you do not create an account.
-        Deleting the app deletes this data. If you back up your iPhone or iPad to
-        iCloud or a computer, Apple includes app data in that backup under
-        Apple&apos;s own terms.
+        Deleting the app deletes this data, apart from a small copy of your next
+        dinner and any cook in progress that the widget and Apple Watch app keep in
+        your device&apos;s keychain (iOS&apos;s secure storage), which iOS does not
+        remove when an app is deleted. It never leaves your devices. If you back up
+        your iPhone or iPad to iCloud or a computer, Apple includes app data in that
+        backup under Apple&apos;s own terms.
+      </p>
+
+      <h2>Cooking together (iCloud sharing)</h2>
+      <p>
+        When you share a menu live with Cook together, Roast Conductor stores it in
+        your iCloud account using Apple&apos;s CloudKit and shares it with the people
+        you invite: the menu&apos;s name, dishes, steps and times, the dishes&apos;
+        ingredients and recipe links, how many you are cooking for, the jobs for the day
+        before, your helpers&apos; names and your own name as you give it, which steps
+        were ticked Done, when and
+        by whom, and who each person says they are in the plan and when their device
+        last checked in. Anyone you invite can read and change the plan. People you
+        invite can also see your name and contact as iCloud shows it on the invite.
+      </p>
+      <p>
+        The plan itself (dishes, steps, times, names and who ticked what) is stored in
+        iCloud&apos;s encrypted fields, which Apple says it cannot read. The menu&apos;s name
+        is shown on the invite, so iCloud holds it unencrypted, along with technical
+        details such as record IDs and when changes were made.
+      </p>
+      <p>
+        We run no server for this and cannot read it; Apple stores it under its own
+        terms and privacy policy. Stop sharing (or delete the menu) to remove the plan
+        from everyone else&apos;s devices and from your iCloud: it removes everyone at
+        once. A copy someone saves to their
+        own menus stays on their device after you stop sharing. Deleting the app does
+        not remove a shared plan from iCloud: stop sharing first. Anyone can leave a
+        plan shared with them; leaving removes only their access, and the steps they
+        ticked stay in your copy of the plan until you stop sharing. If you sign out of
+        iCloud, plans shared with you are removed from this device.
       </p>
 
       <h2>Your purchase (RevenueCat)</h2>
@@ -104,7 +150,8 @@ export default function RoastConductorPrivacyPage() {
         </li>
         <li>
           technical details needed to deliver the service, such as the app version,
-          iOS version, device model, country and IP address
+          iOS version, device model, country and IP address, and the identifier iOS
+          gives the app on your device (not your advertising identifier)
         </li>
       </ul>
       <p>
@@ -138,9 +185,9 @@ export default function RoastConductorPrivacyPage() {
       </p>
       <ul>
         <li>
-          for a link, your device fetches that public web page directly from the website you
-          linked to, the same way Safari would, so that website sees an ordinary
-          request from your device
+          for a link, your device fetches that public web page directly from the
+          website you linked to, much as Safari would; the request names Roast
+          Conductor as the app asking
         </li>
         <li>
           the page (or the method you pasted) is read on your device, using
@@ -148,17 +195,21 @@ export default function RoastConductorPrivacyPage() {
           sent to us or to any AI service
         </li>
         <li>
-          the app saves only the dish, its steps, its ingredients list and the link,
-          never the full page
+          the app saves only the dish, its steps, its ingredients list, how many it
+          serves and the link, never the full page
         </li>
       </ul>
 
       <h2>What we do not do</h2>
       <ul>
-        <li>No accounts or sign-in.</li>
+        <li>No accounts or sign-in (Cook together uses your own iCloud account).</li>
         <li>No analytics or advertising tools in the app, and no tracking.</li>
-        <li>No selling or sharing of your data.</li>
-        <li>No access to your contacts, location, photos, camera or microphone.</li>
+        <li>We never sell your data, and we share it only with the people you choose.</li>
+        <li>No access to your contacts, location, camera or microphone.</li>
+        <li>
+          The app never reads your photos. It only saves a plan picture to Photos
+          when you choose Save Image.
+        </li>
       </ul>
       <p>
         If you have chosen in iOS Settings to share analytics with app developers,
@@ -174,8 +225,10 @@ export default function RoastConductorPrivacyPage() {
         purchase record is anonymous, we may need your help to find it (for example,
         the date you bought the unlock). Email{" "}
         <a href={`mailto:${contactEmail}`}>{contactEmail}</a> and we will respond
-        within one month. You can also complain to the UK Information
-        Commissioner&apos;s Office at{" "}
+        within one month. If you are unhappy with how we use your data, email{" "}
+        <a href={`mailto:${privacyEmail}`}>{privacyEmail}</a>. We will
+        acknowledge your complaint within 30 days and try to resolve it. You can
+        also complain to the UK Information Commissioner&apos;s Office at{" "}
         <a href="https://ico.org.uk" target="_blank" rel="noopener noreferrer">
           ico.org.uk
         </a>
