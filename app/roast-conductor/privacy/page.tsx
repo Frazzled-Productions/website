@@ -18,8 +18,7 @@ export default function RoastConductorPrivacyPage() {
       >
         Roast Conductor privacy policy
       </h1>
-      {/* Set this, and the Changes line's date, to the day this PR merges (owner, at merge). */}
-      <p>Effective 20 October 2026</p>
+      <p>Effective 23 October 2026</p>
       <p>
         <strong>Changes:</strong> on 11 October 2026 we added how the app handles
         reminders, widgets, the Apple Watch app and your region. None of these sends
@@ -27,7 +26,7 @@ export default function RoastConductorPrivacyPage() {
         complain to us about how we use your data. Later the same day we made the
         policy more precise: the device identifier RevenueCat receives, the copy the
         widget and Apple Watch app keep after the app is deleted, how a recipe page is
-        fetched and what an import saves, and saving a plan picture to Photos. On 20
+        fetched and what an import saves, and saving a plan picture to Photos. On 23
         October 2026 we added Cook together, which shares a menu you choose with the
         people you invite through your own iCloud account.
       </p>
@@ -122,8 +121,7 @@ export default function RoastConductorPrivacyPage() {
         We run no server for this and cannot read it; Apple stores it under its own
         terms and privacy policy. Stop sharing (or delete the menu) to remove the plan
         from everyone else&apos;s devices and from your iCloud: it removes everyone at
-        once. You can also see what you share in your iPhone&apos;s iCloud settings
-        (Settings, then your Apple Account, then iCloud). A copy someone saves to their
+        once. A copy someone saves to their
         own menus stays on their device after you stop sharing. Deleting the app does
         not remove a shared plan from iCloud: stop sharing first. Anyone can leave a
         plan shared with them; leaving removes only their access, and the steps they
