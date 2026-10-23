@@ -205,9 +205,11 @@ export default function RoastConductorSupportPage() {
       <h3>Does Roast Conductor need an account or collect my data?</h3>
       <p>
         No account is needed. Your menus and plans stay on your iPhone or iPad (and
-        your Apple Watch, if you use it). Apart from fetching a recipe page when you
-        paste its link, the only data that leaves your devices is about your
-        purchase, so it can be restored.
+        your Apple Watch, if you use it), unless you share a menu with Cook together,
+        which keeps it in your iCloud and shares it with the people you invite. Apart
+        from fetching a recipe page when you paste its link, and Cook together, the
+        only data that leaves your devices is about your purchase, so it can be
+        restored.
         The <Link href="/roast-conductor/privacy">privacy policy</Link> has the details.
       </p>
 

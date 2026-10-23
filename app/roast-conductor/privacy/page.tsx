@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Roast Conductor privacy policy | Frazzled Productions",
   description:
-    "How the Roast Conductor app for iPhone, iPad and Apple Watch handles your data: no account, no tracking, menus stay on your devices, and RevenueCat manages the one-time unlock.",
+    "How the Roast Conductor app for iPhone, iPad and Apple Watch handles your data: no account, no tracking, menus stay on your devices unless you share one with Cook together, and RevenueCat manages the one-time unlock.",
 };
 
 const contactEmail = "hello@frazzledproductions.com";
@@ -18,7 +18,7 @@ export default function RoastConductorPrivacyPage() {
       >
         Roast Conductor privacy policy
       </h1>
-      <p>Effective 17 October 2026</p>
+      <p>Effective 23 October 2026</p>
       <p>
         <strong>Changes:</strong> on 11 October 2026 we added how the app handles
         reminders, widgets, the Apple Watch app and your region. None of these sends
@@ -26,15 +26,20 @@ export default function RoastConductorPrivacyPage() {
         complain to us about how we use your data. Later the same day we made the
         policy more precise: the device identifier RevenueCat receives, the copy the
         widget and Apple Watch app keep after the app is deleted, how a recipe page is
-        fetched and what an import saves, and saving a plan picture to Photos.
+        fetched and what an import saves, and saving a plan picture to Photos. On 23
+        October 2026 we added Cook together, which shares a menu you choose with the
+        people you invite through your own iCloud account.
       </p>
 
       <p className="text-lg">
         <strong>In short:</strong> Roast Conductor has no accounts, no adverts, no
-        analytics tools and no tracking. Your menus and plans stay on your devices.
-        Nothing you make in the app is sent to us. Apart from fetching a recipe page
-        when you paste its link, the only data the app sends off your device is about
-        your one-time purchase: our payment partner RevenueCat processes it under an
+        analytics tools and no tracking. Your menus and plans stay on your devices. If
+        you choose Cook together, the menu you share is kept in your iCloud account and
+        shared, through Apple&apos;s iCloud, with the people you invite. We never see
+        it. Nothing you make in the app is sent to us. Apart from fetching a recipe page
+        when you paste its link, and a menu you choose to share with Cook together
+        (which goes only to your own iCloud), the only data the app sends off your
+        device is about your one-time purchase: our payment partner RevenueCat processes it under an
         anonymous ID, with the technical details listed below, so the unlock works and
         can be restored.
       </p>
@@ -50,8 +55,8 @@ export default function RoastConductorPrivacyPage() {
 
       <h2>What stays on your devices</h2>
       <p>
-        Everything you make in the app is stored only on your iPhone or iPad and is
-        never sent to us:
+        Everything you make in the app is stored only on your iPhone or iPad, except a
+        menu you share with Cook together, described below, and is never sent to us:
       </p>
       <ul>
         <li>your menus, dishes, steps, serving times, plans and any helpers&apos; names you add</li>
@@ -92,6 +97,36 @@ export default function RoastConductorPrivacyPage() {
         remove when an app is deleted. It never leaves your devices. If you back up
         your iPhone or iPad to iCloud or a computer, Apple includes app data in that
         backup under Apple&apos;s own terms.
+      </p>
+
+      <h2>Cooking together (iCloud sharing)</h2>
+      <p>
+        When you share a menu live with Cook together, Roast Conductor stores it in
+        your iCloud account using Apple&apos;s CloudKit and shares it with the people
+        you invite: the menu&apos;s name, dishes, steps and times, the dishes&apos;
+        ingredients and recipe links, how many you are cooking for, the jobs for the day
+        before, your helpers&apos; names and your own name as you give it, which steps
+        were ticked Done, when and
+        by whom, and who each person says they are in the plan and when their device
+        last checked in. Anyone you invite can read and change the plan. People you
+        invite can also see your name and contact as iCloud shows it on the invite.
+      </p>
+      <p>
+        The plan itself (dishes, steps, times, names and who ticked what) is stored in
+        iCloud&apos;s encrypted fields, which Apple says it cannot read. The menu&apos;s name
+        is shown on the invite, so iCloud holds it unencrypted, along with technical
+        details such as record IDs and when changes were made.
+      </p>
+      <p>
+        We run no server for this and cannot read it; Apple stores it under its own
+        terms and privacy policy. Stop sharing (or delete the menu) to remove the plan
+        from everyone else&apos;s devices and from your iCloud: it removes everyone at
+        once. A copy someone saves to their
+        own menus stays on their device after you stop sharing. Deleting the app does
+        not remove a shared plan from iCloud: stop sharing first. Anyone can leave a
+        plan shared with them; leaving removes only their access, and the steps they
+        ticked stay in your copy of the plan until you stop sharing. If you sign out of
+        iCloud, plans shared with you are removed from this device.
       </p>
 
       <h2>Your purchase (RevenueCat)</h2>
@@ -167,9 +202,9 @@ export default function RoastConductorPrivacyPage() {
 
       <h2>What we do not do</h2>
       <ul>
-        <li>No accounts or sign-in.</li>
+        <li>No accounts or sign-in (Cook together uses your own iCloud account).</li>
         <li>No analytics or advertising tools in the app, and no tracking.</li>
-        <li>No selling or sharing of your data.</li>
+        <li>We never sell your data, and we share it only with the people you choose.</li>
         <li>No access to your contacts, location, camera or microphone.</li>
         <li>
           The app never reads your photos. It only saves a plan picture to Photos
