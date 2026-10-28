@@ -47,8 +47,8 @@ export default function Home() {
         >
           Frazzled Productions is an independent software studio based in London.
           We build digital products (apps, tools, and platforms) with a focus on
-          craft and longevity. Currently shipping Poké Memory, with Roast Conductor
-          coming soon to iPhone.
+          craft and longevity. Currently shipping Poké Memory and Roast Conductor,
+          on iPhone and iPad.
         </p>
       </section>
 
@@ -109,7 +109,7 @@ export default function Home() {
                 borderColor: "var(--cyan)",
               }}
             >
-              Soon
+              Live
             </span>
           </div>
           <p style={{ color: "var(--text-muted)" }} className="leading-relaxed">

@@ -76,7 +76,8 @@ export default function RoastConductorPage() {
         >
           Roast Conductor
         </h1>
-        <span
+        <a
+          href="https://apps.apple.com/app/id6821368790"
           className="text-xs tracking-widest px-3 py-1 rounded-full border"
           style={{
             fontFamily: "var(--font-orbitron)",
@@ -84,8 +85,8 @@ export default function RoastConductorPage() {
             borderColor: "var(--cyan)",
           }}
         >
-          Coming soon
-        </span>
+          On the App Store
+        </a>
       </div>
       <p
         className="text-lg md:text-xl leading-relaxed mb-12"
