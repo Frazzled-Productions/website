@@ -5,17 +5,19 @@ The optional "Support the studio" donation mechanism on the company website: a S
 the home page and a Ko-fi panel in an on-page modal. This is the baseline of current behaviour,
 written from the code on `main` at commit `3c6ba06` on 2 November 2026. It records what is true
 today, not what should be. No automated test covers this capability: the repo has no test files, and
-CI runs lint, typecheck and build only (`.github/workflows/ci.yml:24-26`).
+CI runs lint, typecheck and build only (`.github/workflows/ci.yml:24-26`). The CI build of this spec's
+branch lists `/` as static (`○`) under Next.js 16.2.7, and on 2 November 2026 the live home page answered
+with `x-nextjs-prerender: 1` and `x-vercel-cache: HIT`.
 
 ## Requirements
 
 ### Requirement: Baseline - the Support section only renders when KOFI_URL is set
 The home page SHALL read `KOFI_URL` from the server environment and SHALL render the Support section,
 including its divider, only when the value is non-empty. The value is not validated, so any non-empty
-string counts as set. `KOFI_URL` is blank in `.env.example`.
+string, including one of only spaces, counts as set. `KOFI_URL` is blank in `.env.example`.
 Sources: `app/page.tsx:11`, `app/page.tsx:123-146`, `.env.example:3-5`, `README.md:38`.
 
-#### Scenario: KOFI_URL unset or blank (baseline)
+#### Scenario: KOFI_URL unset or empty (baseline)
 - **WHEN** the home page is rendered with `KOFI_URL` unset or empty
 - **THEN** no Support heading, divider or "Support the studio" button appears on the page
 
@@ -23,10 +25,19 @@ Sources: `app/page.tsx:11`, `app/page.tsx:123-146`, `.env.example:3-5`, `README.
 - **WHEN** the home page is rendered with `KOFI_URL=https://ko-fi.com/frazzledproductions`
 - **THEN** the Support section appears, and the value is passed to `SupportButton` as `kofiUrl`
 
+### Requirement: Baseline - the KOFI_URL value reaches the browser
+`KOFI_URL` has no `NEXT_PUBLIC_` prefix, but the home page SHALL pass it to a client component, so the
+value SHALL appear in the page payload sent to the browser.
+Sources: `app/page.tsx:143`, `app/components/SupportButton.tsx:1`.
+
+#### Scenario: Reading the page source (baseline)
+- **WHEN** the home page is served with `KOFI_URL` set
+- **THEN** the value is readable in the page's HTML source
+
 ### Requirement: Baseline - KOFI_URL takes effect when the home page is rendered at build
 The home page SHALL NOT use any dynamic rendering API or dynamic route setting, so it is statically
-rendered and SHALL take the `KOFI_URL` value present at build time. Read from the code and the Next.js
-16.2.7 environment variables guide, not from a build run for this baseline.
+rendered and SHALL take the `KOFI_URL` value present at build time. Setting the variable therefore needs
+a new deployment, which the comment at `app/page.tsx:10` and `README.md:38` leave unsaid.
 Sources: `app/page.tsx:7-11`, `app/layout.tsx:28-45`, `next.config.ts:3-5`.
 
 #### Scenario: KOFI_URL changes on a deployed site (baseline)
@@ -44,13 +55,22 @@ Sources: `app/page.tsx:121-123`, `app/page.tsx:125`, `app/page.tsx:128-144`, `ap
 - **WHEN** a visitor scrolls the home page with `KOFI_URL` set
 - **THEN** they see "Support", the optional, no-perks paragraph and a "Support the studio" pill, then Contact
 
+### Requirement: Baseline - the section offers no route to Ko-fi without JavaScript
+The pill SHALL be in the prerendered HTML, but it is a button and the only link to Ko-fi is inside the
+modal, so without JavaScript the section SHALL offer no route to Ko-fi.
+Sources: `app/components/SupportButton.tsx:46-56`, `app/components/SupportButton.tsx:79-86`.
+
+#### Scenario: JavaScript is off (baseline)
+- **WHEN** a visitor with JavaScript off clicks "Support the studio"
+- **THEN** nothing happens
+
 ### Requirement: Baseline - a click records support_click and opens the modal
 `SupportButton` SHALL render a button labelled "Support the studio". Clicking it SHALL call Vercel
 Analytics `track('support_click')` with no properties, and SHALL then open the modal. This is the
 only analytics event in the capability: closing the modal and clicking the fallback link record
 nothing.
 Sources: `app/components/SupportButton.tsx:39-42`, `app/components/SupportButton.tsx:46-54`,
-`app/components/SupportButton.tsx:79-86`, `app/globals.css:110-127`.
+`app/components/SupportButton.tsx:79-86`, `app/layout.tsx:41`, `app/globals.css:110-127`.
 
 #### Scenario: Visitor clicks the pill (baseline)
 - **WHEN** a visitor clicks "Support the studio"
@@ -120,7 +140,8 @@ Sources: `app/components/SupportButton.tsx:26-29`, `app/components/SupportButton
 - **THEN** the modal closes
 
 ### Requirement: Baseline - closing discards the Ko-fi panel
-Closing the modal SHALL unmount the iframe, so anything entered in the Ko-fi panel is discarded.
+Closing the modal SHALL unmount the iframe with no confirmation, so anything entered in the Ko-fi panel
+and not yet submitted is discarded. Closing SHALL NOT undo anything already submitted to Ko-fi.
 Reopening SHALL load the panel afresh and record another `support_click`.
 Sources: `app/components/SupportButton.tsx:39-42`, `app/components/SupportButton.tsx:56`,
 `app/components/SupportButton.tsx:74-78`.
@@ -158,9 +179,19 @@ Sources: `app/components/SupportButton.tsx:18`, `app/components/SupportButton.ts
 - **WHEN** a keyboard user closes the modal with the Close button or Escape
 - **THEN** focus is not moved back to the "Support the studio" button
 
+### Requirement: Baseline - the pill stays active behind the open modal
+The "Support the studio" button SHALL stay focusable and active while the modal is open, directly before
+the dialog in tab order, and pressing it SHALL record another `support_click` without reloading the panel.
+Sources: `app/components/SupportButton.tsx:39-42`, `app/components/SupportButton.tsx:46-56`.
+
+#### Scenario: Pressing the pill behind the open modal (baseline)
+- **WHEN** a keyboard user presses Shift+Tab from Close, then Enter on "Support the studio"
+- **THEN** a second `support_click` is sent, and the modal stays open with its panel unchanged
+
 ### Requirement: Baseline - the privacy notice describes the mechanism unconditionally
 The `/privacy` page SHALL describe the "Support the studio" button, its link-click event and the Ko-fi
-panel whether or not `KOFI_URL` is set, using the conditional wording "If the site shows".
+panel whether or not `KOFI_URL` is set, because it does not read the variable. Only the Ko-fi section
+is conditional ("If the site shows"); "Link clicks" names the button without a condition.
 Sources: `app/privacy/page.tsx:7`, `app/privacy/page.tsx:45-46`, `app/privacy/page.tsx:89-97`,
 `app/privacy/page.tsx:99-121`.
 
@@ -171,11 +202,13 @@ Sources: `app/privacy/page.tsx:7`, `app/privacy/page.tsx:45-46`, `app/privacy/pa
 ## Clarifications
 
 ### 2 November 2026
-- Does the Ko-fi launch gate still stand? Issue #7 closed with its solicitor sign-off box unticked, and
-  PR #8 made setting `KOFI_URL` the deliberate go-live step. Whether production has it set is outside a
-  code baseline. Recommendation: Fraser confirms the sign-off before `KOFI_URL` is set, and this spec
-  stays silent on production state.
+- Is the Ko-fi launch gate still open? Issue #7 closed with its solicitor sign-off box unticked, and
+  PR #8 made setting `KOFI_URL` the deliberate go-live step. That step has been taken: on 2 November 2026
+  the live home page served the Support section with `kofiUrl` set to
+  `https://ko-fi.com/frazzledproductions`. Recommendation: Fraser records whether the mechanism stays live
+  and on what basis, and this spec's requirements stay silent on production state.
 - Should the capability have tests? It has none. Recommendation: add them when a change first touches
   it, under spec on touch.
-- This file lands ahead of the OpenSpec adoption PR (#50), so the repo has no `openspec/config.yaml`
-  yet. Recommendation: keep the file as it is, because adoption can pick it up unchanged.
+- This file lands ahead of OpenSpec adoption (issue #50, open, no adoption PR yet), so the repo has no
+  `openspec/config.yaml` yet. Recommendation: keep the file as it is, because adoption can pick it up
+  unchanged.
