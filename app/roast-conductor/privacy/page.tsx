@@ -213,7 +213,10 @@ export default function RoastConductorPrivacyPage() {
       <ul>
         <li>No accounts or sign-in (Cook together uses your own iCloud account).</li>
         <li>No analytics or advertising tools in the app, and no tracking.</li>
-        <li>We never sell your data, and we share it only with the people you choose.</li>
+        <li>
+          We never sell your data, and we share it only with the people you choose and
+          the services this policy names.
+        </li>
         <li>No access to your contacts, location, camera or microphone.</li>
         <li>
           The app never reads your photos. It only saves a plan picture to Photos
