@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Baseline of the privacy and support pages for Roast Conductor and Loop Year on the company website, which App Store Connect and the apps link to directly. It describes what the code does today (`origin/main` at `3c6ba06`, 2 November 2026), not what it should do, and was not checked against production. The repo has no tests, so no scenario here is covered by a test. Behaviour that looks like a bug is stated as it is, with its issue number. The website's own notice at `/privacy`, the Roast Conductor product page and the sample recipe page are not part of this capability.
+Baseline of the privacy and support pages for Roast Conductor and Loop Year on the company website, which App Store Connect and the apps link to directly. It describes what the code does today (`origin/main` at `3c6ba06`, 2 November 2026), not what it should do. Production was deployed from the same commit on that date, and the live site was spot-checked: the four URLs returned 200 with no redirect and `/loop-year` returned 404. The text of each page was not compared in full. The repo has no tests, so no scenario here is covered by a test. Behaviour that looks like a bug is stated as it is, with its issue number. The website's own notice at `/privacy`, the Roast Conductor product page and the sample recipe page are not part of this capability.
 
 ## Requirements
 
@@ -20,7 +20,7 @@ Source: `app/roast-conductor/privacy/page.tsx:12`, `app/roast-conductor/support/
 #### Scenario: The Loop Year parent path
 
 - **WHEN** a visitor opens `/loop-year`
-- **THEN** no route exists for it, because `app/loop-year/` has a layout but no `page.tsx`
+- **THEN** no route exists for it, because `app/loop-year/` has a layout but no `page.tsx`, so the site returns 404
 
 #### Scenario: The home page does not link Loop Year
 
@@ -29,7 +29,7 @@ Source: `app/roast-conductor/privacy/page.tsx:12`, `app/roast-conductor/support/
 
 ### Requirement: What guards the URLs
 
-The only automated guards on these URLs SHALL be the CI steps lint, typecheck and build, of which `check:structure` compares the README's structure block with `app/`. No test, route list or uptime monitor exists for the four URLs.
+The only automated guards on these URLs SHALL be the CI steps lint, typecheck and build, of which `check:structure` compares the README's structure block with `app/`. No test requests the four URLs, and no route list or uptime monitor exists for them.
 
 Source: `.github/workflows/ci.yml:24-26`, `package.json:12-15`, `scripts/check-readme-structure.mjs:7-10`, `README.md:66-71`, `README.md:77-82`.
 
@@ -38,10 +38,15 @@ Source: `.github/workflows/ci.yml:24-26`, `package.json:12-15`, `scripts/check-r
 - **WHEN** a change removes one of the page files and leaves the README as it is
 - **THEN** `npm run lint` fails, because the README names a path that no longer exists
 
+#### Scenario: The URL strings in the apps
+
+- **WHEN** a Loop Year URL string changes in the app
+- **THEN** a Loop Year test fails (loop-year `LoopYearTests/BlanketsAndSettingsTests.swift:141-142`), but that test does not request the page, and Roast Conductor's strings (`RoastConductor/Model/AppLinks.swift`) have no such test
+
 #### Scenario: A page and its README line change together
 
-- **WHEN** a change renames a route and updates the README in the same PR
-- **THEN** nothing fails, although App Store Connect and the apps still point at the old URL (open issue #30)
+- **WHEN** a change renames or removes a route and updates the README in the same PR
+- **THEN** nothing fails, although App Store Connect and the apps still point at the old URL, and an in-site link to the old path is not caught either (open issue #30)
 
 ### Requirement: Page titles and descriptions
 
@@ -68,7 +73,7 @@ Source: `app/roast-conductor/layout.tsx:3-5`, `app/roast-conductor/layout.tsx:14
 #### Scenario: Footer
 
 - **WHEN** any Roast Conductor page is rendered
-- **THEN** the footer shows FRAZZLED PRODUCTIONS LTD, company number 17258540 and 71-75 Shelton Street, Covent Garden, London, WC2H 9JQ, as literal text in the layout, with no link to the website's `/privacy` notice
+- **THEN** the footer shows FRAZZLED PRODUCTIONS LTD, company number 17258540 and 71-75 Shelton Street, Covent Garden, London, WC2H 9JQ, as literal text in the layout, with no link to the website's `/privacy` notice (open issue #66)
 
 ### Requirement: Loop Year frame
 
@@ -84,7 +89,7 @@ Source: `app/loop-year/layout.tsx:3-6`, `app/loop-year/layout.tsx:15-33`, `app/l
 #### Scenario: Footer
 
 - **WHEN** a Loop Year page is rendered
-- **THEN** the footer repeats the same company details as literal text, in a separate file from the Roast Conductor footer, with no link to `/privacy`
+- **THEN** the footer repeats the same company details as literal text, in a separate file from the Roast Conductor footer, with no link to `/privacy` (open issue #66)
 
 ### Requirement: Shared styling and site-wide wrapper
 
@@ -137,7 +142,7 @@ Source: `app/roast-conductor/privacy/page.tsx:21-32`, `app/roast-conductor/priva
 
 ### Requirement: Roast Conductor data on the device
 
-The Roast Conductor policy SHALL state that the app has no accounts, adverts, analytics tools, tracking or servers, that what the user makes stays on their devices apart from Cook together, and that nothing is sent to the company. It covers notifications, widgets, the Apple Watch link, the region setting and what survives deleting the app.
+The Roast Conductor policy SHALL state that the app has no accounts, adverts, analytics tools, tracking or servers, that what the user makes stays on their devices apart from Cook together, and that nothing is sent to the company. It covers notifications, widgets, the Apple Watch link, the region setting, what survives deleting the app and backups.
 
 Source: `app/roast-conductor/privacy/page.tsx:34-45`, `app/roast-conductor/privacy/page.tsx:56-100`.
 
@@ -145,6 +150,16 @@ Source: `app/roast-conductor/privacy/page.tsx:34-45`, `app/roast-conductor/priva
 
 - **WHEN** a reader reads what deleting the app does
 - **THEN** the policy says app data goes, apart from a small keychain copy of the next dinner and any cook in progress, which iOS does not remove
+
+#### Scenario: Apple Watch
+
+- **WHEN** a reader uses the Apple Watch app
+- **THEN** the policy says the iPhone sends the current cook and upcoming dinners to the paired watch, which keeps a copy, the watch sends back the steps marked done, and nothing is sent to the company
+
+#### Scenario: Backups
+
+- **WHEN** a reader reads about backups
+- **THEN** the policy says iCloud or computer backups include app data under Apple's terms
 
 #### Scenario: Region
 
@@ -157,6 +172,11 @@ The Roast Conductor policy SHALL describe Cook together: what is stored in the u
 
 Source: `app/roast-conductor/privacy/page.tsx:102-130`.
 
+#### Scenario: What invited people get
+
+- **WHEN** a reader reads who can see a shared menu
+- **THEN** the policy says anyone invited can read and change the plan, and can see the owner's name and contact as iCloud shows it on the invite
+
 #### Scenario: What stays unencrypted
 
 - **WHEN** a reader reads how a plan is stored
@@ -165,11 +185,11 @@ Source: `app/roast-conductor/privacy/page.tsx:102-130`.
 #### Scenario: Ending a share
 
 - **WHEN** a reader reads how to remove a plan
-- **THEN** the policy says stopping sharing or deleting the menu removes it for everyone, deleting the app does not, a copy someone saved stays with them, and leaving removes only that person's access
+- **THEN** the policy says stopping sharing or deleting the menu removes it for everyone, deleting the app does not, a copy someone saved stays with them, leaving removes only that person's access while their ticks stay in the owner's copy, and signing out of iCloud removes plans shared with that person from the device
 
 ### Requirement: Roast Conductor recipe import disclosure
 
-The Roast Conductor policy SHALL state that importing a recipe needs the unlock, that the device fetches the page directly, that it is read on the device, and that only the dish details and link are saved.
+The Roast Conductor policy SHALL state that importing a recipe, from a link or a pasted method, needs the unlock, that the device fetches a linked page directly, that the text is read on the device, using on-device Apple Intelligence where available, and that only the dish details and link are saved.
 
 Source: `app/roast-conductor/privacy/page.tsx:181-201`.
 
@@ -187,12 +207,12 @@ Source: `app/roast-conductor/privacy/page.tsx:132-179`, `app/loop-year/privacy/p
 #### Scenario: Device identifier
 
 - **WHEN** the two technical-details lists are compared
-- **THEN** only Roast Conductor's lists the identifier iOS gives the app (`app/roast-conductor/privacy/page.tsx:152-154`, `app/loop-year/privacy/page.tsx:158-160`)
+- **THEN** only Roast Conductor's lists the identifier iOS gives the app (`app/roast-conductor/privacy/page.tsx:152-154`, `app/loop-year/privacy/page.tsx:158-160`), and Loop Year's omission is open issue #77
 
 #### Scenario: Reader who never buys
 
 - **WHEN** a reader looks for what happens if they never buy
-- **THEN** both policies describe RevenueCat only in terms of the purchase and give no legal basis or retention for non-buyers (open issue #54 for Roast Conductor, draft PR #55)
+- **THEN** both policies describe RevenueCat only in terms of the purchase and give no legal basis or retention for non-buyers (open issue #54 for Roast Conductor, draft PR #55; loop-year #91 for Loop Year)
 
 ### Requirement: Loop Year data on the iPhone
 
@@ -261,14 +281,14 @@ Source: `app/roast-conductor/privacy/page.tsx:221-236`, `app/loop-year/privacy/p
 
 ### Requirement: Children and the website
 
-Each policy SHALL state that the app is general-audience and does not knowingly collect personal data from anyone, including children, and that the policy covers the app while the website counts visits with Vercel Web Analytics without cookies.
+Each policy SHALL call the app a general cooking or crafting app that does not knowingly collect personal data from anyone, including children, and SHALL state that the policy covers the app while the website counts visits with Vercel Web Analytics without cookies.
 
 Source: `app/roast-conductor/privacy/page.tsx:238-242`, `app/roast-conductor/privacy/page.tsx:250-254`, `app/loop-year/privacy/page.tsx:219-223`, `app/loop-year/privacy/page.tsx:231-236`.
 
 #### Scenario: Website data
 
 - **WHEN** a reader reads "This website"
-- **THEN** it names page counts only and does not link the website's `/privacy` notice
+- **THEN** it names page counts only and does not link the website's `/privacy` notice (open issue #66)
 
 ### Requirement: External links
 
@@ -292,6 +312,16 @@ Source: `app/roast-conductor/support/page.tsx:205-214`, `app/loop-year/support/p
 - **WHEN** a reader opens the account question on either support page
 - **THEN** it says no account is needed and links to that app's `/privacy` route
 
+#### Scenario: What leaves the device
+
+- **WHEN** a reader reads the data answer on the Roast Conductor page
+- **THEN** it says that, apart from fetching a pasted recipe link and Cook together, the only data leaving the device is about the purchase
+
+#### Scenario: Deleting Loop Year
+
+- **WHEN** a reader reads the data answer on the Loop Year page
+- **THEN** it says deleting the app deletes the blankets and does not mention backups (open issue #79)
+
 ### Requirement: Roast Conductor support answers
 
 The Roast Conductor support page SHALL open with what the app does and answer questions on alarms, restoring purchases, cooking times, editing steps, oven offset, air fryers and microwaves, recipe links, running late, "Not done yet", make-ahead dishes, courses and helpers, reminders, data, devices, the Apple Watch, iPad, units and missing menus.
@@ -303,6 +333,21 @@ Source: `app/roast-conductor/support/page.tsx:21-26`, `app/roast-conductor/suppo
 - **WHEN** a reader asks if alarms ring on silent or in a Focus
 - **THEN** the page says yes if alarms are allowed, and that without permission the app falls back to notifications that follow silent and Focus
 
+#### Scenario: Restoring
+
+- **WHEN** a reader asks how to restore on a new iPhone
+- **THEN** the page says to tap More on the home screen, then Restore purchases, with the same Apple Account, and that Family Sharing is supported
+
+#### Scenario: Stopping reminders
+
+- **WHEN** a reader wants to stop reminders
+- **THEN** the page says the Leftovers reminder turns off in Your kitchen, all of them turn off in the Settings app, and cook mode alarms are separate and keep working
+
+#### Scenario: iPad
+
+- **WHEN** a reader asks about iPad
+- **THEN** the page says there are no Live Activities on iPad, the purchase works on both devices with the same Apple Account, and menus are not synced between devices
+
 #### Scenario: Timing safety
 
 - **WHEN** a reader reads where cooking times come from
@@ -311,12 +356,12 @@ Source: `app/roast-conductor/support/page.tsx:21-26`, `app/roast-conductor/suppo
 #### Scenario: Trying recipe links
 
 - **WHEN** a reader asks how to try recipe links
-- **THEN** the page links to `/roast-conductor/sample-recipe` and says recipe links are part of the unlock
+- **THEN** the page links to `/roast-conductor/sample-recipe`, tells them to choose "From a recipe link", though the app's button says "From a link" (`app/roast-conductor/support/page.tsx:138`, open issue #61), and says recipe links are part of the unlock
 
 #### Scenario: Lost menus
 
 - **WHEN** a reader's menus have gone
-- **THEN** the page says menus live only on the device they were made on and asks the reader to email before deleting the app
+- **THEN** the page says menus live only on the device they were made on and reach a new device only through an iCloud or computer backup, and asks the reader to update the app and email before deleting it. It does not cover plans under "Shared with you" (open issue #79)
 
 ### Requirement: Roast Conductor free and unlock lists
 
@@ -349,6 +394,11 @@ Source: `app/roast-conductor/support/page.tsx:245-254`, `app/roast-conductor/pri
 
 - **WHEN** a reader wants different units
 - **THEN** the page says °C or °F and oven type change from the More button, and weights follow the region in the Settings app
+
+#### Scenario: Oven types in the US edition
+
+- **WHEN** a US edition reader reads "Can I change a time or temperature?"
+- **THEN** the page offers fan, conventional or gas (`app/roast-conductor/support/page.tsx:111-113`), though the app's US edition offers no gas (roast-conductor `RoastEngine/Sources/RoastEngine/CookRegion.swift:30-35`, noted in open issue #79)
 
 ### Requirement: Stated device support
 
@@ -383,7 +433,9 @@ Source: `app/loop-year/support/page.tsx:21-25`, `app/loop-year/support/page.tsx:
 - 2 November 2026: the Loop Year policy says "evening reminder" (`app/loop-year/privacy/page.tsx:126`) and its support page says "daily reminder" (`app/loop-year/support/page.tsx:69`). Loop Year's own label is "Daily reminder". Copy only, so no issue was filed. Recommendation: use "daily reminder" in the next change here.
 - 2 November 2026: the policy text for the 18 October 2026 region edit is in the page but not in its "Changes" paragraph. It corrected how the region is read, so no issue was filed. Recommendation: decide whether "Changes" lists every edit or only material ones, and say so in the next policy change.
 - 2 November 2026: both policies say "no analytics tools" while saying RevenueCat data is used to see how many unlocks are sold, "(analytics)" (`app/roast-conductor/privacy/page.tsx:35-36`, `app/roast-conductor/privacy/page.tsx:158-159`, `app/loop-year/privacy/page.tsx:24-25`, `app/loop-year/privacy/page.tsx:163-164`). The two sit awkwardly together, though neither is false: RevenueCat is a payment partner, not an analytics tool in the app. Wording only, so no issue was filed. Recommendation: reword the summaries in the next policy change.
-- 2 November 2026: "This website" on both policies names page counts only, while the website's notice also covers link click counts and Ko-fi (`app/privacy/page.tsx:7`), and neither policy nor frame links it. Recommendation: link `/privacy` from those sections in the next change here.
+- 2 November 2026: "This website" on both policies names page counts only, while the website's notice also covers link click counts and Ko-fi (`app/privacy/page.tsx:7`), and neither policy nor frame links it. Open issue #66 now covers the link. Recommendation: take this with #66, including the frames.
 - 2 November 2026: the company details and footer are repeated in two layouts and two policies, though AGENTS.md says company facts are referenced from ops or Drive, not forked (`AGENTS.md:8-10`). Recommendation: leave as it is until a change touches the footer.
 - 2 November 2026: `/loop-year` has no page. Recommendation: take this with #31, which asks whether Loop Year can be public yet.
 - 2 November 2026: the repo has not adopted OpenSpec (#50), so this PR adds only this file, with no `config.yaml` or change folder. Recommendation: land it with or after the adoption PR.
+- 2 November 2026: the Roast Conductor support page says "Every built-in timing comes from published UK guidance", with USDA named only for US turkey and ham (`app/roast-conductor/support/page.tsx:94-97`), while the privacy policy says Canada follows Health Canada's guidance. #58 asks for line 96 to be checked. Recommendation: settle the sources sentence in the #58 change.
+- 2 November 2026: #79 also lists "only data" and "anonymous" wording against a persistent ID (cited in that audit, not repeated here; see loop-year #91). Recommendation: decide the wording with #54 and loop-year #91, as these requirements quote the policies as they stand.
