@@ -18,17 +18,17 @@ export default function LoopYearPrivacyPage() {
       >
         Loop Year privacy policy
       </h1>
-      <p>Effective 17 October 2026</p>
+      <p>Effective 2 November 2026</p>
 
       <p className="text-lg">
         <strong>In short:</strong> Loop Year has no accounts, no adverts, no
         analytics tools and no tracking. Your blankets stay on your iPhone. To
         look up the weather, the app sends the place you chose to Apple Weather
-        (and, for days before August 2021, a weather station number and a year
-        to Meteostat). The record of your one-time purchase is processed by our
-        payment partner RevenueCat under an anonymous ID, so the unlock works and
-        can be restored. We never see your location, and the app never asks for
-        it.
+        (and, for days before August 2021, nearby weather station numbers and
+        years to Meteostat, through Cloudflare). The record of your one-time
+        purchase is processed by our payment partner RevenueCat under an
+        anonymous ID, so the unlock works and can be restored. We never see your
+        location, and the app never asks for it.
       </p>
 
       <h2>Who we are</h2>
@@ -102,12 +102,24 @@ export default function LoopYearPrivacyPage() {
         <li>
           <strong>Meteostat.</strong> For blankets with days before 1 August
           2021, such as a birth-year blanket, the app picks the nearest weather
-          stations on your iPhone, from a list built into the app. It then
-          downloads that station&apos;s records for the year from
-          data.meteostat.net. The request contains only the station&apos;s
-          number and the year, never your place or its map position. Like any
-          web request, it also carries your device&apos;s IP address, which
-          Meteostat logs in anonymised form under its{" "}
+          stations on your iPhone, from a list built into the app. It may
+          download records from several nearby stations, for each year needed,
+          from data.meteostat.net. Each request contains only a station number,
+          a year and the app&apos;s name, never your place or its map position,
+          but those stations are near the place you chose, and the year may be
+          your birth year. Requests pass through Cloudflare, which Meteostat
+          uses to deliver its files, and which handles your device&apos;s IP
+          address under its own{" "}
+          <a
+            href="https://www.cloudflare.com/privacypolicy/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            privacy policy
+          </a>
+          . Meteostat records an anonymised IP address, your approximate
+          location and country, your operating system and the time of the
+          request, under its{" "}
           <a
             href="https://meteostat.net/en/privacy"
             target="_blank"
