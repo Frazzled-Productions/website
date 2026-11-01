@@ -147,9 +147,7 @@ Source: `app/layout.tsx:2`, `app/layout.tsx:7-21`, `app/globals.css:1`.
 ### Requirement: The notice page at /privacy (baseline, current behaviour)
 `/privacy` SHALL be a server-rendered page titled "Privacy | Frazzled Productions" with a header link
 to `/` and a company footer. Its summary SHALL say the site has no accounts, sign-up forms, adverts or
-cookies, counts visits and clicks on a few links with analytics that "does not identify you", and
-leaves Ko-fi support to Ko-fi. Its meta description SHALL call the analytics cookie-free and the click
-counts anonymous.
+cookies, counts visits and clicks on a few links, and leaves Ko-fi support to Ko-fi.
 
 Source: `app/privacy/page.tsx:4-8`, `app/privacy/page.tsx:20-26`, `app/privacy/page.tsx:37`,
 `app/privacy/page.tsx:41-47`, `app/privacy/page.tsx:159-166`.
@@ -158,6 +156,11 @@ Source: `app/privacy/page.tsx:4-8`, `app/privacy/page.tsx:20-26`, `app/privacy/p
 - **WHEN** a visitor opens `/privacy`
 - **THEN** they see the summary first, then the sections Who we are, Visit statistics, Link clicks,
   Supporting us on Ko-fi, Our legal basis, Emailing us, Your rights and Changes to this notice
+
+#### Scenario: How the page describes the analytics
+- **WHEN** a reader reads the summary, or a search result shows the meta description
+- **THEN** the summary says the analytics "does not identify you", and the description calls it
+  cookie-free and the click counts anonymous
 
 ### Requirement: Notice names the controller and its scope (baseline, current behaviour)
 The notice SHALL name Frazzled Productions Ltd (company number 17258540, 71-75 Shelton Street) as
@@ -182,9 +185,7 @@ The notice SHALL say that Vercel Web Analytics records, per page view, the time,
 referring site, rough location (country, region, city), device type, operating system and browser;
 that it uses no cookies and stores nothing on the device; that Vercel distinguishes visits by a
 request hash discarded after 24 hours; that only totals are visible; and that Vercel briefly processes
-IP addresses to deliver and protect the site. It gives no retention period for the page-view and click
-records, and no statement on processing outside the UK. This looks like a bug: see
-Frazzled-Productions/website#76.
+IP addresses to deliver and protect the site.
 
 Source: `app/privacy/page.tsx:62-87`.
 
@@ -194,7 +195,8 @@ Source: `app/privacy/page.tsx:62-87`.
 
 #### Scenario: Looking for how long records are kept
 - **WHEN** a reader looks for how long analytics records are kept or where they are processed
-- **THEN** the only period given is 24 hours for the hash, and no location is given
+- **THEN** the only period given is 24 hours for the hash, and no location is given; this looks like
+  a bug: see Frazzled-Productions/website#76
 
 ### Requirement: Notice describes link clicks (baseline, current behaviour)
 The notice SHALL say that clicks on "a few specific links", such as the Poké Memory link or the
