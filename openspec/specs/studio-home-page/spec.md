@@ -88,7 +88,7 @@ Source: `app/page.tsx:17-25`, `app/globals.css:38-53`
 
 ### Requirement: Typed tagline
 
-The hero SHALL type the tagline "Software for the fun of it." in the browser, one character every 55ms after a 600ms delay, in animated gradient text, showing a pulsing `|` cursor until typing ends. The server-rendered hero markup SHALL contain the cursor and none of the tagline (#70). Once typing has started, the interval is not cleared by unmount or a text change (#71).
+The hero SHALL type the tagline "Software for the fun of it." in the browser, one character every 55ms after a 600ms delay, in animated gradient text, showing a pulsing `|` cursor until typing ends. The server-rendered hero markup SHALL contain the cursor and none of the tagline (#70).
 
 Source: `app/page.tsx:26-28`, `app/components/Typewriter.tsx:4-22`, `app/components/Typewriter.tsx:24-34`, `app/globals.css:56-69`
 
@@ -106,6 +106,11 @@ Source: `app/page.tsx:26-28`, `app/components/Typewriter.tsx:4-22`, `app/compone
 
 - **WHEN** the served HTML is searched for the tagline (measured on the live page)
 - **THEN** it appears in the meta description and twice in the inline React payload, but not in the visible markup
+
+#### Scenario: Unmount during typing
+
+- **WHEN** the component unmounts or its text changes once typing has started
+- **THEN** the interval is not cleared (#71)
 
 #### Scenario: Cursor colour
 
