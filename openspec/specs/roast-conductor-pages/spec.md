@@ -147,8 +147,8 @@ features need the unlock: only the pricing section does.
 ### Requirement: What the page says is free (baseline, current behaviour)
 Under "Free, with a one-time unlock", the product page SHALL list as free, with every built-in dish
 and cut of meat: any number of menus of up to four dishes each, the planner with oven clash fixes and
-running late, cook mode alarms and the Live Activity, widgets with Siri, Shortcuts and the iPad layout, starters and
-puddings, tips with the Day before list and reminders, sharing as a picture, PDF or text, and the
+running late, cook mode alarms and the Live Activity, widgets with Siri, Shortcuts and the iPad
+layout, starters and puddings, tips with the Day before list and reminders, sharing as a picture, PDF or text, and the
 Christmas and Easter themes (`app/roast-conductor/page.tsx:45-54`, `:117-123`).
 
 #### Scenario: Free list
@@ -167,8 +167,7 @@ records the difference from the support page.
 ### Requirement: What the page says the unlock adds (baseline, current behaviour)
 The product page SHALL list ten items after the price: unlimited dishes, recipes from links (a pasted
 link or method, read on the device, with the cook checking every step), custom dishes, up to three
-ovens, the air fryer and microwave, reverse sear and slow roast, make-ahead sides,
-course timing with moving dishes and sharing jobs among helpers, any number of guests with a shopping
+ovens, the air fryer and microwave, reverse sear and slow roast, make-ahead sides, course timing with moving dishes and sharing jobs among helpers, any number of guests with a shopping
 list, and the Apple Watch app (`app/roast-conductor/page.tsx:56-67`, `:125-129`).
 
 #### Scenario: Unlock list
@@ -244,8 +243,7 @@ do (`app/roast-conductor/page.tsx:58`, `app/roast-conductor/support/page.tsx:140
 The page SHALL show "Serves 4. Preparation 15 minutes, cooking about 1 hour."
 (`app/roast-conductor/sample-recipe/page.tsx:85-87`), four ingredients as a bulleted list (`:12-17`,
 `:89-94`) under the heading "Ingredients", seven steps as a numbered list (`:19-27`, `:96-101`) under
-the heading "Method", and a closing note that ovens vary, so
-check the potatoes towards the end (`:103-106`).
+the heading "Method", and a closing note that ovens vary, so check the potatoes towards the end (`:103-106`).
 
 #### Scenario: Numbered method
 - **WHEN** the page renders
@@ -254,17 +252,17 @@ check the potatoes towards the end (`:103-106`).
 ### Requirement: Sample recipe structured data (baseline, current behaviour)
 The page SHALL embed one `application/ld+json` script of schema.org type `Recipe` in the `article`, not
 the document head, with `<` escaped as `\u003c` (`app/roast-conductor/sample-recipe/page.tsx:59-65`).
-It SHALL carry the name, a
-description, the URL `https://frazzledproductions.com/roast-conductor/sample-recipe`, the Organization
-author "Frazzled Productions", the yield, `prepTime` PT15M, `cookTime` PT1H, `totalTime` PT1H15M,
-category "Side dish" and cuisine "British" (`app/roast-conductor/sample-recipe/page.tsx:8-10`, `:29-42`).
+It SHALL carry the name, a description, the page URL, the Organization author "Frazzled Productions",
+the yield, `prepTime` PT15M, `cookTime` PT1H, `totalTime` PT1H15M, category "Side dish" and cuisine
+"British" (`app/roast-conductor/sample-recipe/page.tsx:8-10`, `:29-42`).
 
 #### Scenario: Yield shared between page and data
 - **WHEN** the page renders
 - **THEN** "Serves 4" comes from the one `recipeYield` constant in both the visible text and the JSON-LD
 
 ### Requirement: Structured data outside this page (baseline, current behaviour)
-The JSON-LD URL SHALL be the production address on every deployment, previews included
+The JSON-LD URL SHALL be `https://frazzledproductions.com/roast-conductor/sample-recipe` on every
+deployment, previews included
 (`app/roast-conductor/sample-recipe/page.tsx:8`). The app's importer tests SHALL use their own copy of
 this JSON-LD as a fixture (roast-conductor
 `RoastEngine/Tests/RoastEngineTests/Fixtures/plain-object-howto-steps.html`).
