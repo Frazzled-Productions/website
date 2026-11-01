@@ -101,7 +101,7 @@ Source: `app/page.tsx:26-28`, `app/components/Typewriter.tsx:4-22`, `app/compone
 
 The hero SHALL show, over its bottom 40%, a canvas grid of 40px cells tilted by CSS perspective and faded in from the top by a mask, with horizontal lines scrolling down one cell every 1500ms. It SHALL stop its animation frame, timer and resize listener on unmount.
 
-Source: `app/page.tsx:29-31`, `app/globals.css:91-99`, `app/components/HorizonGrid.tsx:4-6`, `app/components/HorizonGrid.tsx:34-40`, `app/components/HorizonGrid.tsx:59-85`, `app/components/HorizonGrid.tsx:154-158`, `app/components/HorizonGrid.tsx:161-172`
+Source: `app/page.tsx:29-31`, `app/globals.css:91-99`, `app/components/HorizonGrid.tsx:4-6,34-40,59-85,154-172`
 
 #### Scenario: Grid scrolls
 
@@ -117,7 +117,7 @@ Source: `app/page.tsx:29-31`, `app/globals.css:91-99`, `app/components/HorizonGr
 
 On devices where `(hover: none)` does not match, the grid SHALL spawn a cyan light cycle 3000ms after load, and schedule the next spawn 8000 to 14000ms after each one ends. In practice only the first cycle is ever seen, because later spawns start past the canvas bottom and are discarded on their first frame (#67).
 
-Source: `app/components/HorizonGrid.tsx:7`, `app/components/HorizonGrid.tsx:12-23`, `app/components/HorizonGrid.tsx:46-57`, `app/components/HorizonGrid.tsx:87-117`, `app/components/HorizonGrid.tsx:119-147`
+Source: `app/components/HorizonGrid.tsx:7,12-23,46-57,87-147`
 
 #### Scenario: Touch device
 
