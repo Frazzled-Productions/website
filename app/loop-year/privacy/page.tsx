@@ -104,10 +104,11 @@ export default function LoopYearPrivacyPage() {
           2021, such as a birth-year blanket, the app picks the nearest weather
           stations on your iPhone, from a list built into the app. It may
           download records from several nearby stations, for each year needed,
-          from data.meteostat.net. Each request contains only a station number,
-          a year and the app&apos;s name, never your place or its map position,
-          but those stations are near the place you chose, and the year may be
-          your birth year. Requests pass through Cloudflare, which Meteostat
+          from data.meteostat.net. Each request contains a station number, a
+          year, the app&apos;s name and standard technical details such as your
+          language setting, never your place or its map position, but those
+          stations are near the place you chose, and the year may be your birth
+          year. Requests pass through Cloudflare, which Meteostat
           uses to deliver its files, and which handles your device&apos;s IP
           address under its own{" "}
           <a
