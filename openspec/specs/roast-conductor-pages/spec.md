@@ -5,6 +5,8 @@ The Roast Conductor product page, the sample recipe page and the shared frame ar
 `/roast-conductor`, as they behave on `main` at 3c6ba06. Written from code on 2 November 2026 and
 describes what is true today, not what should be. The repo has no automated tests for these pages: CI
 runs lint, type-check and build only. The support and privacy page bodies are outside this capability.
+Rendered output was checked against the live site on 2 November 2026, whose deployment is the one
+GitHub records for 3c6ba06 (`dpl_FEkfk6twnkZUB7mVREvth1896hw9`).
 
 ## Requirements
 
@@ -17,6 +19,17 @@ privacy (`app/roast-conductor/layout.tsx:3`).
 #### Scenario: Sample recipe gets the frame
 - **WHEN** a visitor opens `/roast-conductor/sample-recipe`
 - **THEN** the recipe appears inside the same header, `main` and footer as the product page
+
+### Requirement: Unknown paths get no frame (baseline, current behaviour)
+A path under `/roast-conductor` with no page SHALL return HTTP 404 with the framework's default
+not-found screen, without the Roast Conductor header, navigation or footer and with no link anywhere,
+because the repo has no `not-found` file. It SHALL carry the root layout's description, the title
+"404: This page could not be found." and a `noindex` robots tag (live
+`/roast-conductor/does-not-exist`, 2 November 2026).
+
+#### Scenario: Mistyped address
+- **WHEN** a visitor opens `/roast-conductor/does-not-exist`
+- **THEN** the response is 404 and the page offers no header, navigation, footer or way back
 
 ### Requirement: Link back to the studio (baseline, current behaviour)
 The header SHALL show "Frazzled Productions" as a link to `/` (`app/roast-conductor/layout.tsx:14-20`).
@@ -49,13 +62,22 @@ Covent Garden, London, WC2H 9JQ" as plain text, with no links (`app/roast-conduc
 
 ### Requirement: Site-wide additions from the root layout (baseline, current behaviour)
 These pages SHALL inherit the root layout: `lang="en"`, the cursor glow and Vercel Analytics
-(`app/layout.tsx:35`, `:39`, `:41`). The three page and layout files SHALL fetch no data, take no
-input and contain no client component of their own (`app/roast-conductor/layout.tsx:1`,
-`app/roast-conductor/page.tsx:1-2`, `app/roast-conductor/sample-recipe/page.tsx:1-2`).
+(`app/layout.tsx:35`, `:39`, `:41`), plus the grid background and CRT scanlines from the site
+stylesheet (`app/layout.tsx:5`, `app/globals.css:12-36`). The frame SHALL set Inter as the base font
+(`app/roast-conductor/layout.tsx:12`).
 
 #### Scenario: Visit counted
 - **WHEN** a visitor loads the product page
 - **THEN** the root layout's Analytics component is on the page
+
+### Requirement: Static pages (baseline, current behaviour)
+The three page and layout files SHALL fetch no data, take no input and contain no client component of
+their own (`app/roast-conductor/layout.tsx:1`, `app/roast-conductor/page.tsx:1-2`,
+`app/roast-conductor/sample-recipe/page.tsx:1-2`), so the pages SHALL be prerendered.
+
+#### Scenario: Same page for everyone
+- **WHEN** a visitor requests `/roast-conductor/sample-recipe`
+- **THEN** the response is the prerendered page, marked `x-nextjs-prerender: 1` on the live site
 
 ### Requirement: Product page metadata (baseline, current behaviour)
 The product page SHALL set the title "Roast Conductor | Frazzled Productions" and a description
@@ -89,10 +111,43 @@ from the `sm` breakpoint (`app/roast-conductor/page.tsx:100-114`).
 - **WHEN** the product page renders
 - **THEN** each of the eight features appears as a card with its title as a level 2 heading and its body below
 
+### Requirement: What the feature cards promise (baseline, current behaviour)
+The card bodies SHALL make the app promises in the scenarios below
+(`app/roast-conductor/page.tsx:11-42`). Neither the cards nor the metadata description SHALL say which
+features need the unlock: only the pricing section does.
+
+#### Scenario: Planning promises
+- **WHEN** a visitor reads the first two cards
+- **THEN** they promise steps from preheating to dishing up, jobs the day before, defrosting a frozen
+  turkey, a warning and a suggested fix for oven clashes, and a dial setting for an oven that runs hot
+  or cool
+
+#### Scenario: Cooking promises
+- **WHEN** a visitor reads the next two cards
+- **THEN** they promise alarms through silent mode and Focus, a Live Activity on the Lock Screen and in
+  the Dynamic Island, one tap to move every step not yet started, and extra minutes at a check
+
+#### Scenario: Seasonal promises
+- **WHEN** a visitor reads the fifth card
+- **THEN** it promises Christmas and Easter themes, a Christmas app icon, ready-made Christmas dinner,
+  Easter lunch and Burns Night supper menus, and in the US a Thanksgiving menu with °F, pounds and US
+  cuts
+
+#### Scenario: Helper promises
+- **WHEN** a visitor reads the last three cards
+- **THEN** they promise tips, a Day before list, fridge and leftovers reminders, sharing as a picture,
+  printable PDF or plain text, Home Screen and Lock Screen widgets, asking Siri what is next, an iPad
+  layout and an Apple Watch app
+
+#### Scenario: Apple Watch before the pricing section
+- **WHEN** a visitor reads the "Widgets, Siri, iPad and Apple Watch" card
+- **THEN** it describes the Apple Watch app with no mention of the unlock, which the pricing section
+  requires for it
+
 ### Requirement: What the page says is free (baseline, current behaviour)
 Under "Free, with a one-time unlock", the product page SHALL list as free, with every built-in dish
-and cut of meat: menus of up to four dishes, the planner with oven clash fixes and running late, cook
-mode alarms and the Live Activity, widgets with Siri, Shortcuts and the iPad layout, starters and
+and cut of meat: any number of menus of up to four dishes each, the planner with oven clash fixes and
+running late, cook mode alarms and the Live Activity, widgets with Siri, Shortcuts and the iPad layout, starters and
 puddings, tips with the Day before list and reminders, sharing as a picture, PDF or text, and the
 Christmas and Easter themes (`app/roast-conductor/page.tsx:45-54`, `:117-123`).
 
@@ -110,8 +165,9 @@ records the difference from the support page.
 - **THEN** the price reads £2.99
 
 ### Requirement: What the page says the unlock adds (baseline, current behaviour)
-The product page SHALL list ten items after the price: unlimited dishes, recipes from links, custom
-dishes, up to three ovens, the air fryer and microwave, reverse sear and slow roast, make-ahead sides,
+The product page SHALL list ten items after the price: unlimited dishes, recipes from links (a pasted
+link or method, read on the device, with the cook checking every step), custom dishes, up to three
+ovens, the air fryer and microwave, reverse sear and slow roast, make-ahead sides,
 course timing with moving dishes and sharing jobs among helpers, any number of guests with a shopping
 list, and the Apple Watch app (`app/roast-conductor/page.tsx:56-67`, `:125-129`).
 
@@ -158,7 +214,8 @@ controls, for App Review and testers to try the app's recipe import
 ### Requirement: Sample recipe metadata (baseline, current behaviour)
 The sample recipe SHALL set the title "Sample recipe: crisp roast potatoes | Roast Conductor" and a
 description naming trying recipe links, crisp roast potatoes and serves 4
-(`app/roast-conductor/sample-recipe/page.tsx:51-55`).
+(`app/roast-conductor/sample-recipe/page.tsx:51-55`). It SHALL set no other metadata, so nothing asks
+search engines to leave it out.
 
 #### Scenario: Browser tab on the sample recipe
 - **WHEN** `/roast-conductor/sample-recipe` is open
@@ -167,17 +224,27 @@ description naming trying recipe links, crisp roast potatoes and serves 4
 ### Requirement: Sample recipe instructions (baseline, current behaviour)
 Below a "Sample recipe" label and the heading "Crisp roast potatoes", the page SHALL link to
 `/roast-conductor` and tell the reader to copy the page's address, add a dish in the app and choose
-"From a recipe link" (`app/roast-conductor/sample-recipe/page.tsx:66-84`). That is not the app's label
-(issue #61). The page SHALL NOT say recipe links need the unlock.
+"From a recipe link", and SHALL say the app reads the method, turns it into timed steps to check and
+fits them into the plan (`app/roast-conductor/sample-recipe/page.tsx:66-84`). That is not the app's
+label (issue #61).
 
 #### Scenario: Reading the instruction
 - **WHEN** a tester opens the sample recipe
 - **THEN** the page names "From a recipe link" in bold as the control to choose
 
+### Requirement: Sample recipe is silent on the unlock (baseline, current behaviour)
+The sample recipe SHALL NOT say recipe links need the unlock, although the product and support pages
+do (`app/roast-conductor/page.tsx:58`, `app/roast-conductor/support/page.tsx:140-141`).
+
+#### Scenario: Free tester
+- **WHEN** a visitor without the unlock reads the sample recipe
+- **THEN** nothing on the page tells them the import is a paid feature
+
 ### Requirement: Sample recipe content (baseline, current behaviour)
 The page SHALL show "Serves 4. Preparation 15 minutes, cooking about 1 hour."
 (`app/roast-conductor/sample-recipe/page.tsx:85-87`), four ingredients as a bulleted list (`:12-17`,
-`:89-94`), seven steps as a numbered list (`:19-27`, `:96-101`) and a closing note that ovens vary, so
+`:89-94`) under the heading "Ingredients", seven steps as a numbered list (`:19-27`, `:96-101`) under
+the heading "Method", and a closing note that ovens vary, so
 check the potatoes towards the end (`:103-106`).
 
 #### Scenario: Numbered method
@@ -185,15 +252,26 @@ check the potatoes towards the end (`:103-106`).
 - **THEN** seven method steps appear in order, from heating the oven to serving hot
 
 ### Requirement: Sample recipe structured data (baseline, current behaviour)
-The page SHALL embed one `application/ld+json` script of schema.org type `Recipe`, with `<` escaped
-as `\u003c` (`app/roast-conductor/sample-recipe/page.tsx:60-65`). It SHALL carry the name, a
+The page SHALL embed one `application/ld+json` script of schema.org type `Recipe` in the `article`, not
+the document head, with `<` escaped as `\u003c` (`app/roast-conductor/sample-recipe/page.tsx:59-65`).
+It SHALL carry the name, a
 description, the URL `https://frazzledproductions.com/roast-conductor/sample-recipe`, the Organization
 author "Frazzled Productions", the yield, `prepTime` PT15M, `cookTime` PT1H, `totalTime` PT1H15M,
-category "Side dish" and cuisine "British" (`app/roast-conductor/sample-recipe/page.tsx:8-10`, `:29-43`).
+category "Side dish" and cuisine "British" (`app/roast-conductor/sample-recipe/page.tsx:8-10`, `:29-42`).
 
 #### Scenario: Yield shared between page and data
 - **WHEN** the page renders
 - **THEN** "Serves 4" comes from the one `recipeYield` constant in both the visible text and the JSON-LD
+
+### Requirement: Structured data outside this page (baseline, current behaviour)
+The JSON-LD URL SHALL be the production address on every deployment, previews included
+(`app/roast-conductor/sample-recipe/page.tsx:8`). The app's importer tests SHALL use their own copy of
+this JSON-LD as a fixture (roast-conductor
+`RoastEngine/Tests/RoastEngineTests/Fixtures/plain-object-howto-steps.html`).
+
+#### Scenario: Page changes, app tests do not
+- **WHEN** the sample recipe's JSON-LD changes on the website
+- **THEN** the app's importer tests still run against the old copy and do not fail
 
 ### Requirement: Structured data shares the visible lists (baseline, current behaviour)
 `recipeIngredient` and `recipeInstructions` (as numbered `HowToStep`s) SHALL come from the same lists
@@ -213,7 +291,12 @@ the visible heading are separate literals, so those can differ from the data
 - **Shared frame ownership.** `layout.tsx` also frames the support and privacy pages, which the
   `app-legal-and-support-pages` baseline covers. Recommendation: this capability owns the frame, that
   one owns the page bodies.
-- **`mb-3` on the sample recipe label.** `.rc-prose p` is unlayered CSS (`app/globals.css:228-232`), so
-  it should beat Tailwind's `mb-3` on the label (`app/roast-conductor/sample-recipe/page.tsx:67`).
-  Not verified in a browser and left out of the requirements. Recommendation: confirm during the next
-  visual pass; no issue filed for a 4px difference.
+- **`mb-3` on the sample recipe label.** The label's `mb-3` has no effect
+  (`app/roast-conductor/sample-recipe/page.tsx:67`): in the live stylesheet `.mb-3` sits inside
+  `@layer utilities` and `.rc-prose p` is unlayered (`app/globals.css:228-232`), and unlayered rules win,
+  so the margin is 1rem, not 0.75rem. Read from the CSS, not measured in a browser. Recommendation: no
+  issue for a 4px difference; drop the class when the page is next edited.
+- **Bare 404 under `/roast-conductor`.** A mistyped address, including one from an old link, gets the
+  framework's default screen with no way back to the site. Recommendation: treat it as a site-wide
+  gap, not a Roast Conductor one, and add a root `not-found` only if a visitor report or a broken
+  inbound link shows it matters; no issue filed.
