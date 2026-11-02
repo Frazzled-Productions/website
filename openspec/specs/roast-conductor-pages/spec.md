@@ -3,7 +3,8 @@
 ## Purpose
 The Roast Conductor product page, the sample recipe page and the shared frame around every page under
 `/roast-conductor`, as they behave on `main` at 3c6ba06. Written from code on 2 November 2026 and
-describes what is true today, not what should be. The repo has no automated tests for these pages: CI
+describes what is true today, not what should be. Rechecked on 3 November 2026 against `main` at
+b063fed: the commits since 3c6ba06 change only dependencies and CI, so every citation still holds. The repo has no automated tests for these pages: CI
 runs lint, type-check and build only. The support and privacy page bodies are outside this capability.
 Rendered output was checked against the live site on 2 November 2026, whose deployment is the one
 GitHub records for 3c6ba06 (`dpl_FEkfk6twnkZUB7mVREvth1896hw9`).
@@ -285,10 +286,18 @@ the visible heading are separate literals, so those can differ from the data
 
 ### 2 November 2026
 - **Landing before adoption.** The website has not adopted OpenSpec (website #50), so this file has no
-  `config.yaml` beside it. Recommendation: keep it in draft until adoption lands, then rebase.
-- **Shared frame ownership.** `layout.tsx` also frames the support and privacy pages, which the
-  `app-legal-and-support-pages` baseline covers. Recommendation: this capability owns the frame, that
-  one owns the page bodies.
+  `config.yaml` beside it. Ruled by Fraser on 2 November 2026: land now on one review after a rebase,
+  and #50 adopts it as it stands.
+- **Shared frame ownership.** `layout.tsx` also frames the support and privacy pages, and the
+  `app-legal-and-support-pages` baseline (website #64) has its own "Roast Conductor frame"
+  requirement describing the same header, navigation, `main` and footer. The two agree today.
+  Recommendation: this capability owns the frame and that one owns the page bodies; whichever of the
+  two lands second, or #50's adoption, drops the duplicate. Open for Fraser.
+
+### 3 November 2026
+- **Rebase and review.** Rebased onto `main` at b063fed with no conflicts. One review checked every
+  file:line citation against the rebased code and the fixture path in roast-conductor; all hold, so
+  no requirement changed.
 - **`mb-3` on the sample recipe label.** The label's `mb-3` has no effect
   (`app/roast-conductor/sample-recipe/page.tsx:67`): in the live stylesheet `.mb-3` sits inside
   `@layer utilities` and `.rc-prose p` is unlayered (`app/globals.css:228-232`), and unlayered rules win,
