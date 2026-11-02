@@ -3,10 +3,11 @@
 ## Purpose
 The optional "Support the studio" donation mechanism on the company website: a Support section on
 the home page and a Ko-fi panel in an on-page modal. This is the baseline of current behaviour,
-written from the code on `main` at commit `3c6ba06` on 2 November 2026. It records what is true
+written from the code on `main` at commit `3c6ba06` on 2 November 2026 and rechecked against `main` at
+`b063fed` on 3 November 2026 (no capability file changed in between). It records what is true
 today, not what should be. No automated test covers this capability: the repo has no test files, and
 CI runs lint, typecheck and build only (`.github/workflows/ci.yml:24-26`). The CI build of this spec's
-branch lists `/` as static (`○`) under Next.js 16.2.7, and on 2 November 2026 the live home page answered
+branch lists `/` as static (`○`) under Next.js 16.4.3, and on 2 November 2026 the live home page answered
 with `x-nextjs-prerender: 1` and `x-vercel-cache: HIT`.
 
 ## Requirements
@@ -212,3 +213,13 @@ Sources: `app/privacy/page.tsx:7`, `app/privacy/page.tsx:45-46`, `app/privacy/pa
 - This file lands ahead of OpenSpec adoption (issue #50, open, no adoption PR yet), so the repo has no
   `openspec/config.yaml` yet. Recommendation: keep the file as it is, because adoption can pick it up
   unchanged.
+
+### 3 November 2026
+- Rebased onto `main` at `b063fed` (Next.js 16.2.7 to 16.4.3, React 19.3.1, CI action bumps). No file
+  this spec cites changed; every file:line citation was rechecked and holds. The static-rendering
+  evidence now names the 16.4.3 build.
+- Review of the 2 November calls, per Fraser's ruling of 2 November 2026 (land on one review; #50
+  adopts the file as it stands): the tests and adoption calls need no decision and stand as
+  recommended. The launch-gate call stays open for Fraser: only he can record whether the live
+  Support section stays live and on what basis (issue #7's unticked solicitor sign-off). It does not
+  block this baseline, which describes code, not production state.
