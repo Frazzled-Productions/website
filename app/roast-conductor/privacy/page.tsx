@@ -18,7 +18,7 @@ export default function RoastConductorPrivacyPage() {
       >
         Roast Conductor privacy policy
       </h1>
-      <p>Effective 2 November 2026</p>
+      <p>Effective 3 November 2026</p>
       <p>
         <strong>Changes:</strong> on 11 October 2026 we added how the app handles
         reminders, widgets, the Apple Watch app and your region. None of these sends
@@ -28,7 +28,7 @@ export default function RoastConductorPrivacyPage() {
         widget and Apple Watch app keep after the app is deleted, how a recipe page is
         fetched and what an import saves, and saving a plan picture to Photos. On 23
         October 2026 we added Cook together, which shares a menu you choose with the
-        people you invite through your own iCloud account. On 2 November 2026 we
+        people you invite through your own iCloud account. On 3 November 2026 we
         corrected how we describe RevenueCat: the app contacts it each time it opens,
         whether or not you buy anything, and the ID it uses is random. We also added
         our legal basis for this and how long the data is kept if you never buy.
