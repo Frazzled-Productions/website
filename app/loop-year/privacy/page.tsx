@@ -18,7 +18,7 @@ export default function LoopYearPrivacyPage() {
       >
         Loop Year privacy policy
       </h1>
-      <p>Effective 2 November 2026</p>
+      <p>Effective 3 November 2026</p>
 
       <p className="text-lg">
         <strong>In short:</strong> Loop Year has no accounts, no adverts, no
@@ -118,9 +118,10 @@ export default function LoopYearPrivacyPage() {
           >
             privacy policy
           </a>
-          . Meteostat records an anonymised IP address, your approximate
-          location and country, your operating system and the time of the
-          request, under its{" "}
+          . Cloudflare is based in the United States, so this data may be
+          processed there. Meteostat records an anonymised IP address, your
+          approximate location and country, your operating system and the time
+          of the request, under its{" "}
           <a
             href="https://meteostat.net/en/privacy"
             target="_blank"
