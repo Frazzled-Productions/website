@@ -4,6 +4,8 @@
 What frazzledproductions.com measures, what it loads from third parties, and what its own privacy
 notice at `/privacy` tells visitors. Baseline read from the code at `main` commit `3c6ba06`
 (`file:line` citations are to that commit); it describes what is true today, not what should be.
+Rechecked at `main` `b063fed` on 3 November 2026: the commits since are dependency bumps, nothing
+under `app/` changed, and `@vercel/analytics` is still 2.0.1.
 The repo has no automated tests for this capability (no test files and no `test` script in
 `package.json`), so every requirement comes from code. CI runs lint, typecheck and build only
 (`.github/workflows/ci.yml:23-26`). The notice's statements about how Vercel and Ko-fi behave are
@@ -281,9 +283,8 @@ Source: `app/page.tsx:175-177`, `app/roast-conductor/layout.tsx:36-43`,
 - **THEN** it mentions counted page visits, with no link to `/privacy` and no mention of click events
 
 ## Clarifications
-- 2 November 2026, open call: should this spec merge before website #50 (adopt OpenSpec)? Recommended:
-  keep this draft until the adoption PR lands, then rebase, so the repo gets `openspec/config.yaml` and
-  its specs together.
+- 2 November 2026, decided (Fraser's ruling on PR #74): this spec lands now, before website #50
+  (adopt OpenSpec), after a rebase and one review; #50 adopts it as it stands.
 - 2 November 2026, open call: should the notice's claims about Vercel ("does not use cookies or store
   anything on your device") be treated as checked? Recommended: no, repeat the check in the fix for
   website #65, because Vercel can change the script without a change here. The script served that day
