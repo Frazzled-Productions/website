@@ -208,8 +208,9 @@ export default function RoastConductorSupportPage() {
         your Apple Watch, if you use it), unless you share a menu with Cook together,
         which keeps it in your iCloud and shares it with the people you invite. Apart
         from fetching a recipe page when you paste its link, and Cook together, the
-        only data that leaves your devices is about your purchase, so it can be
-        restored.
+        app sends data off your devices for one reason: each time it opens, whether
+        or not you buy anything, it contacts our payment partner RevenueCat to load
+        the price and check for an unlock.
         The <Link href="/roast-conductor/privacy">privacy policy</Link> has the details.
       </p>
 
