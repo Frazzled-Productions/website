@@ -106,9 +106,9 @@ export default function LoopYearPrivacyPage() {
           download records from several nearby stations, for each year needed,
           from data.meteostat.net. Each request contains a station number, a
           year, the app&apos;s name and standard technical details such as your
-          language setting, never your place or its map position, but those
-          stations are near the place you chose, and the year may be your birth
-          year. Requests pass through Cloudflare, which Meteostat
+          language setting. It never contains your place or its map position,
+          but those stations are near the place you chose, and the year may be
+          your birth year. Requests pass through Cloudflare, which Meteostat
           uses to deliver its files, and which handles your device&apos;s IP
           address under its own{" "}
           <a
