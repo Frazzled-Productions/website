@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Roast Conductor privacy policy | Frazzled Productions",
   description:
-    "How the Roast Conductor app for iPhone, iPad and Apple Watch handles your data: no account, no tracking, menus stay on your devices unless you share one with Cook together, and RevenueCat manages the one-time unlock.",
+    "How the Roast Conductor app for iPhone, iPad and Apple Watch handles your data: no account, no tracking, menus stay on your devices unless you share one with Cook together, and RevenueCat, which the app contacts each time it opens, manages the price and the one-time unlock.",
 };
 
 const contactEmail = "hello@frazzledproductions.com";
@@ -18,7 +18,7 @@ export default function RoastConductorPrivacyPage() {
       >
         Roast Conductor privacy policy
       </h1>
-      <p>Effective 23 October 2026</p>
+      <p>Effective 3 November 2026</p>
       <p>
         <strong>Changes:</strong> on 11 October 2026 we added how the app handles
         reminders, widgets, the Apple Watch app and your region. None of these sends
@@ -28,20 +28,27 @@ export default function RoastConductorPrivacyPage() {
         widget and Apple Watch app keep after the app is deleted, how a recipe page is
         fetched and what an import saves, and saving a plan picture to Photos. On 23
         October 2026 we added Cook together, which shares a menu you choose with the
-        people you invite through your own iCloud account.
+        people you invite through your own iCloud account. On 3 November 2026 we
+        corrected how we describe RevenueCat: the app contacts it each time it opens,
+        whether or not you buy anything; the ID it uses is random, and the data is
+        linked to your copy of the app. We also added our legal basis for this and
+        how long the data is kept if you never buy.
       </p>
 
       <p className="text-lg">
         <strong>In short:</strong> Roast Conductor has no accounts, no adverts, no
-        analytics tools and no tracking. Your menus and plans stay on your devices. If
+        advertising tools and no tracking. Our payment partner RevenueCat counts how
+        many unlocks are sold. Your menus and plans stay on your devices. If
         you choose Cook together, the menu you share is kept in your iCloud account and
         shared, through Apple&apos;s iCloud, with the people you invite. We never see
         it. Nothing you make in the app is sent to us. Apart from fetching a recipe page
         when you paste its link, and a menu you choose to share with Cook together
-        (which goes only to your own iCloud), the only data the app sends off your
-        device is about your one-time purchase: our payment partner RevenueCat processes it under an
-        anonymous ID, with the technical details listed below, so the unlock works and
-        can be restored.
+        (which goes only to your own iCloud), the app sends data off your device for
+        one reason. Each time the app opens, whether or not you buy anything, it
+        contacts our payment partner RevenueCat to load the price and check for an
+        unlock. RevenueCat receives a random ID created by the app and the technical
+        details below. If you buy the unlock, RevenueCat also processes your purchase
+        so the unlock works and can be restored.
       </p>
 
       <h2>Who we are</h2>
@@ -135,18 +142,19 @@ export default function RoastConductorPrivacyPage() {
         handles the payment; we never see your name, Apple Account or card details.
       </p>
       <p>
-        To confirm the unlock and let you restore it, the app uses{" "}
+        To show the price, confirm the unlock and let you restore it, the app uses{" "}
         <a href="https://www.revenuecat.com" target="_blank" rel="noopener noreferrer">
           RevenueCat
         </a>{" "}
-        (RevenueCat, Inc.), which processes the data on our behalf. RevenueCat
+        (RevenueCat, Inc.), which processes the data on our behalf. The app contacts
+        RevenueCat each time it opens, whether or not you buy anything. RevenueCat
         receives:
       </p>
       <ul>
-        <li>an anonymous app user ID created by the app (it is not your name, email or Apple Account)</li>
+        <li>a random app user ID created by the app (it is not your name, email or Apple Account)</li>
         <li>
-          your purchase history for this app: what was bought, when, the price and
-          currency, and the App Store transaction record
+          if you buy the unlock, your purchase history for this app: what was bought,
+          when, the price and currency, and the App Store transaction record
         </li>
         <li>
           technical details needed to deliver the service, such as the app version,
@@ -155,10 +163,12 @@ export default function RoastConductorPrivacyPage() {
         </li>
       </ul>
       <p>
-        We use this to provide the unlock (to make the app work) and to see how many
-        unlocks are sold (analytics). It is not linked to your identity, is not
-        used for advertising and is not used to track you across other apps or
-        websites. Read{" "}
+        We use this to show the price, to provide the unlock (to make the app work)
+        and to count how many unlocks are sold. RevenueCat keeps this data under the
+        random ID, so it is linked to your copy of the app. It does not include your
+        name or email, is not used for advertising and is not used to track you across
+        other apps or websites.
+        Read{" "}
         <a
           href="https://www.revenuecat.com/privacy"
           target="_blank"
@@ -172,10 +182,13 @@ export default function RoastConductorPrivacyPage() {
       </p>
       <p>
         Our legal bases under UK and EU data protection law are performing our
-        contract with you (providing the unlock you bought) and our legitimate
-        interest in understanding sales of the app. We keep purchase records for as
-        long as they are needed to let you restore your purchase and to meet our
-        accounting obligations.
+        contract with you (providing the unlock you bought), our legitimate interest
+        in showing the price and restoring purchases, and our legitimate interest in
+        understanding sales of the app. We keep purchase records for as long as they
+        are needed to let you restore your purchase and to meet our accounting
+        obligations. If you never buy, RevenueCat may keep the random ID and technical
+        details for as long as we use RevenueCat, unless you ask us to delete them
+        sooner.
       </p>
 
       <h2>Importing a recipe from a link</h2>
@@ -203,8 +216,14 @@ export default function RoastConductorPrivacyPage() {
       <h2>What we do not do</h2>
       <ul>
         <li>No accounts or sign-in (Cook together uses your own iCloud account).</li>
-        <li>No analytics or advertising tools in the app, and no tracking.</li>
-        <li>We never sell your data, and we share it only with the people you choose.</li>
+        <li>
+          No advertising tools in the app, and no tracking. RevenueCat only counts how
+          many unlocks are sold.
+        </li>
+        <li>
+          We never sell your data, and we share it only with the people you choose and
+          the services this policy names.
+        </li>
         <li>No access to your contacts, location, camera or microphone.</li>
         <li>
           The app never reads your photos. It only saves a plan picture to Photos
@@ -222,8 +241,8 @@ export default function RoastConductorPrivacyPage() {
       <p>
         You have the right to ask for a copy of personal data we hold about you, to
         have it corrected or deleted, and to object to how it is used. Because the
-        purchase record is anonymous, we may need your help to find it (for example,
-        the date you bought the unlock). Email{" "}
+        purchase record sits under a random ID, we may need your help to find it
+        (for example, the date you bought the unlock). Email{" "}
         <a href={`mailto:${contactEmail}`}>{contactEmail}</a> and we will respond
         within one month. If you are unhappy with how we use your data, email{" "}
         <a href={`mailto:${privacyEmail}`}>{privacyEmail}</a>. We will
