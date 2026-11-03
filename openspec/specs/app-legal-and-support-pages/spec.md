@@ -212,7 +212,7 @@ Source: `app/roast-conductor/privacy/page.tsx:132-179`, `app/loop-year/privacy/p
 #### Scenario: How Roast Conductor describes the record
 
 - **WHEN** a reader reads the RevenueCat section of the Roast Conductor policy
-- **THEN** it says the app contacts RevenueCat each time it opens, whether or not anyone buys, that the app user ID is random, and that the data is linked to the user's copy of the app, as the App Store label lists it (#55, ruled 3 November 2026); the Loop Year policy still calls the ID anonymous (#77, loop-year #91)
+- **THEN** it says the app contacts RevenueCat each time it opens, whether or not anyone buys, that the app user ID is random, and that the data is linked to the user's copy of the app (#55, ruled 3 November 2026); the Loop Year policy still calls the ID anonymous (#77, loop-year #91)
 
 #### Scenario: Reader who never buys
 
