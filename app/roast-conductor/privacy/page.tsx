@@ -30,13 +30,15 @@ export default function RoastConductorPrivacyPage() {
         October 2026 we added Cook together, which shares a menu you choose with the
         people you invite through your own iCloud account. On 3 November 2026 we
         corrected how we describe RevenueCat: the app contacts it each time it opens,
-        whether or not you buy anything, and the ID it uses is random. We also added
-        our legal basis for this and how long the data is kept if you never buy.
+        whether or not you buy anything; the ID it uses is random, and the data is
+        linked to your copy of the app. We also added our legal basis for this and
+        how long the data is kept if you never buy.
       </p>
 
       <p className="text-lg">
         <strong>In short:</strong> Roast Conductor has no accounts, no adverts, no
-        analytics tools and no tracking. Your menus and plans stay on your devices. If
+        advertising tools and no tracking. Our payment partner RevenueCat counts how
+        many unlocks are sold. Your menus and plans stay on your devices. If
         you choose Cook together, the menu you share is kept in your iCloud account and
         shared, through Apple&apos;s iCloud, with the people you invite. We never see
         it. Nothing you make in the app is sent to us. Apart from fetching a recipe page
@@ -162,9 +164,11 @@ export default function RoastConductorPrivacyPage() {
       </ul>
       <p>
         We use this to show the price, to provide the unlock (to make the app work)
-        and to see how many unlocks are sold (analytics). It does not include your
-        name or email, is not used for advertising and is not used to track you
-        across other apps or websites. Read{" "}
+        and to count how many unlocks are sold. RevenueCat keeps this data under the
+        random ID, so it is linked to your copy of the app, and the App Store lists it
+        as data linked to you. It does not include your name or email, is not used for
+        advertising and is not used to track you across other apps or websites.
+        Read{" "}
         <a
           href="https://www.revenuecat.com/privacy"
           target="_blank"
@@ -212,7 +216,10 @@ export default function RoastConductorPrivacyPage() {
       <h2>What we do not do</h2>
       <ul>
         <li>No accounts or sign-in (Cook together uses your own iCloud account).</li>
-        <li>No analytics or advertising tools in the app, and no tracking.</li>
+        <li>
+          No advertising tools in the app, and no tracking. RevenueCat only counts how
+          many unlocks are sold.
+        </li>
         <li>
           We never sell your data, and we share it only with the people you choose and
           the services this policy names.
