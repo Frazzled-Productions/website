@@ -4,10 +4,10 @@
 The optional "Support the studio" donation mechanism on the company website: a Support section on
 the home page and a Ko-fi panel in an on-page modal. This is the baseline of current behaviour,
 written from the code on `main` at commit `3c6ba06` on 2 November 2026 and rechecked against `main` at
-`b063fed` on 3 November 2026 (no capability file changed in between). It records what is true
+`b063fed` later the same day (no capability file changed in between). It records what is true
 today, not what should be. No automated test covers this capability: the repo has no test files, and
-CI runs lint, typecheck and build only (`.github/workflows/ci.yml:24-26`). The CI build of this spec's
-branch lists `/` as static (`○`) under Next.js 16.4.3, and on 2 November 2026 the live home page answered
+CI runs lint, typecheck and build only (`.github/workflows/ci.yml:24-26`). The CI build of PR #84
+lists `/` as static (`○`) under Next.js 16.4.3, and on 2 November 2026 the live home page answered
 with `x-nextjs-prerender: 1` and `x-vercel-cache: HIT`.
 
 ## Requirements
@@ -214,9 +214,11 @@ Sources: `app/privacy/page.tsx:7`, `app/privacy/page.tsx:45-46`, `app/privacy/pa
   `openspec/config.yaml` yet. Recommendation: keep the file as it is, because adoption can pick it up
   unchanged.
 
-### 3 November 2026
-- Rebased onto `main` at `b063fed` (Next.js 16.2.7 to 16.4.3, React 19.3.1, CI action bumps). No file
-  this spec cites changed; every file:line citation was rechecked and holds. The static-rendering
+### 2 November 2026 (rebase recheck)
+- Rebased onto `main` at `b063fed` (Next.js 16.2.7 to 16.4.3, React 19.3.1, CI action bumps). Of the files
+  this spec cites, only `.github/workflows/ci.yml` changed (`actions/checkout` and `setup-node` v4 to
+  v7 on lines 18-19); the cited lines 24-26 did not, and every file:line citation was rechecked and
+  holds. The static-rendering
   evidence now names the 16.4.3 build.
 - Review of the 2 November calls, per Fraser's ruling of 2 November 2026 (land on one review; #50
   adopts the file as it stands): the tests and adoption calls need no decision and stand as
