@@ -165,9 +165,9 @@ export default function RoastConductorPrivacyPage() {
       <p>
         We use this to show the price, to provide the unlock (to make the app work)
         and to count how many unlocks are sold. RevenueCat keeps this data under the
-        random ID, so it is linked to your copy of the app, and the App Store lists it
-        as data linked to you. It does not include your name or email, is not used for
-        advertising and is not used to track you across other apps or websites.
+        random ID, so it is linked to your copy of the app. It does not include your
+        name or email, is not used for advertising and is not used to track you across
+        other apps or websites.
         Read{" "}
         <a
           href="https://www.revenuecat.com/privacy"
