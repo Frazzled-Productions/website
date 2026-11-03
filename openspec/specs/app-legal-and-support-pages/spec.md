@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Baseline of the privacy and support pages for Roast Conductor and Loop Year on the company website, which App Store Connect and the apps link to directly. It describes what the code does today (`origin/main` at `3c6ba06`, 2 November 2026; rechecked at `b063fed` on 3 November 2026, where main had changed only dependency versions and the CI action versions, and every cited line still matched), not what it should do. Production was deployed from the same commit on that date, and the live site was spot-checked: the four URLs returned 200 with no redirect and `/loop-year` returned 404. The text of each page was not compared in full. The repo has no tests, so no scenario here is covered by a test. Behaviour that looks like a bug is stated as it is, with its issue number. The website's own notice at `/privacy`, the Roast Conductor product page and the sample recipe page are not part of this capability.
+Baseline of the privacy and support pages for Roast Conductor and Loop Year on the company website, which App Store Connect and the apps link to directly. It describes what the code does today (`origin/main` at `3c6ba06`, 2 November 2026; rechecked at `b063fed` on 3 November 2026, where main had changed only dependency versions and the CI action versions, and every cited line still matched), not what it should do. Production ran `3c6ba06` (deployed 28 October 2026) on 2 November and `b063fed` (deployed 2 November 2026) on 3 November, and the live site was spot-checked on both dates: the four URLs returned 200 with no redirect and `/loop-year` returned 404. The text of each page was not compared in full. The repo has no tests, so no scenario here is covered by a test. Behaviour that looks like a bug is stated as it is, with its issue number. The website's own notice at `/privacy`, the Roast Conductor product page and the sample recipe page are not part of this capability.
 
 ## Requirements
 
@@ -29,7 +29,7 @@ Source: `app/roast-conductor/privacy/page.tsx:12`, `app/roast-conductor/support/
 
 ### Requirement: What guards the URLs
 
-The only automated guards on these URLs SHALL be the CI steps lint, typecheck and build, of which `check:structure` compares the README's structure block with `app/`. No test requests the four URLs, and no route list or uptime monitor exists for them.
+The only automated guards on these URLs SHALL be the CI steps lint (which runs `check:structure`, comparing the README's structure block with `app/`), typecheck and build. No test requests the four URLs, and no route list or uptime monitor exists for them.
 
 Source: `.github/workflows/ci.yml:24-26`, `package.json:12-15`, `scripts/check-readme-structure.mjs:7-10`, `README.md:66-71`, `README.md:77-82`.
 
@@ -95,7 +95,7 @@ Source: `app/loop-year/layout.tsx:3-6`, `app/loop-year/layout.tsx:15-33`, `app/l
 
 All four pages SHALL render inside the root layout, in English, with an `article.rc-prose`. The `rc-prose` and `rc-nav-link` styles are shared by both apps and the root layout adds the cursor effect and Vercel Web Analytics to every page.
 
-Source: `app/layout.tsx:34-42`, `app/globals.css:196-258`, `app/roast-conductor/privacy/page.tsx:14`, `app/roast-conductor/support/page.tsx:14`, `app/loop-year/privacy/page.tsx:14`, `app/loop-year/support/page.tsx:14`.
+Source: `app/layout.tsx:34-42`, `app/globals.css:196-260`, `app/roast-conductor/privacy/page.tsx:14`, `app/roast-conductor/support/page.tsx:14`, `app/loop-year/privacy/page.tsx:14`, `app/loop-year/support/page.tsx:14`.
 
 #### Scenario: Visiting a legal page
 
@@ -234,7 +234,7 @@ Source: `app/loop-year/privacy/page.tsx:71-124`.
 #### Scenario: A birth-year blanket
 
 - **WHEN** a blanket has days before 1 August 2021
-- **THEN** the policy says the app picks stations from a built-in list, and the request carries the station's number, the year and the device's IP address, which Meteostat logs in anonymised form (loop-year #92, draft PR #56)
+- **THEN** the policy says the app picks stations from a built-in list, and the request carries the station's number, the year and the device's IP address, which Meteostat logs in anonymised form (loop-year #92, website draft PR #56)
 
 #### Scenario: What is kept from Apple Weather
 
@@ -437,6 +437,6 @@ Source: `app/loop-year/support/page.tsx:21-25`, `app/loop-year/support/page.tsx:
 - 2 November 2026: the company details and footer are repeated in two layouts and two policies, though AGENTS.md says company facts are referenced from ops or Drive, not forked (`AGENTS.md:8-10`). Recommendation: leave as it is until a change touches the footer.
 - 2 November 2026: `/loop-year` has no page. Recommendation: take this with #31, which asks whether Loop Year can be public yet.
 - 2 November 2026: the repo has not adopted OpenSpec (#50), so this PR adds only this file, with no `config.yaml` or change folder. Ruled 2 November 2026 (Fraser): land it now on one review after a rebase, and #50 adopts it as it stands.
-- 3 November 2026: draft PRs #55 (Roast Conductor policy and RevenueCat) and #56 (Loop Year policy, Meteostat and Cloudflare) change policy text quoted here, and neither has merged. Ruled 2 November 2026 (Fraser): this spec is reconciled with whichever of the two lands later, in that PR.
 - 2 November 2026: the Roast Conductor support page says "Every built-in timing comes from published UK guidance", with USDA named only for US turkey and ham (`app/roast-conductor/support/page.tsx:94-97`), while the privacy policy says Canada follows Health Canada's guidance. #58 asks for line 96 to be checked. Recommendation: settle the sources sentence in the #58 change.
 - 2 November 2026: #79 also lists "only data" and "anonymous" wording against a persistent ID (cited in that audit, not repeated here; see loop-year #91). Recommendation: decide the wording with #54 and loop-year #91, as these requirements quote the policies as they stand.
+- 3 November 2026: draft PRs #55 (Roast Conductor policy and RevenueCat) and #56 (Loop Year policy, Meteostat and Cloudflare) change policy text quoted here, and neither has merged. Ruled 2 November 2026 (Fraser): this spec is reconciled with whichever of the two lands later, in that PR.
