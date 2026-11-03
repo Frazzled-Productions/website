@@ -264,12 +264,12 @@ Source: `app/page.tsx:168-181`, `app/globals.css:4`
 
 All home page animation SHALL run whatever the visitor's motion preference: nothing in `app/` reads `prefers-reduced-motion` (#68).
 
-Source: `app/globals.css:52`, `app/globals.css:68`, `app/globals.css:80`, `app/components/Typewriter.tsx:8-22`, `app/components/HorizonGrid.tsx:152`
+Source: `app/globals.css:52`, `app/globals.css:68`, `app/globals.css:80`, `app/components/Typewriter.tsx:8-22`, `app/components/Typewriter.tsx:31`, `app/components/HorizonGrid.tsx:152`
 
 #### Scenario: Reduced motion requested
 
 - **WHEN** a visitor's system asks for reduced motion
-- **THEN** the flicker, gradient shift, card pulse, typing, grid and light cycle all still run
+- **THEN** the flicker, gradient shift, card pulse, typing, typing cursor pulse, grid and light cycle all still run
 
 ## Clarifications
 
@@ -278,5 +278,5 @@ Source: `app/globals.css:52`, `app/globals.css:68`, `app/globals.css:80`, `app/c
 - 2026-11-02, open call: the heading's opacity holds at 0.75 for 35% of each cycle instead of dipping at each flicker, which looks unintended. No issue is filed yet. Recommendation: add opacity to the recovery keyframes when #68 touches this animation, or keep the hold if the dimmer stretch looks right.
 - 2026-11-02, open call: #67 describes the first cycle as always appearing, but on windows under about 850px tall it can be missed too, and the "Short canvas" scenario records this. Recommendation: add this to #67 so its fix covers the first spawn as well.
 - 2026-11-02, open call: #31 still describes the old "coming soon" wording, which #52 fixed; only its Loop Year half is live. Recommendation: Fraser trims #31 to the Loop Year question.
-- 2026-11-02, settled: the repo has not adopted OpenSpec (#50), so this PR holds only this spec file, with no `openspec/config.yaml` or change folder. Fraser ruled on 2 November 2026 to land it now after a rebase and one review; #50 adopts it as it stands.
+- 2026-11-02, settled: the repo has not adopted OpenSpec (#50), so this spec landed as a lone file, with no `openspec/config.yaml` or change folder. Fraser ruled on 2 November 2026 to land it now after a rebase and one review; #50 adopts it as it stands.
 - 2026-11-03, settled: rebased onto `main` at b063fed. Nothing under `app/` or `.env.example` changed between 3c6ba06 and b063fed (only dependency and action version bumps, and `.github/workflows/ci.yml:24-26` is unchanged), so every `file:line` above still holds on `main`.
