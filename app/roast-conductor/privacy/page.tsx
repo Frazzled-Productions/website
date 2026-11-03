@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Roast Conductor privacy policy | Frazzled Productions",
   description:
-    "How the Roast Conductor app for iPhone, iPad and Apple Watch handles your data: no account, no tracking, menus stay on your devices unless you share one with Cook together, and RevenueCat manages the one-time unlock.",
+    "How the Roast Conductor app for iPhone, iPad and Apple Watch handles your data: no account, no tracking, menus stay on your devices unless you share one with Cook together, and RevenueCat, which the app contacts each time it opens, manages the price and the one-time unlock.",
 };
 
 const contactEmail = "hello@frazzledproductions.com";
