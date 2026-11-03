@@ -126,7 +126,7 @@ Source: `app/roast-conductor/privacy/page.tsx:47-54`, `app/loop-year/privacy/pag
 
 ### Requirement: Effective dates and change notes
 
-The Roast Conductor policy SHALL show "Effective 3 November 2026" and a "Changes" paragraph, and the Loop Year policy SHALL show "Effective 3 November 2026" with no change notes (both dated by #55 and #56, merged 3 November 2026). Both promise to update the page and its effective date before a data change reaches the App Store.
+The Roast Conductor policy SHALL show "Effective 3 November 2026" and a "Changes" paragraph, and the Loop Year policy SHALL show "Effective 3 November 2026" with no change notes (#55, #56). Both promise to update the page and its effective date before a data change reaches the App Store.
 
 Source: `app/roast-conductor/privacy/page.tsx:21-32`, `app/roast-conductor/privacy/page.tsx:244-248`, `app/loop-year/privacy/page.tsx:21`, `app/loop-year/privacy/page.tsx:225-229`.
 
@@ -142,7 +142,7 @@ Source: `app/roast-conductor/privacy/page.tsx:21-32`, `app/roast-conductor/priva
 
 ### Requirement: Roast Conductor data on the device
 
-The Roast Conductor policy SHALL state that the app has no accounts, adverts, advertising tools, tracking or servers, that its payment partner RevenueCat counts how many unlocks are sold (#55, ruled 3 November 2026), that what the user makes stays on their devices apart from Cook together, and that nothing is sent to the company. It covers notifications, widgets, the Apple Watch link, the region setting, what survives deleting the app and backups.
+The Roast Conductor policy SHALL state that the app has no accounts, adverts, advertising tools, tracking or servers, that RevenueCat counts unlocks sold, that what the user makes stays on their devices apart from Cook together, and that nothing is sent to the company. It covers notifications, widgets, the Apple Watch link, the region setting, what survives deleting the app and backups.
 
 Source: `app/roast-conductor/privacy/page.tsx:34-45`, `app/roast-conductor/privacy/page.tsx:56-100`.
 
@@ -200,7 +200,7 @@ Source: `app/roast-conductor/privacy/page.tsx:181-201`.
 
 ### Requirement: RevenueCat purchase disclosure
 
-Both policies SHALL state that Apple takes payment, that RevenueCat processes the app user ID, purchase history and technical details on the company's behalf, the purposes, the legal bases, the retention and that the data may be processed in the United States. The Roast Conductor policy SHALL also state that the app contacts RevenueCat each time it opens, whether or not anyone buys, that the app user ID is random, and that the data is linked to the user's copy of the app, as the App Store label lists it (#55, ruled 3 November 2026). The Loop Year policy still calls the ID anonymous (#77, loop-year #91).
+Both policies SHALL state that Apple takes payment, that RevenueCat processes the app user ID, purchase history and technical details on the company's behalf, the purposes, the legal bases, the retention and that the data may be processed in the United States.
 
 Source: `app/roast-conductor/privacy/page.tsx:132-179`, `app/loop-year/privacy/page.tsx:134-184`.
 
@@ -208,6 +208,11 @@ Source: `app/roast-conductor/privacy/page.tsx:132-179`, `app/loop-year/privacy/p
 
 - **WHEN** the two technical-details lists are compared
 - **THEN** only Roast Conductor's lists the identifier iOS gives the app (`app/roast-conductor/privacy/page.tsx:152-154`, `app/loop-year/privacy/page.tsx:158-160`), and Loop Year's omission is open issue #77
+
+#### Scenario: How Roast Conductor describes the record
+
+- **WHEN** a reader reads the RevenueCat section of the Roast Conductor policy
+- **THEN** it says the app contacts RevenueCat each time it opens, whether or not anyone buys, that the app user ID is random, and that the data is linked to the user's copy of the app, as the App Store label lists it (#55, ruled 3 November 2026); the Loop Year policy still calls the ID anonymous (#77, loop-year #91)
 
 #### Scenario: Reader who never buys
 
