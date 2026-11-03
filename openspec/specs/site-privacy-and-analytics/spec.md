@@ -4,7 +4,7 @@
 What frazzledproductions.com measures, what it loads from third parties, and what its own privacy
 notice at `/privacy` tells visitors. Baseline read from the code at `main` commit `3c6ba06`
 (`file:line` citations are to that commit); it describes what is true today, not what should be.
-Rechecked at `main` `b063fed` on 3 November 2026: the commits since are dependency bumps, nothing
+Rechecked at `main` `b063fed` on 2 November 2026: the commits since are dependency bumps, nothing
 under `app/` changed, and `@vercel/analytics` is still 2.0.1.
 The repo has no automated tests for this capability (no test files and no `test` script in
 `package.json`), so every requirement comes from code. CI runs lint, typecheck and build only
@@ -22,7 +22,7 @@ content, so it is present on every route of the site, including `/privacy` and e
 `/roast-conductor` and `/loop-year`. It uses `@vercel/analytics` 2.0.1, with no consent step and no
 `beforeSend` filter.
 
-Source: `app/layout.tsx:3`, `app/layout.tsx:38-42`, `package-lock.json:2312-2313`.
+Source: `app/layout.tsx:3`, `app/layout.tsx:38-42`, `package-lock.json:2312-2313` (`:2425-2426` at `b063fed`).
 
 #### Scenario: A visitor opens any page
 - **WHEN** any route on the site renders
@@ -100,7 +100,7 @@ Source: `app/page.tsx:11`, `app/page.tsx:123-146`, `.env.example:3-5`.
 ### Requirement: Nothing loads from Ko-fi until the button is clicked (baseline, current behaviour)
 `SupportButton` SHALL mount the Ko-fi iframe only while its panel is open, and a click SHALL call
 `track("support_click")` before opening it. The panel's new-tab fallback link sends no event. The rest
-of the panel is the `support-the-studio` capability.
+of the panel is the `support-the-studio` capability (baseline in website #63).
 
 Source: `app/components/SupportButton.tsx:39-42`, `app/components/SupportButton.tsx:56`,
 `app/components/SupportButton.tsx:74-86`.
@@ -130,8 +130,10 @@ Source: `app/components/SupportButton.tsx:74`, `app/roast-conductor/sample-recip
 #### Scenario: Searching the app code
 - **WHEN** `app/` is searched for those storage, network and form terms
 - **THEN** there are no matches in code, and the only `<iframe>` or `<script>` matches are the two
-  cited above; the bare word "fetch" appears only as prose in the Roast Conductor policy
-  (`app/roast-conductor/privacy/page.tsx:29`, `:39`, `:188`)
+  cited above; the word "fetch" appears only as prose, in the Roast Conductor policy
+  (`app/roast-conductor/privacy/page.tsx:29`, `:39`, `:188`), the Roast Conductor support page
+  (`app/roast-conductor/support/page.tsx:210`) and the Loop Year support page
+  (`app/loop-year/support/page.tsx:46`)
 
 ### Requirement: Fonts come from the site's own origin (baseline, current behaviour)
 The root layout SHALL load its three fonts through `next/font/google`, which serves them from the site
