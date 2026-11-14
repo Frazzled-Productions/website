@@ -10,10 +10,7 @@ here; company facts it displays (addresses, product descriptions) have their hom
 `ops` or Drive - reference, never fork.
 
 ## Conventions
-Company standards: `ops/standards/` (British English in copy, no em dashes, commits in the maker's
-name, issue-first process). Repo-local: `npm run dev` to run, `npm run lint` before committing;
-auto-push every commit on this repo (no need to ask). External API identifiers (CSS `color` etc.)
-stay American per the standard.
+Company standards: `ops/standards/`. Repo-local: `npm run dev` to run, `npm run lint` before committing.
 
 Node major: `.nvmrc` is the home of record, chosen to match `poke-memory` and the shared CI
 workflow's own documented example. `package.json` `engines` restates it only because Vercel and npm
