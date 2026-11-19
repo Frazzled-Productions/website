@@ -25,7 +25,7 @@
 - [x] ~~3.3 Smoke the production Worker on workers.dev after the build merges. Verify: `node scripts/smoke.mjs https://website.<subdomain>.workers.dev --production` exits 0.~~ Moved to #98
 - [x] ~~3.4 Cookie and storage check on the production Worker with the beacon: load every page in a clean browser profile, then list cookies, `localStorage` and `sessionStorage` for the site. Verify: all three empty, quoted; only then does the notice say no cookies or storage (D4, D8).~~ Moved to #98
 - [x] ~~3.5 CPU gate (site-hosting: "Page requests fit the Workers Free plan"). Verify: after at least 20 requests to each route and 20 posts to `/api/event`, the Worker's metrics show p99 CPU time per route of 5 ms or less, quoted with the date; over it, Fraser subscribes to Workers Paid before the cutover (Clarifications, call 5).~~ Moved to #98
-- [x] 3.6 Build-time pass done on the build PR (`blast-radius`, then `final-review`; findings in the PR body). ~~3.6 `/opsx:verify run-site-on-cloudflare-workers`, the `blast-radius` skill again, then the `final-review` skill. Verify: findings fixed or listed in the build PR body.~~ The live re-run is moved to #98
+- [x] 3.6 `/opsx:verify run-site-on-cloudflare-workers`, the `blast-radius` skill again, then the `final-review` skill. Verify: findings fixed or listed in the build PR body. Build-time pass done on the build PR: `blast-radius` and the four-lens `final-review`, findings and their handling under "Final review" in the PR body. The live re-run against the deployed Worker is moved to #98.
 
 ## 4. Before merging the build PR
 
@@ -53,5 +53,5 @@ All seven are on the checklist in #98.
 - A3. Create the Web Analytics site for frazzledproductions.com (manual setup, automatic setup off) and add its token as the repository variable `NEXT_PUBLIC_CF_BEACON_TOKEN`.
 - A4. Just before the build PR merges: pause production deploys for the website project in Vercel.
 - A5. Cutover: delete the apex A record (`76.76.21.21`) and the `www` CNAME (`cname.vercel-dns.com`), then say go for the cutover PR merge. Rollback, if needed within 14 days: remove the two Custom Domains and recreate both records, DNS only.
-- A6. Sign off the privacy wording in design D8 (or edits) before task 2.5 lands.
+- A6. Sign off the privacy wording in design D8 (or edits) before the build PR merges (task 2.5 is built from the draft).
 - A7. Day 14 with no rollback: delete the website project in Vercel.

@@ -13,7 +13,7 @@
     "typecheck": "tsc --noEmit",
     "check:node-version": "node scripts/check-node-version-drift.mjs",
     "check:structure": "node scripts/check-readme-structure.mjs",
-    "test": "node --test tests/",
+    "test": "node --test 'tests/*.test.ts'",
     "cf:build": "opennextjs-cloudflare build",
     "cf:preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "cf:upload-preview": "opennextjs-cloudflare upload --env preview --preview-alias \"pr-${PR_NUMBER:?set PR_NUMBER}\"",

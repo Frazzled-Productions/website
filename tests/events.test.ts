@@ -217,3 +217,23 @@ test('sendEvent with no navigator.sendBeacon does nothing and does not throw', (
     if (original) Object.defineProperty(globalThis, 'navigator', original);
   }
 });
+
+test('wrangler.jsonc gives production and preview the bindings the endpoint reads', async () => {
+  const { readFileSync } = await import('node:fs');
+  // wrangler.jsonc only has whole-line comments, so dropping them leaves plain JSON.
+  const text = readFileSync(new URL('../wrangler.jsonc', import.meta.url), 'utf8')
+    .split('\n')
+    .filter((line) => !line.trim().startsWith('//'))
+    .join('\n');
+  const config = JSON.parse(text);
+  const required: Array<keyof EventEnv> = ['EVENTS_DB', 'EVENT_LIMITER'];
+  for (const [label, scope] of [['production', config], ['preview', config.env.preview]]) {
+    const bindings = [
+      ...scope.d1_databases.map((db: { binding: string }) => db.binding),
+      ...scope.ratelimits.map((rl: { name: string }) => rl.name),
+    ];
+    for (const name of required) assert.ok(bindings.includes(name), `${label} lacks ${name}`);
+  }
+  assert.notEqual(config.d1_databases[0].database_name, config.env.preview.d1_databases[0].database_name);
+  assert.notEqual(config.ratelimits[0].namespace_id, config.env.preview.ratelimits[0].namespace_id);
+});
