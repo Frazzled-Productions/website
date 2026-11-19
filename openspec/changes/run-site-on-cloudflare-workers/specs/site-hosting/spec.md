@@ -30,19 +30,25 @@ be at most 5 ms, half the Free plan's 10 ms limit, measured on a deployed Worker
 
 #### Scenario: Measured over budget
 - **WHEN** any route's p99 CPU time is over 5 ms
-- **THEN** the cutover waits for Fraser's decision (Workers Paid early, or a static export)
+- **THEN** Fraser subscribes to Workers Paid before the cutover, and the build is not reworked into a
+  static export
 
 ### Requirement: Main deploys through CI with wrangler
 Each push to `main` SHALL run tests, build with OpenNext, apply pending D1 migrations to the production
-database, then deploy the production Worker, using the `CLOUDFLARE_API_TOKEN` secret.
+database, then deploy the production Worker, using the `CLOUDFLARE_API_TOKEN` secret. While that secret
+is absent, the job SHALL skip the Cloudflare steps with a notice and pass.
 
 #### Scenario: A normal merge
 - **WHEN** a PR merges to `main`
 - **THEN** `deploy.yml` applies migrations before `opennextjs-cloudflare deploy`, and a failed migration
   stops the deploy
 
-#### Scenario: Token missing or revoked
-- **WHEN** the secret is empty or Cloudflare rejects it
+#### Scenario: Token not yet added
+- **WHEN** a PR merges to `main` and the secret is empty
+- **THEN** the deploy job prints a notice, skips the Cloudflare steps and passes, and nothing is deployed
+
+#### Scenario: Token revoked
+- **WHEN** the secret is set but Cloudflare rejects it
 - **THEN** the deploy job fails red and the live site keeps its previous version
 
 ### Requirement: Each pull request gets a preview version on a separate Worker

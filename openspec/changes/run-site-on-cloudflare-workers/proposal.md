@@ -44,8 +44,10 @@ retired 14 days later).
   Fraser signs off the wording before the cutover.
 - **CI deploys with wrangler.** A new `deploy.yml` workflow: on push to `main`, apply D1 migrations then
   deploy the production Worker; on each pull request from this repo, upload a preview version to the
-  preview Worker (its own D1 database, seeded empty) with the alias `pr-<number>` and comment its URL on
-  the PR. Pull requests without secrets (Dependabot, forks) skip the upload with a notice.
+  preview Worker (its own D1 database, starting empty with the migrations applied) with the alias
+  `pr-<number>` and comment its URL on the PR. Pull requests without secrets (Dependabot, forks) skip the
+  upload with a notice. Until the `CLOUDFLARE_API_TOKEN` secret exists, the `main` deploy also skips
+  with a notice and passes, so the build PR can merge while Vercel still serves the site.
 - **Cutover by DNS.** frazzledproductions.com and www move from Vercel's records to Worker Custom
   Domains. The last Vercel production deployment stays untouched for 14 days as the rollback (put the
   two DNS records back).
@@ -115,7 +117,7 @@ Each surface from the house rules (ops `openspec/config.yaml`), plus the website
 - **README structure check** (`scripts/check-readme-structure.mjs`): every new file under `app/`
   (`api/event/route.ts`, `lib/events.ts`) is added to the README block, or `npm run lint` fails.
 - **Open privacy issues**: website #76 (no retention or transfer statement) is fixed by the rewritten
-  notice, which must state both for the new processing (open call 4). Website #65 (complaints route,
+  notice, which states both for the new processing (Clarifications, call 4). Website #65 (complaints route,
   effective date before the page) and #66 (notice linked only from the home page) are not fixed here.
 - **Website #30** (protect the App Store URLs, uptime monitor): not done here; the smoke script is a
   start it can reuse.
@@ -136,7 +138,8 @@ Each surface from the house rules (ops `openspec/config.yaml`), plus the website
 ## Out of scope
 
 - Koinori, Plan Bee and Poké Memory (stages 2 to 4).
-- Subscribing to Workers Paid (stage 2, Fraser), unless the CPU check in design D7 fails (open call 5).
+- Subscribing to Workers Paid (stage 2, Fraser), unless the CPU check in design D7 fails, in which case
+  Fraser subscribes before the cutover (Clarifications, call 5).
 - Nightly D1 export to R2: the click table holds only daily totals with no personal data, and D1 Time
   Travel (30 days) covers mistakes; the export is built in stage 2 where user data first lands.
 - A scope helper and its CI rule: the site has no users.
@@ -170,21 +173,25 @@ Each surface from the house rules (ops `openspec/config.yaml`), plus the website
 ## Clarifications
 
 - 19 November 2026, decided (grilling for ADR 0018, ops #607): the settled decisions listed under
-  "Owner decisions this relies on". No grilling round was held for this proposal itself; the open calls
-  below go to Fraser as decision boxes with this PR.
-- 19 November 2026, open call 1: click table shape. Recommended: daily totals per name only (no row per
-  click), so nothing in it can be personal data. Alternative: one row per click with page and time.
-- 19 November 2026, open call 2: rate-limit key. Recommended: per event name, 60 a minute per Cloudflare
-  location, so the endpoint never reads the IP address. Alternative: per IP address (stronger, but the
-  notice must then say the IP is used for this).
-- 19 November 2026, open call 3: previews. Recommended: a separate `website-preview` Worker with its own
-  EU D1 database, because Cloudflare version URLs "use that Worker version's existing configuration and
-  resources", so a preview version of the production Worker would write into the production table.
-- 19 November 2026, open call 4: app policies and website #76. Recommended: change only the "This
-  website" sentence in the two app policies without moving their effective dates (the apps do not
-  change), and close website #76 with the rewritten website notice.
-- 19 November 2026, open call 5: if the measured CPU time per page request on the Workers Free plan is
-  over half its 10 ms limit. Recommended: Fraser subscribes to Workers Paid then, rather than at the
-  start of stage 2, instead of reworking the build. Alternative: a static export plus a tiny events Worker.
-- 19 November 2026, open call 6: the Vercel project after 14 days. Recommended: save its page-view
-  totals to ops, then delete it (ADR 0018). Alternative: keep it paused until stage 5.
+  "Owner decisions this relies on". No grilling round was held for this proposal itself; its six calls
+  went to Fraser with this PR.
+- 19 November 2026, Fraser approved the proposal and answered its six calls:
+  1. Click table: daily totals per event name only, no row per click, so nothing in it can be personal
+     data (design D3).
+  2. Rate limit: keyed per event name, 60 a minute per Cloudflare location; the endpoint never reads the
+     IP address (design D3, `site-privacy-and-analytics` "The event endpoint is rate-limited").
+  3. Previews: a separate `website-preview` Worker with its own EU D1 database, which starts empty with
+     the migrations applied, because Cloudflare version URLs share the production Worker's bindings
+     (design D2, D5). This is how this site meets ADR 0018's "seeded test database": it has no seed data.
+  4. App policies: only the "This website" sentence changes in the Roast Conductor and Loop Year
+     policies, and their effective dates stay. Website #76 is closed by the new website notice, which
+     states retention and where data is kept (design D8).
+  5. If the real deploy measures over 5 ms p99 CPU time per request on the Free plan, Fraser subscribes
+     to Workers Paid early, before the cutover. No static export (design D7, `site-hosting` "Page
+     requests fit the Workers Free plan").
+  6. After the 14-day rollback window, the Vercel project's page-view and event totals are saved to ops,
+     then the project is deleted (task 6.1, owner step A7).
+- 19 November 2026, build brief (stage 1 orchestration, ops #610): while the `CLOUDFLARE_API_TOKEN`
+  secret is absent, the `main` deploy job skips with a notice and passes instead of failing, so merging
+  the build PR does not turn CI red and Vercel keeps serving the site until the DNS switch. A token
+  that is present but rejected still fails the job (`site-hosting` "Main deploys through CI").

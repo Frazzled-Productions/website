@@ -78,7 +78,7 @@ CREATE TABLE event_counts (
 ```
 
 No column can hold an IP address, user agent, page address, referrer, identifier or time finer than
-the day (open call 1).
+the day (Clarifications, call 1).
 
 Endpoint (`app/api/event/route.ts`, logic in `app/lib/events.ts` so it is testable without Next):
 
@@ -87,7 +87,7 @@ Endpoint (`app/api/event/route.ts`, logic in `app/lib/events.ts` so it is testab
    posting; it does not stop scripts, which the rate limit bounds.
 3. Body at most 200 bytes, JSON `{"name": "<event>"}`; `name` must be in the allowlist
    `["support_click", "pokememory_click"]` exported from `app/lib/events.ts`; otherwise 400.
-4. `EVENT_LIMITER.limit({ key: name })`; when not allowed, 429 and no write (open call 2). Cloudflare
+4. `EVENT_LIMITER.limit({ key: name })`; when not allowed, 429 and no write (Clarifications, call 2). Cloudflare
    says the limit is approximate, eventually consistent and per location, so the worst case is 60 a
    minute per name per location reaching the table: an inflated count, never a cost.
 5. `INSERT INTO event_counts (day, name, count) VALUES (?1, ?2, 1) ON CONFLICT (day, name) DO UPDATE
@@ -134,9 +134,12 @@ New `.github/workflows/deploy.yml` (ubuntu-latest, `node-version-file: .nvmrc`, 
 - `pull_request` from this repo: same build with the beacon token unset, migrations applied to the
   preview database (`--env preview`), `npm run cf:upload-preview`, then one PR comment (edited on later
   pushes) with `https://pr-<n>-website-preview.<subdomain>.workers.dev`. The preview database starts
-  empty: seeding it means applying the migrations (open call 3).
+  empty: seeding it means applying the migrations (Clarifications, call 3).
 - Pull requests where `secrets.CLOUDFLARE_API_TOKEN` is empty (Dependabot, forks) skip the Cloudflare
   steps with a `::notice::` and pass; CI still builds them.
+- Pushes to `main` while the secret is absent do the same: the deploy job prints a `::notice::` and
+  passes, so the build PR can merge before Fraser's account steps and Vercel keeps serving the site. A
+  token that is present but rejected fails the job (Clarifications, build brief).
 - Secrets and variables: `CLOUDFLARE_API_TOKEN` (secret; Workers Scripts edit and D1 edit on this
   account only), `CLOUDFLARE_ACCOUNT_ID`, `KOFI_URL`, `NEXT_PUBLIC_CF_BEACON_TOKEN` (variables).
 - Version URLs are public when enabled; the preview Worker only ever holds PR builds of a public repo
@@ -176,7 +179,8 @@ limit "you will not be able to run queries against D1".
   asset cache; the endpoint does one D1 call (I/O, not CPU). Not measured: the research lists "Real CPU
   per request on Cloudflare (needs a deploy)" as unanswered. Gate (task 3.5): CPU time per request from
   the preview Worker's metrics for each route and the endpoint, p99 at most 5 ms (half the limit). Over
-  it, the cutover waits for open call 5.
+  it, Fraser subscribes to Workers Paid before the cutover; the build is not reworked into a static
+  export (Clarifications, call 5).
 - Not stated on the pages read: whether D1 jurisdiction, the Rate Limiting binding and version URLs are
   available on Free. Task 3.1 creates them on the real account; a refusal stops the build and comes back
   to Fraser.
@@ -206,12 +210,12 @@ counts page visits with Cloudflare Web Analytics, which does not collect persona
 ## Risks / Trade-offs
 
 - [Preview writes into production] Version URLs share the Worker's bindings. Mitigation: a separate
-  preview Worker and database (D2, open call 3).
+  preview Worker and database (D2, Clarifications call 3).
 - [Support section vanishes] `KOFI_URL` missing in CI. Mitigation: the smoke script fails without the
   "Support the studio" button on production.
 - [Counts inflated by scripts] Mitigation: Origin check, allowlist, rate limit; the counts are a rough
   signal, as Vercel's were.
-- [Free plan CPU] Unmeasured. Mitigation: task 3.5 gate before cutover.
+- [Free plan CPU] Unmeasured. Mitigation: task 3.5 gate before cutover; over it, Workers Paid early.
 - [Free plan can end] Cloudflare may end free services at its discretion (ops research). Mitigation:
   Workers Paid arrives at stage 2 anyway.
 - [Vercel page-view history] Lost when the project is deleted. Mitigation: totals saved to ops first
@@ -226,4 +230,4 @@ D6 step 5 until the Vercel project is deleted.
 
 ## Open Questions
 
-The six open calls in the proposal's Clarifications.
+None. Fraser answered the six calls on 19 November 2026 (proposal Clarifications).

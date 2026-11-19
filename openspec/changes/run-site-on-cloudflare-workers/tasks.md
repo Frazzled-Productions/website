@@ -1,6 +1,6 @@
 ## 0. On approval
 
-- [ ] 0.1 Record Fraser's answers to the six open calls under the proposal's Clarifications and apply them to design and specs. Verify: one dated line per call; `OPENSPEC_TELEMETRY=0 openspec validate run-site-on-cloudflare-workers --strict` prints "is valid".
+- [x] 0.1 Record Fraser's answers to the six open calls under the proposal's Clarifications and apply them to design and specs. Verify: one dated line per call; `OPENSPEC_TELEMETRY=0 openspec validate run-site-on-cloudflare-workers --strict` prints "is valid". Done 19 November 2026: Clarifications lists calls 1 to 6 under one dated entry; validate printed "Change 'run-site-on-cloudflare-workers' is valid" (exit 0), `--all --strict` 6 passed, 0 failed.
 - [ ] 0.2 Open this change's after-merge issue in the website repo (cutover, 14-day watch, Vercel retirement, archive). Verify: its number is in the build PR body.
 
 ## 1. Tests first (red against today's code)
@@ -24,7 +24,7 @@
 - [ ] 3.2 Preview version of the build PR. Verify: the PR comment's URL passes `node scripts/smoke.mjs <url>`; a click there adds a row to `website-events-preview` and none to `website-events`.
 - [ ] 3.3 Smoke the production Worker on workers.dev after the build merges. Verify: `node scripts/smoke.mjs https://website.<subdomain>.workers.dev --production` exits 0.
 - [ ] 3.4 Cookie and storage check on the production Worker with the beacon: load every page in a clean browser profile, then list cookies, `localStorage` and `sessionStorage` for the site. Verify: all three empty, quoted; only then does the notice say no cookies or storage (D4, D8).
-- [ ] 3.5 CPU gate (site-hosting: "Page requests fit the Workers Free plan"). Verify: after at least 20 requests to each route and 20 posts to `/api/event`, the Worker's metrics show p99 CPU time per route of 5 ms or less, quoted with the date; over it, stop for open call 5.
+- [ ] 3.5 CPU gate (site-hosting: "Page requests fit the Workers Free plan"). Verify: after at least 20 requests to each route and 20 posts to `/api/event`, the Worker's metrics show p99 CPU time per route of 5 ms or less, quoted with the date; over it, Fraser subscribes to Workers Paid before the cutover (Clarifications, call 5).
 - [ ] 3.6 `/opsx:verify run-site-on-cloudflare-workers`, the `blast-radius` skill again, then the `final-review` skill. Verify: findings fixed or listed in the build PR body.
 
 ## 4. Before merging the build PR
