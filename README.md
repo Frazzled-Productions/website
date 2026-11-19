@@ -109,16 +109,20 @@ November 2026). The two hostnames are Worker Custom Domains attached in Cloudfla
 
 `.github/workflows/deploy.yml` deploys with wrangler:
 
-- **Push to `main`:** tests, `npm run cf:build`, D1 migrations applied to `website-events`, then
-  `npm run cf:deploy` to the Worker `website`.
-- **Pull request from this repo:** the same build without the analytics token, migrations applied to
-  `website-events-preview`, and a preview version uploaded to the separate `website-preview` Worker
-  with the alias `pr-<number>`; a comment on the PR gives its URL. Previews never touch production
-  data, because version URLs share their Worker's bindings.
-- **No `CLOUDFLARE_API_TOKEN` secret** (Dependabot, forks, or before the account is set up): the
-  Cloudflare steps are skipped with a notice and the job passes.
+- **Push to `main`:** tests, `npm run cf:build`, D1 migrations applied to `website-events` and to
+  `website-events-preview`, then `npm run cf:deploy` to the Worker `website`.
+- **Pull request from this repo:** the same build without the analytics token, and a preview version
+  uploaded to the separate `website-preview` Worker with the alias `pr-<number>`; a comment on the PR
+  gives its URL. Previews never touch production data, because version URLs share their Worker's
+  bindings. A migration the PR adds reaches the preview database only after it merges.
+- **No `CLOUDFLARE_API_TOKEN` in the job's environment** (Dependabot, forks, or the preview token not
+  created yet): the Cloudflare steps are skipped with a notice and the job passes.
 
-It needs the secret `CLOUDFLARE_API_TOKEN` and the repository variables `CLOUDFLARE_ACCOUNT_ID`,
+**Deploy guard** (ops #610, 19 November 2026). The token is not a repository secret. Each job reads
+`CLOUDFLARE_API_TOKEN` from its GitHub environment: `production` admits only `main` and holds the
+account token (D1, R2 and Workers write); `preview` holds a token limited to the preview Workers (no
+D1 or R2: Cloudflare cannot limit a token to one D1 database), or nothing, so a pull request cannot
+write a live database or deploy the live Worker. The repository variables are `CLOUDFLARE_ACCOUNT_ID`,
 `KOFI_URL` and `NEXT_PUBLIC_CF_BEACON_TOKEN`. `wrangler.jsonc` holds the two D1 database ids, both
 created with `--jurisdiction=eu`.
 

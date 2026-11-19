@@ -35,8 +35,9 @@ be at most 5 ms, half the Free plan's 10 ms limit, measured on a deployed Worker
 
 ### Requirement: Main deploys through CI with wrangler
 Each push to `main` SHALL run tests, build with OpenNext, apply pending D1 migrations to the production
-database, then deploy the production Worker, using the `CLOUDFLARE_API_TOKEN` secret. While that secret
-is absent, the job SHALL skip the Cloudflare steps with a notice and pass.
+database and to the preview database, then deploy the production Worker, using the
+`CLOUDFLARE_API_TOKEN` secret of the `production` GitHub environment, which admits only `main`. While
+that secret is absent, the job SHALL skip the Cloudflare steps with a notice and pass.
 
 #### Scenario: A normal merge
 - **WHEN** a PR merges to `main`
@@ -54,12 +55,20 @@ is absent, the job SHALL skip the Cloudflare steps with a notice and pass.
 ### Requirement: Each pull request gets a preview version on a separate Worker
 A pull request from this repo SHALL upload a preview version to the `website-preview` Worker, whose D1
 database is separate from production and starts empty with the migrations applied, aliased `pr-<n>`, and
-comment its URL on the PR. Pull requests without the secret SHALL skip this with a notice.
+comment its URL on the PR. The preview job SHALL read its token from the `preview` GitHub environment,
+which holds no token able to write D1 or deploy the production Worker. Pull requests without that
+secret SHALL skip this with a notice.
 
 #### Scenario: A PR from a branch in this repo
 - **WHEN** a branch PR is opened or pushed
 - **THEN** one comment on the PR shows `pr-<n>-website-preview.<subdomain>.workers.dev`, updated on
   later pushes, and clicks there land in the preview database only
+
+#### Scenario: A pull request cannot reach production
+- **WHEN** any pull request workflow runs
+- **THEN** it has no token that can write `website-events` or deploy the `website` Worker, because
+  that token is only in the `production` environment, whose deployment branch policy admits `main`
+  alone
 
 #### Scenario: A Dependabot or fork PR
 - **WHEN** the PR runs without `CLOUDFLARE_API_TOKEN`
