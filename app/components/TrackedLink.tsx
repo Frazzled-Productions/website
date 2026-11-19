@@ -1,20 +1,20 @@
 'use client';
 
-import { track } from '@vercel/analytics';
 import type { ReactNode } from 'react';
+import { sendEvent, type EventName } from '../lib/events';
 
 type TrackedLinkProps = {
   href: string;
-  /** Vercel Analytics custom event name, fired on click. */
-  event: string;
+  /** Click name counted by the site's own /api/event on click. */
+  event: EventName;
   className?: string;
   children: ReactNode;
 };
 
 /**
- * An external anchor that records a Vercel Analytics custom event when clicked,
- * so we can see click-throughs in the dashboard. The event name carries the
- * meaning (event-property filtering is a paid feature, event counts are not).
+ * An external anchor that adds one to the day's total for its click name when
+ * clicked (app/lib/events.ts), so we can see click-throughs without collecting
+ * anything about the visitor.
  */
 export function TrackedLink({ href, event, className, children }: TrackedLinkProps) {
   return (
@@ -23,7 +23,7 @@ export function TrackedLink({ href, event, className, children }: TrackedLinkPro
       target="_blank"
       rel="noopener noreferrer"
       className={className}
-      onClick={() => track(event)}
+      onClick={() => sendEvent(event)}
     >
       {children}
     </a>

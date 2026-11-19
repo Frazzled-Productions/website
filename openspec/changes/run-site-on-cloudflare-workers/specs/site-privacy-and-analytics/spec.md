@@ -53,7 +53,8 @@ With the token unset (local and preview builds) it SHALL render no beacon. No co
 
 #### Scenario: Searching for the old library
 - **WHEN** the repo is searched for `@vercel/analytics` or `_vercel/insights`
-- **THEN** nothing matches outside `openspec/` and `package-lock.json` history
+- **THEN** nothing matches outside `openspec/`, `package-lock.json` history and `scripts/smoke.mjs`,
+  which only checks that built pages do not contain them
 
 ### Requirement: Exactly two click events, counted by the site
 The site SHALL send exactly two click events, each a fixed name with no properties: `pokememory_click`

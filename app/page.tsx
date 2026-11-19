@@ -7,7 +7,8 @@ import Link from "next/link";
 export default function Home() {
   // Donation mechanism (issue #7). The Ko-fi page URL lives in an env var, so the
   // Support section only renders once a destination is configured. This keeps a dead
-  // link off the live site and lets it go live by setting KOFI_URL in Vercel.
+  // link off the live site and lets it go live by setting the KOFI_URL repository
+  // variable, which the deploy workflow passes to the build.
   const kofiUrl = process.env.KOFI_URL;
 
   return (

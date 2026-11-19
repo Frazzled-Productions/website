@@ -269,7 +269,8 @@ export default function RoastConductorPrivacyPage() {
       <h2>This website</h2>
       <p>
         This policy covers the Roast Conductor app. The Frazzled Productions website
-        counts page visits with Vercel Web Analytics, which does not use cookies.
+        counts page visits with Cloudflare Web Analytics, which does not collect
+        personal data.
       </p>
     </article>
   );
