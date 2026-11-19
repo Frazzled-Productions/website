@@ -131,17 +131,23 @@ New `.github/workflows/deploy.yml` (ubuntu-latest, `node-version-file: .nvmrc`, 
 - `push` to `main`: `npm ci`, `npm test`, `npm run cf:build`, `wrangler d1 migrations apply EVENTS_DB
   --remote`, `npm run cf:deploy`. Build-time settings from repository variables: `KOFI_URL`,
   `NEXT_PUBLIC_CF_BEACON_TOKEN`.
-- `pull_request` from this repo: same build with the beacon token unset, migrations applied to the
-  preview database (`--env preview`), `npm run cf:upload-preview`, then one PR comment (edited on later
-  pushes) with `https://pr-<n>-website-preview.<subdomain>.workers.dev`. The preview database starts
-  empty: seeding it means applying the migrations (Clarifications, call 3).
+- `pull_request` from this repo: same build with the beacon token unset, `npm run cf:upload-preview`,
+  then one PR comment (edited on later pushes) with
+  `https://pr-<n>-website-preview.<subdomain>.workers.dev`. The preview database starts empty: seeding
+  it means applying the migrations (Clarifications, call 3), which the `main` job does (`--env
+  preview`), because a pull request cannot write D1 (deploy guard below).
+- Deploy guard (ops #610, Fraser's ruling of 19 November 2026): `CLOUDFLARE_API_TOKEN` lives in the
+  GitHub environments, not the repository. `production` (deployment branches: `main` only) holds the
+  account token; `preview` holds a token with Individual Workers Editor on `website-preview` only, or
+  nothing until it is created, in which case previews skip with a notice. Cloudflare tokens can be
+  limited to single Workers but not to single D1 databases (permission groups, read 19 November
+  2026), so the preview token has no D1 access at all.
 - Pull requests where `secrets.CLOUDFLARE_API_TOKEN` is empty (Dependabot, forks) skip the Cloudflare
   steps with a `::notice::` and pass; CI still builds them.
 - Pushes to `main` while the secret is absent do the same: the deploy job prints a `::notice::` and
   passes, so the build PR can merge before Fraser's account steps and Vercel keeps serving the site. A
   token that is present but rejected fails the job (Clarifications, build brief).
-- Secrets and variables: `CLOUDFLARE_API_TOKEN` (secret; Workers Scripts edit and D1 edit on this
-  account only), `CLOUDFLARE_ACCOUNT_ID`, `KOFI_URL`, `NEXT_PUBLIC_CF_BEACON_TOKEN` (variables).
+- Secrets and variables: `CLOUDFLARE_API_TOKEN` (environment secret, per the deploy guard), `CLOUDFLARE_ACCOUNT_ID`, `KOFI_URL`, `NEXT_PUBLIC_CF_BEACON_TOKEN` (variables).
 - Version URLs are public when enabled; the preview Worker only ever holds PR builds of a public repo
   with an empty table, so no Access gate is added.
 
