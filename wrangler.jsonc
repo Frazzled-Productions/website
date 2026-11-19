@@ -21,7 +21,7 @@
       "database_name": "website-events",
       // Created by Fraser with `wrangler d1 create website-events --jurisdiction=eu`
       // (EU jurisdiction can only be set at creation); paste the id it prints here.
-      "database_id": "REPLACE_WITH_WEBSITE_EVENTS_DATABASE_ID",
+      "database_id": "f042fea6-471e-4279-a1cd-1d6b2775f2fd",
       "migrations_dir": "migrations"
     }
   ],
@@ -45,7 +45,7 @@
           "binding": "EVENTS_DB",
           "database_name": "website-events-preview",
           // Created with `wrangler d1 create website-events-preview --jurisdiction=eu`.
-          "database_id": "REPLACE_WITH_WEBSITE_EVENTS_PREVIEW_DATABASE_ID",
+          "database_id": "993a6b3c-bf15-4abc-af2f-a998b81cfcf7",
           "migrations_dir": "migrations"
         }
       ],
