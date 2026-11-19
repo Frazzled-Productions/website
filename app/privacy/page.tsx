@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Privacy | Frazzled Productions",
   description:
-    "How the Frazzled Productions website handles your data: cookie-free Vercel Web Analytics, anonymous counts of clicks on a few links, and the optional Ko-fi support panel.",
+    "How the Frazzled Productions website handles your data: hosting and Cloudflare Web Analytics, daily click totals for two links, and the optional Ko-fi support panel.",
 };
 
 const contactEmail = "hello@frazzledproductions.com";
@@ -36,14 +36,15 @@ export default function PrivacyPage() {
           >
             Website privacy notice
           </h1>
-          <p>Effective 17 October 2026</p>
+          {/* The cutover PR replaces this placeholder with the cutover date (task 5.1). */}
+          <p>Effective [cutover date, set by the cutover PR]</p>
 
           <p className="text-lg">
             <strong>In short:</strong> this website has no accounts, no sign-up
-            forms, no adverts and no cookies. We count page visits and clicks on
-            a few links with Vercel Web Analytics, which does not identify you.
-            If you choose to support us through Ko-fi, Ko-fi handles that, not
-            us.
+            forms, no adverts and no cookies. We count page visits with
+            Cloudflare Web Analytics, which does not collect personal data, and
+            keep a daily total of clicks on two links. If you choose to support
+            us through Ko-fi, Ko-fi handles that, not us.
           </p>
 
           <h2>Who we are</h2>
@@ -59,41 +60,45 @@ export default function PrivacyPage() {
             own privacy policies, linked from each app&apos;s page.
           </p>
 
-          <h2>Visit statistics (Vercel Web Analytics)</h2>
+          <h2>Hosting and visit statistics</h2>
           <p>
-            The site is hosted by Vercel, and we use{" "}
+            The site is hosted by{" "}
             <a
-              href="https://vercel.com/docs/analytics/privacy-policy"
+              href="https://www.cloudflare.com/privacypolicy/"
               target="_blank"
               rel="noopener noreferrer"
             >
-              Vercel Web Analytics
+              Cloudflare, Inc.
             </a>{" "}
-            to see how many people visit and which pages they read. For each page
-            view it records the time, the page address, the site you came from,
-            your rough location (country, region and city), and your device type,
-            operating system and browser.
+            Like any web host, Cloudflare processes your IP address briefly to
+            deliver pages to you and to protect the site from abuse, using its
+            network of data centres around the world.
           </p>
           <p>
-            It does not use cookies or store anything on your device. Vercel
-            tells one visit from another using a hash of the incoming request,
-            which it discards after 24 hours, so we cannot follow you across
-            visits or across other websites, and we cannot see your IP address.
-            We only ever see totals.
-          </p>
-          <p>
-            Like any web host, Vercel also processes your IP address briefly to
-            deliver the page to you and to protect the site from abuse.
+            We use{" "}
+            <a
+              href="https://www.cloudflare.com/web-analytics/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Cloudflare Web Analytics
+            </a>{" "}
+            to see how many people visit and which pages they read. Cloudflare
+            says it does not collect or use visitors&apos; personal data and does
+            not log the part of an address after a question mark. Cloudflare
+            keeps the full measurements for 7 days and a sample after that. We
+            only ever see totals.
           </p>
 
           <h2>Link clicks</h2>
           <p>
-            When you click a few specific links, such as the link to Poké Memory
-            or the &quot;Support the studio&quot; button, the site sends Vercel
-            Web Analytics an event with a fixed name (for example
-            &quot;pokememory_click&quot;). The event carries nothing about you
-            beyond the page-view details above. We use it to count how many
-            visitors follow each link.
+            When you click the link to Poké Memory or the &quot;Support the
+            studio&quot; button, the site adds one to that day&apos;s total for
+            that link. The total is kept by us in a Cloudflare database stored in
+            the European Union. It holds the date, the link&apos;s name and the
+            number, nothing else: no IP address, no device details, no page
+            address and no time of day. We keep the totals for as long as they
+            help us see how the site is used. It counts clicks, not visitors.
           </p>
 
           <h2>Supporting us on Ko-fi</h2>

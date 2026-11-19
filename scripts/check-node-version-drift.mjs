@@ -5,7 +5,7 @@
 //
 // This exists because issue #14: the major used to live only as a `node-version: '20'`
 // literal inside a CI step, so nothing stated what the repo actually wanted and CI could
-// silently validate a different runtime from the one Vercel built with.
+// silently validate a different runtime from the one production built with.
 
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -18,8 +18,8 @@ if (!/^\d+$/.test(nvmrc)) {
 
 const errors = [];
 
-// Vercel picks the build runtime from engines.node, and npm warns on a local mismatch,
-// so package.json has to restate .nvmrc exactly.
+// npm warns on a local mismatch with engines.node (and Vercel picked its build runtime from
+// it while it hosted the site), so package.json has to restate .nvmrc exactly.
 const pkg = JSON.parse(readFileSync("package.json", "utf8"));
 const engines = pkg.engines?.node;
 if (engines !== `${nvmrc}.x`) {

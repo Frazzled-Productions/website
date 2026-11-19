@@ -1,7 +1,7 @@
 'use client';
 
-import { track } from '@vercel/analytics';
 import { useEffect, useRef, useState } from 'react';
+import { sendEvent } from '../lib/events';
 
 type SupportButtonProps = {
   /** The studio's Ko-fi page URL, e.g. https://ko-fi.com/frazzledproductions */
@@ -37,7 +37,7 @@ export function SupportButton({ kofiUrl }: SupportButtonProps) {
   }, [open]);
 
   function handleOpen() {
-    track('support_click');
+    sendEvent('support_click');
     setOpen(true);
   }
 

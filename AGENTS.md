@@ -1,6 +1,7 @@
 # AGENTS.md - website (frazzledproductions.com)
 
-Layer 2 product repo: the public company website, a Next.js app deployed on Vercel. Public-facing
+Layer 2 product repo: the public company website, a Next.js app deployed to a Cloudflare Worker
+with OpenNext (`.github/workflows/deploy.yml`; Vercel serves it until the DNS cutover). Public-facing
 copy: everything shipped here is read by outsiders (and by Apple/vendors verifying the company),
 so check copy reads correctly to someone who has never heard of us.
 
@@ -13,8 +14,8 @@ here; company facts it displays (addresses, product descriptions) have their hom
 Company standards: `ops/standards/`. Repo-local: `npm run dev` to run, `npm run lint` before committing.
 
 Node major: `.nvmrc` is the home of record, chosen to match `poke-memory` and the shared CI
-workflow's own documented example. `package.json` `engines` restates it only because Vercel and npm
-cannot read `.nvmrc`; nothing else should. Workflows take it via
+workflow's own documented example. `package.json` `engines` restates it only because npm (and Vercel, until the
+cutover) cannot read `.nvmrc`; nothing else should. Workflows take it via
 `node-version-file: .nvmrc`, never a `node-version:` literal, and `npm run check:node-version` fails
 if any of those drift apart (issue #14). One literal is still outstanding in
 `.github/workflows/ci.yml`, which that check reports and `docs/plans/14-question.md` explains.

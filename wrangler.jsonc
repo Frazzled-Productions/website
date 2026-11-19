@@ -1,0 +1,61 @@
+// Cloudflare Worker for frazzledproductions.com (OpenSpec change run-site-on-cloudflare-workers,
+// design D2). Built by `npm run cf:build`; deployed only by .github/workflows/deploy.yml.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "website",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-11-10",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  // Until the cutover PR: reachable at website.<subdomain>.workers.dev only, no routes.
+  // The cutover PR adds the frazzledproductions.com and www Custom Domains and turns both
+  // of these off (design D6).
+  "workers_dev": true,
+  "preview_urls": false,
+  "d1_databases": [
+    {
+      "binding": "EVENTS_DB",
+      "database_name": "website-events",
+      // Created by Fraser with `wrangler d1 create website-events --jurisdiction=eu`
+      // (EU jurisdiction can only be set at creation); paste the id it prints here.
+      "database_id": "REPLACE_WITH_WEBSITE_EVENTS_DATABASE_ID",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "ratelimits": [
+    {
+      "name": "EVENT_LIMITER",
+      // Keyed per event name in app/lib/events.ts, never by IP address.
+      "namespace_id": "1001",
+      "simple": { "limit": 60, "period": 60 }
+    }
+  ],
+  "env": {
+    // Preview versions for pull requests: a separate Worker and database, because version
+    // URLs share their Worker's bindings (proposal Clarifications, call 3).
+    "preview": {
+      "name": "website-preview",
+      "workers_dev": true,
+      "preview_urls": true,
+      "d1_databases": [
+        {
+          "binding": "EVENTS_DB",
+          "database_name": "website-events-preview",
+          // Created with `wrangler d1 create website-events-preview --jurisdiction=eu`.
+          "database_id": "REPLACE_WITH_WEBSITE_EVENTS_PREVIEW_DATABASE_ID",
+          "migrations_dir": "migrations"
+        }
+      ],
+      "ratelimits": [
+        {
+          "name": "EVENT_LIMITER",
+          "namespace_id": "1002",
+          "simple": { "limit": 60, "period": 60 }
+        }
+      ]
+    }
+  }
+}

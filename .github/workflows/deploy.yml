@@ -1,0 +1,147 @@
+# Deploys the site to Cloudflare Workers with OpenNext and wrangler (OpenSpec change
+# run-site-on-cloudflare-workers, design D5).
+#
+# - Push to main: test, build, apply D1 migrations to production, deploy the Worker `website`.
+# - Pull request: same build without the analytics token, migrations applied to the preview
+#   database, a preview version of the separate Worker `website-preview` aliased pr-<number>,
+#   and one PR comment with its URL (edited on later pushes).
+# - With no CLOUDFLARE_API_TOKEN secret (Dependabot, forks, or before the account is set up), or
+#   while wrangler.jsonc still holds placeholder database ids, both jobs skip the Cloudflare
+#   steps with a notice and pass. Until the DNS cutover, Vercel keeps serving the domain.
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  # Never cancel a production deploy half way; a newer push to a PR replaces its preview.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+env:
+  CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+  CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+
+jobs:
+  production:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Check Cloudflare is set up
+        id: ready
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "::notice::No CLOUDFLARE_API_TOKEN secret, so nothing is deployed to Cloudflare. Vercel keeps serving the site until the DNS cutover."
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          elif grep -q 'REPLACE_WITH_' wrangler.jsonc; then
+            echo "::notice::wrangler.jsonc still holds placeholder D1 database ids, so nothing is deployed to Cloudflare."
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - if: steps.ready.outputs.ok == 'true'
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: 'npm'
+      - if: steps.ready.outputs.ok == 'true'
+        run: npm ci
+      - if: steps.ready.outputs.ok == 'true'
+        run: npm test
+      - if: steps.ready.outputs.ok == 'true'
+        name: Build the Worker
+        run: npm run cf:build
+        env:
+          KOFI_URL: ${{ vars.KOFI_URL }}
+          NEXT_PUBLIC_CF_BEACON_TOKEN: ${{ vars.NEXT_PUBLIC_CF_BEACON_TOKEN }}
+      - if: steps.ready.outputs.ok == 'true'
+        name: Apply D1 migrations (website-events)
+        run: npx wrangler d1 migrations apply EVENTS_DB --remote
+      - if: steps.ready.outputs.ok == 'true'
+        name: Deploy the Worker
+        run: npm run cf:deploy
+
+  preview:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Check Cloudflare is set up
+        id: ready
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "::notice::No CLOUDFLARE_API_TOKEN secret for this pull request (Dependabot, a fork, or not set up yet), so no preview version is uploaded. CI still builds it."
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          elif grep -q 'REPLACE_WITH_' wrangler.jsonc; then
+            echo "::notice::wrangler.jsonc still holds placeholder D1 database ids, so no preview version is uploaded."
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - if: steps.ready.outputs.ok == 'true'
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: 'npm'
+      - if: steps.ready.outputs.ok == 'true'
+        run: npm ci
+      - if: steps.ready.outputs.ok == 'true'
+        run: npm test
+      - if: steps.ready.outputs.ok == 'true'
+        name: Build the Worker (no analytics token)
+        run: npm run cf:build
+        env:
+          KOFI_URL: ${{ vars.KOFI_URL }}
+      - if: steps.ready.outputs.ok == 'true'
+        name: Apply D1 migrations (website-events-preview)
+        run: npx wrangler d1 migrations apply EVENTS_DB --remote --env preview
+      - if: steps.ready.outputs.ok == 'true'
+        name: Upload the preview version
+        id: upload
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          set -o pipefail
+          npm run cf:upload-preview 2>&1 | tee upload.log
+          url=$(grep -oE "https://pr-${PR_NUMBER}-[A-Za-z0-9.-]+\.workers\.dev" upload.log | head -n 1)
+          echo "url=${url}" >> "$GITHUB_OUTPUT"
+      - if: steps.ready.outputs.ok == 'true'
+        name: Comment the preview URL on the PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PREVIEW_URL: ${{ steps.upload.outputs.url }}
+          SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          marker='<!-- website-preview -->'
+          if [ -n "$PREVIEW_URL" ]; then
+            line="Preview version for ${SHA}: ${PREVIEW_URL}"
+          else
+            line="Preview version for ${SHA} uploaded; its URL was not found in the log, see this run: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          fi
+          body="${marker}
+          ${line}
+
+          It runs on the separate website-preview Worker with its own database, without the analytics beacon."
+          id=$(gh api "repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments" --paginate \
+            --jq ".[] | select(.body | startswith(\"${marker}\")) | .id" | head -n 1)
+          if [ -n "$id" ]; then
+            gh api -X PATCH "repos/${GITHUB_REPOSITORY}/issues/comments/${id}" -f body="$body" > /dev/null
+          else
+            gh api -X POST "repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments" -f body="$body" > /dev/null
+          fi

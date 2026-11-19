@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Orbitron, Space_Grotesk, Inter } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next";
 import { CursorGlow } from "./components/CursorGlow";
 import "./globals.css";
 
@@ -25,6 +24,10 @@ export const metadata: Metadata = {
   description: "Software for the fun of it.",
 };
 
+// Cloudflare Web Analytics site token: a public site tag, not a secret, set as a repository
+// variable for production builds only, so local and preview builds send no page views.
+const cfBeaconToken = process.env.NEXT_PUBLIC_CF_BEACON_TOKEN;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -38,7 +41,13 @@ export default function RootLayout({
       <body>
         <CursorGlow />
         {children}
-        <Analytics />
+        {cfBeaconToken && (
+          <script
+            defer
+            src="https://static.cloudflareinsights.com/beacon.min.js"
+            data-cf-beacon={JSON.stringify({ token: cfBeaconToken })}
+          />
+        )}
       </body>
     </html>
   );
