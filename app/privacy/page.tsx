@@ -36,8 +36,7 @@ export default function PrivacyPage() {
           >
             Website privacy notice
           </h1>
-          {/* The cutover PR replaces this placeholder with the cutover date (task 5.1). */}
-          <p>Effective [cutover date, set by the cutover PR]</p>
+          <p>Effective 19 November 2026</p>
 
           <p className="text-lg">
             <strong>In short:</strong> this website has no accounts, no sign-up

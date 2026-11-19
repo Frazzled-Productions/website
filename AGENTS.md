@@ -1,7 +1,7 @@
 # AGENTS.md - website (frazzledproductions.com)
 
 Layer 2 product repo: the public company website, a Next.js app deployed to a Cloudflare Worker
-with OpenNext (`.github/workflows/deploy.yml`; Vercel serves it until the DNS cutover). Public-facing
+with OpenNext (`.github/workflows/deploy.yml`). Public-facing
 copy: everything shipped here is read by outsiders (and by Apple/vendors verifying the company),
 so check copy reads correctly to someone who has never heard of us.
 

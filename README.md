@@ -12,7 +12,7 @@ It is a single-page synthwave-styled site introducing the studio and its project
 - [React 19](https://react.dev)
 - [Tailwind CSS v4](https://tailwindcss.com)
 - [TypeScript](https://www.typescriptlang.org)
-- Deployed to [Cloudflare Workers](https://developers.cloudflare.com/workers/) with [OpenNext](https://opennext.js.org/cloudflare) (Vercel serves the site until the DNS cutover)
+- Deployed to [Cloudflare Workers](https://developers.cloudflare.com/workers/) with [OpenNext](https://opennext.js.org/cloudflare)
 
 ## Getting started
 
@@ -102,9 +102,10 @@ Pull requests and pushes to `main` run lint, type-check, build and tests via Git
 
 ## Deployment
 
-The site is served at [frazzledproductions.com](https://frazzledproductions.com). It is moving from
-Vercel to a Cloudflare Worker (OpenSpec change `run-site-on-cloudflare-workers`, ops #610): until the
-DNS cutover, Vercel still serves the domain.
+The site is served at [frazzledproductions.com](https://frazzledproductions.com) and www by the
+Cloudflare Worker `website` (OpenSpec change `run-site-on-cloudflare-workers`, ops #610; cutover 19
+November 2026). The two hostnames are Worker Custom Domains attached in Cloudflare, not routes in
+`wrangler.jsonc`, so a deploy never changes DNS.
 
 `.github/workflows/deploy.yml` deploys with wrangler:
 
@@ -135,9 +136,10 @@ Page views are in the Cloudflare dashboard under Web Analytics.
 
 ### Rollback
 
-For 14 days after the cutover, the last Vercel deployment stays paused as the rollback: remove the
-two Worker Custom Domains, then recreate the apex A record (`76.76.21.21`) and the `www` CNAME
-(`cname.vercel-dns.com`), DNS only.
+For 14 days after the cutover, Vercel is the rollback. Vercel still builds every push to `main`, so
+first use Vercel's Instant Rollback to the pre-merge production deployment
+(`dpl_42iin6ig53fsi99GxQVTZcq6GxQf`, commit `3fff1e5`), then remove the two Worker Custom Domains and
+recreate the apex A record (`76.76.21.21`) and the `www` CNAME (`cname.vercel-dns.com`), DNS only.
 
 ---
 
