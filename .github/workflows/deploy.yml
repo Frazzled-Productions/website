@@ -23,9 +23,8 @@ concurrency:
 permissions:
   contents: read
 
-env:
-  CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-  CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+# The Cloudflare token is passed only to the steps that call Cloudflare (and the readiness
+# check), never to npm ci, npm test or the build, so dependency scripts never see it.
 
 jobs:
   production:
@@ -37,6 +36,8 @@ jobs:
 
       - name: Check Cloudflare is set up
         id: ready
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: |
           if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
             echo "::notice::No CLOUDFLARE_API_TOKEN secret, so nothing is deployed to Cloudflare. Vercel keeps serving the site until the DNS cutover."
@@ -65,9 +66,15 @@ jobs:
           NEXT_PUBLIC_CF_BEACON_TOKEN: ${{ vars.NEXT_PUBLIC_CF_BEACON_TOKEN }}
       - if: steps.ready.outputs.ok == 'true'
         name: Apply D1 migrations (website-events)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
         run: npx wrangler d1 migrations apply EVENTS_DB --remote
       - if: steps.ready.outputs.ok == 'true'
         name: Deploy the Worker
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
         run: npm run cf:deploy
 
   preview:
@@ -82,6 +89,8 @@ jobs:
 
       - name: Check Cloudflare is set up
         id: ready
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: |
           if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
             echo "::notice::No CLOUDFLARE_API_TOKEN secret for this pull request (Dependabot, a fork, or not set up yet), so no preview version is uploaded. CI still builds it."
@@ -109,11 +118,16 @@ jobs:
           KOFI_URL: ${{ vars.KOFI_URL }}
       - if: steps.ready.outputs.ok == 'true'
         name: Apply D1 migrations (website-events-preview)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
         run: npx wrangler d1 migrations apply EVENTS_DB --remote --env preview
       - if: steps.ready.outputs.ok == 'true'
         name: Upload the preview version
         id: upload
         env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           set -o pipefail
