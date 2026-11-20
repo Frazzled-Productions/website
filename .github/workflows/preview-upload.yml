@@ -1,0 +1,130 @@
+# Uploads each pull request's preview version (koinori #2925 F3 and F4, 20 November 2026; OpenSpec
+# change run-site-on-cloudflare-workers, design D5).
+#
+# deploy.yml builds the pull request with no token and keeps its .open-next/ as the artefact
+# preview-bundle. This workflow runs when that run completes. GitHub runs a workflow_run workflow
+# from the file on the default branch, on main, so a pull request cannot change this file or what
+# it trusts:
+# - wrangler.jsonc, package.json, package-lock.json and open-next.config.ts come from the pull
+#   request's base branch (main), never from the pull request, so the preview Worker's bindings are
+#   always main's.
+# - The artefact is untrusted bytes. Symlinks are refused and nothing in it is run: this does not
+#   call `opennextjs-cloudflare upload`, which imports the compiled config from .open-next/. It does
+#   the one thing that command adds for this site's static-assets cache (copy .open-next/cache into
+#   the assets), then calls wrangler from main's dependencies.
+# - The token is CLOUDFLARE_PREVIEW_API_TOKEN in the Preview environment, whose deployment branch
+#   policy admits only main, so no pull request workflow can read it. It is limited to the
+#   website-preview Worker. With no token there (not created yet), the job prints a notice and passes.
+# Pull requests from forks, failed or cancelled builds and pull requests into any branch other than
+# main are skipped.
+name: Preview upload
+
+on:
+  workflow_run:
+    workflows: [Deploy]
+    types: [completed]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: preview-upload-${{ github.event.workflow_run.pull_requests[0].number || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  upload:
+    if: >-
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_repository.full_name == github.repository &&
+      github.event.workflow_run.pull_requests[0].base.ref == 'main'
+    environment: preview
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      actions: read
+      pull-requests: write
+    env:
+      # From the event, never from the artefact.
+      PR_NUMBER: ${{ github.event.workflow_run.pull_requests[0].number }}
+      SHA: ${{ github.event.workflow_run.head_sha }}
+    steps:
+      - name: Check Cloudflare is set up
+        id: ready
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_PREVIEW_API_TOKEN }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "::notice::No CLOUDFLARE_PREVIEW_API_TOKEN in the Preview environment (the preview-only token is not created yet), so no preview version is uploaded for PR #${PR_NUMBER}. Deploy still built it."
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - if: steps.ready.outputs.ok == 'true'
+        uses: actions/checkout@v7
+        with:
+          # The base branch, which the job condition pins to main; never the pull request's head.
+          ref: ${{ github.event.workflow_run.pull_requests[0].base.ref }}
+          persist-credentials: false
+      - if: steps.ready.outputs.ok == 'true'
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: 'npm'
+      - if: steps.ready.outputs.ok == 'true'
+        run: npm ci
+      - if: steps.ready.outputs.ok == 'true'
+        uses: actions/download-artifact@v8
+        with:
+          name: preview-bundle
+          path: .open-next
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+      - if: steps.ready.outputs.ok == 'true'
+        name: Check the build and add the page cache to the static assets
+        run: |
+          if find .open-next -type l | grep -q .; then
+            echo "::error::The preview-bundle artefact contains symlinks, so it is refused."
+            exit 1
+          fi
+          test -f .open-next/worker.js
+          # What `opennextjs-cloudflare upload` does for the static-assets incremental cache
+          # (open-next.config.ts), without running anything from the artefact.
+          mkdir -p .open-next/assets/cdn-cgi/_next_cache
+          cp -R .open-next/cache/. .open-next/assets/cdn-cgi/_next_cache/
+      - if: steps.ready.outputs.ok == 'true'
+        name: Upload the preview version
+        id: upload
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_PREVIEW_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          set -o pipefail
+          npx wrangler versions upload --env preview --preview-alias "pr-${PR_NUMBER}" 2>&1 | tee upload.log
+          url=$(grep -oE "https://pr-${PR_NUMBER}-[A-Za-z0-9.-]+\.workers\.dev" upload.log | head -n 1)
+          echo "url=${url}" >> "$GITHUB_OUTPUT"
+      - if: steps.ready.outputs.ok == 'true'
+        name: Comment the preview URL on the PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PREVIEW_URL: ${{ steps.upload.outputs.url }}
+        run: |
+          marker='<!-- website-preview -->'
+          if [ -n "$PREVIEW_URL" ]; then
+            line="Preview version for ${SHA}: ${PREVIEW_URL}"
+          else
+            line="Preview version for ${SHA} uploaded; its URL was not found in the log, see this run: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          fi
+          body="${marker}
+          ${line}
+
+          It runs on the separate website-preview Worker with its own database, without the analytics beacon."
+          id=$(gh api "repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments" --paginate \
+            --jq ".[] | select(.body | startswith(\"${marker}\")) | .id" | head -n 1)
+          if [ -n "$id" ]; then
+            gh api -X PATCH "repos/${GITHUB_REPOSITORY}/issues/comments/${id}" -f body="$body" > /dev/null
+          else
+            gh api -X POST "repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments" -f body="$body" > /dev/null
+          fi

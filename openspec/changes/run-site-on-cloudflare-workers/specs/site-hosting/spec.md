@@ -53,16 +53,31 @@ that secret is absent, the job SHALL skip the Cloudflare steps with a notice and
 - **THEN** the deploy job fails red and the live site keeps its previous version
 
 ### Requirement: Each pull request gets a preview version on a separate Worker
-A pull request from this repo SHALL upload a preview version to the `website-preview` Worker, whose D1
-database is separate from production and starts empty with the migrations applied, aliased `pr-<n>`, and
-comment its URL on the PR. The preview job SHALL read its token from the `preview` GitHub environment,
-which holds no token able to write D1 or deploy the production Worker. Pull requests without that
-secret SHALL skip this with a notice.
+A pull request from a branch of this repo into `main` SHALL get a preview version on the
+`website-preview` Worker, whose D1 database is separate from production and starts empty with the
+migrations applied, aliased `pr-<n>`, with its URL commented on the PR. Without the
+`CLOUDFLARE_PREVIEW_API_TOKEN` secret of the `Preview` GitHub environment, the upload SHALL be skipped
+with a notice and pass.
 
 #### Scenario: A PR from a branch in this repo
-- **WHEN** a branch PR is opened or pushed
+- **WHEN** a branch PR into `main` is opened or pushed and its Deploy run passes
 - **THEN** one comment on the PR shows `pr-<n>-website-preview.<subdomain>.workers.dev`, updated on
   later pushes, and clicks there land in the preview database only
+
+#### Scenario: No preview token
+- **WHEN** a pull request's Deploy run passes and `CLOUDFLARE_PREVIEW_API_TOKEN` is not set in `Preview`
+- **THEN** the upload workflow prints a notice, uploads nothing and passes; the PR's own run still
+  built and tested it
+
+#### Scenario: A fork PR
+- **WHEN** the PR comes from a fork
+- **THEN** its own run builds and tests it, and the upload workflow skips it
+
+### Requirement: Preview versions are uploaded only from main
+The pull request's own workflow SHALL build the preview without any GitHub environment or Cloudflare
+secret and keep the build as an artefact. Only a `workflow_run` workflow, which GitHub runs from
+`main`, SHALL upload it, using the `Preview` environment (deployment branches: `main` only), the
+config and dependencies from `main`, and nothing run from the artefact.
 
 #### Scenario: A pull request cannot reach production
 - **WHEN** any pull request workflow runs
@@ -70,9 +85,11 @@ secret SHALL skip this with a notice.
   that token is only in the `production` environment, whose deployment branch policy admits `main`
   alone
 
-#### Scenario: A Dependabot or fork PR
-- **WHEN** the PR runs without `CLOUDFLARE_API_TOKEN`
-- **THEN** the Cloudflare steps are skipped with a notice and the job passes; CI still builds it
+#### Scenario: A pull request changes the preview bindings
+- **WHEN** a pull request edits `env.preview` in `wrangler.jsonc` to bind the production database, or
+  edits a workflow to read the `Preview` environment
+- **THEN** its preview version is still uploaded with `main`'s bindings, and its own workflow is refused
+  the `Preview` environment, so it gets no Cloudflare token
 
 ### Requirement: Build-time settings come from CI variables
 `KOFI_URL` and `NEXT_PUBLIC_CF_BEACON_TOKEN` SHALL be read from repository variables at build in

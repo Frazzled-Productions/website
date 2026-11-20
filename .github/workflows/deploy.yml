@@ -3,17 +3,17 @@
 #
 # - Push to main: test, build, apply D1 migrations to production and to the preview database,
 #   deploy the Worker `website`.
-# - Pull request: same build without the analytics token, a preview version of the separate Worker
-#   `website-preview` aliased pr-<number>, and one PR comment with its URL (edited on later pushes).
+# - Pull request: test and the same build without the analytics token, with no Cloudflare token and
+#   no GitHub environment. The built .open-next/ is kept for a day as the artefact preview-bundle;
+#   preview-upload.yml, which runs from main, uploads it as a preview version of the separate Worker
+#   `website-preview` aliased pr-<number> and comments its URL (koinori #2925 F3, 20 November 2026).
 #   A migration added by the PR reaches the preview database only once it merges.
-# - Deploy guard (ops #610, 19 November 2026): each job reads CLOUDFLARE_API_TOKEN from its own
-#   GitHub environment, never from a repository secret. `production` only admits `main`, and holds
-#   the account token (D1, R2 and Workers write). `preview` holds a token limited to the preview
-#   Workers, with no D1 or R2 access (Cloudflare cannot limit D1 to one database), or nothing, so a
-#   pull request can never write a live database or deploy the live Worker.
-# - With no token in the job's environment (Dependabot, forks, or the preview token not created
-#   yet), or while wrangler.jsonc still holds placeholder database ids, both jobs skip the
-#   Cloudflare steps with a notice and pass.
+# - Deploy guard (ops #610, 19 November 2026): the production job reads CLOUDFLARE_API_TOKEN from the
+#   `production` environment, which admits only `main` and holds the account token (D1, R2 and
+#   Workers write). No pull request job reads any Cloudflare secret, so a pull request can never
+#   write a live database or deploy the live Worker, even by editing this file.
+# - With no token in the production environment, or while wrangler.jsonc still holds placeholder
+#   database ids, the production job skips the Cloudflare steps with a notice and passes.
 name: Deploy
 
 on:
@@ -93,78 +93,26 @@ jobs:
 
   preview:
     if: github.event_name == 'pull_request'
-    environment: preview
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    permissions:
-      contents: read
-      pull-requests: write
     steps:
       - uses: actions/checkout@v7
-
-      - name: Check Cloudflare is set up
-        id: ready
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        run: |
-          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
-            echo "::notice::No CLOUDFLARE_API_TOKEN in the preview environment for this pull request (Dependabot, a fork, or the preview-only token not created yet), so no preview version is uploaded. CI still builds it."
-            echo "ok=false" >> "$GITHUB_OUTPUT"
-          elif grep -q 'REPLACE_WITH_' wrangler.jsonc; then
-            echo "::notice::wrangler.jsonc still holds placeholder D1 database ids, so no preview version is uploaded."
-            echo "ok=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "ok=true" >> "$GITHUB_OUTPUT"
-          fi
-
-      - if: steps.ready.outputs.ok == 'true'
-        uses: actions/setup-node@v7
+      - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
           cache: 'npm'
-      - if: steps.ready.outputs.ok == 'true'
-        run: npm ci
-      - if: steps.ready.outputs.ok == 'true'
-        run: npm test
-      - if: steps.ready.outputs.ok == 'true'
-        name: Build the Worker (no analytics token)
+      - run: npm ci
+      - run: npm test
+      - name: Build the Worker (no analytics token)
         run: npm run cf:build
         env:
           KOFI_URL: ${{ vars.KOFI_URL }}
-      - if: steps.ready.outputs.ok == 'true'
-        name: Upload the preview version
-        id: upload
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-        run: |
-          set -o pipefail
-          npm run cf:upload-preview 2>&1 | tee upload.log
-          url=$(grep -oE "https://pr-${PR_NUMBER}-[A-Za-z0-9.-]+\.workers\.dev" upload.log | head -n 1)
-          echo "url=${url}" >> "$GITHUB_OUTPUT"
-      - if: steps.ready.outputs.ok == 'true'
-        name: Comment the preview URL on the PR
-        env:
-          GH_TOKEN: ${{ github.token }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-          PREVIEW_URL: ${{ steps.upload.outputs.url }}
-          SHA: ${{ github.event.pull_request.head.sha }}
-        run: |
-          marker='<!-- website-preview -->'
-          if [ -n "$PREVIEW_URL" ]; then
-            line="Preview version for ${SHA}: ${PREVIEW_URL}"
-          else
-            line="Preview version for ${SHA} uploaded; its URL was not found in the log, see this run: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
-          fi
-          body="${marker}
-          ${line}
-
-          It runs on the separate website-preview Worker with its own database, without the analytics beacon."
-          id=$(gh api "repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments" --paginate \
-            --jq ".[] | select(.body | startswith(\"${marker}\")) | .id" | head -n 1)
-          if [ -n "$id" ]; then
-            gh api -X PATCH "repos/${GITHUB_REPOSITORY}/issues/comments/${id}" -f body="$body" > /dev/null
-          else
-            gh api -X POST "repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments" -f body="$body" > /dev/null
-          fi
+      - name: Keep the build for preview-upload.yml
+        uses: actions/upload-artifact@v7
+        with:
+          name: preview-bundle
+          path: .open-next/
+          # .open-next/.build holds the Durable Object code the Worker bundle imports.
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 1

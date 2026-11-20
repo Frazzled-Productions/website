@@ -58,9 +58,8 @@ spike's tested version), exact-pinned as today. Close Dependabot PR #96 as super
   - `env.preview`: Worker `website-preview`, `workers_dev: true`, `preview_urls: true`, its own D1
     `website-events-preview` and its own rate-limit namespace.
 - npm scripts: `cf:build` (`opennextjs-cloudflare build`), `cf:preview` (build, then run locally under
-  workerd), `cf:upload-preview` (`wrangler versions upload --env preview --preview-alias pr-$PR`),
-  `cf:deploy` (`opennextjs-cloudflare deploy`), `cf:typegen`. `npm run build` stays `next build` so CI
-  and local dev are unchanged.
+  workerd), `cf:deploy` (`opennextjs-cloudflare deploy`), `cf:typegen`. `npm run build` stays `next
+  build` so CI and local dev are unchanged.
 - Size: the spike bundle was 1.0 MiB gzipped. Cloudflare's limits page lists "Worker size
   (uncompressed) 64 MiB" on Free and Paid; opennext.js.org still says "3 MiB on the Workers Free plan"
   (compressed). Either way it fits.
@@ -131,23 +130,50 @@ New `.github/workflows/deploy.yml` (ubuntu-latest, `node-version-file: .nvmrc`, 
 - `push` to `main`: `npm ci`, `npm test`, `npm run cf:build`, `wrangler d1 migrations apply EVENTS_DB
   --remote`, `npm run cf:deploy`. Build-time settings from repository variables: `KOFI_URL`,
   `NEXT_PUBLIC_CF_BEACON_TOKEN`.
-- `pull_request` from this repo: same build with the beacon token unset, `npm run cf:upload-preview`,
-  then one PR comment (edited on later pushes) with
+- `pull_request`: `npm ci`, `npm test` and the same build with the beacon token unset, with no GitHub
+  environment and no Cloudflare secret. The built `.open-next/` (including `.open-next/.build`, whose
+  Durable Object code the Worker bundle imports) is kept for one day as the artefact `preview-bundle`.
+- Preview upload (koinori #2925 F3 and F4, 20 November 2026): `.github/workflows/preview-upload.yml`,
+  on `workflow_run` of Deploy (`completed`). GitHub runs it from the default branch's file on `main`,
+  so a pull request cannot edit it. Its one job runs only when the run was a `pull_request`, passed,
+  came from this repository and its PR targets `main`; it uses the `preview` environment on a
+  GitHub-hosted runner with `contents: read`, `actions: read`, `pull-requests: write`. With no
+  `CLOUDFLARE_PREVIEW_API_TOKEN` it prints a `::notice::` and passes. Otherwise it checks out the PR's
+  base branch (`main`), never the PR head, so `wrangler.jsonc`, `package.json`, the lockfile and
+  `open-next.config.ts` are `main`'s and a PR cannot bind the production database to the preview
+  Worker; runs `npm ci` there; downloads `preview-bundle` from the triggering run into `.open-next/`;
+  refuses it if it holds a symlink; copies `.open-next/cache` into
+  `.open-next/assets/cdn-cgi/_next_cache`; then runs `wrangler versions upload --env preview
+  --preview-alias pr-<n>` from `main`'s dependencies, the token on that step only. It does not call
+  `opennextjs-cloudflare upload`, because that imports the compiled config
+  `.open-next/.build/open-next.config.edge.mjs` from the artefact; for this site's static-assets
+  incremental cache, with skew protection off, the cache copy is the only thing it adds to wrangler
+  (`@opennextjs/cloudflare` 1.20.17 `dist/cli/commands/upload.js` and `populate-cache.js`). Checked 20
+  November 2026 with `--dry-run --outdir` against one `npm run cf:build` output: the two ways produce an
+  identical `worker.js` and identical assets. The PR number and head SHA come from the event, never the
+  artefact; the job then posts or edits the one PR comment with
   `https://pr-<n>-website-preview.<subdomain>.workers.dev`. The preview database starts empty: seeding
   it means applying the migrations (Clarifications, call 3), which the `main` job does (`--env
   preview`), because a pull request cannot write D1 (deploy guard below).
-- Deploy guard (ops #610, Fraser's ruling of 19 November 2026): `CLOUDFLARE_API_TOKEN` lives in the
-  GitHub environments, not the repository. `production` (deployment branches: `main` only) holds the
-  account token; `preview` holds a token with Individual Workers Editor on `website-preview` only, or
-  nothing until it is created, in which case previews skip with a notice. Cloudflare tokens can be
-  limited to single Workers but not to single D1 databases (permission groups, read 19 November
-  2026), so the preview token has no D1 access at all.
-- Pull requests where `secrets.CLOUDFLARE_API_TOKEN` is empty (Dependabot, forks) skip the Cloudflare
-  steps with a `::notice::` and pass; CI still builds them.
-- Pushes to `main` while the secret is absent do the same: the deploy job prints a `::notice::` and
+- Deploy guard (ops #610, Fraser's ruling of 19 November 2026; tightened for koinori #2925 F3 and F4 on
+  20 November 2026): no Cloudflare token is a repository secret. `production` (deployment branches:
+  `main` only) holds `CLOUDFLARE_API_TOKEN`, the account token. `Preview` (deployment branches: `main`
+  only, set once this change is on `main`) holds `CLOUDFLARE_PREVIEW_API_TOKEN`, a token with
+  Individual Workers Editor on `website-preview` only, or nothing until it is created, in which case
+  previews skip with a notice. The distinct name means a missing environment secret can never fall
+  back to a repository or organisation secret called `CLOUDFLARE_API_TOKEN` (F4). The branch policy is
+  the enforcement: a pull request that edits a workflow to read `Preview` is refused the environment.
+  Cloudflare tokens can be limited to single Workers but not to single D1 databases (permission
+  groups, read 19 November 2026), so the preview token has no D1 access at all, and Workers bindings
+  need no permission on the bound resource, which is why the bindings must come from `main`.
+- Not fixed here: a `workflow_run` workflow is active only once it is on `main`; the preview token is
+  not created until the other app repos carry the same fix on their default branches (koinori #2925).
+- Pushes to `main` while the secret is absent: the deploy job prints a `::notice::` and
   passes, so the build PR can merge before Fraser's account steps and Vercel keeps serving the site. A
   token that is present but rejected fails the job (Clarifications, build brief).
-- Secrets and variables: `CLOUDFLARE_API_TOKEN` (environment secret, per the deploy guard), `CLOUDFLARE_ACCOUNT_ID`, `KOFI_URL`, `NEXT_PUBLIC_CF_BEACON_TOKEN` (variables).
+- Secrets and variables: `CLOUDFLARE_API_TOKEN` (`production` environment secret) and
+  `CLOUDFLARE_PREVIEW_API_TOKEN` (`Preview` environment secret), per the deploy guard;
+  `CLOUDFLARE_ACCOUNT_ID`, `KOFI_URL`, `NEXT_PUBLIC_CF_BEACON_TOKEN` (variables).
 - Version URLs are public when enabled; the preview Worker only ever holds PR builds of a public repo
   with an empty table, so no Access gate is added.
 
@@ -216,7 +242,8 @@ counts page visits with Cloudflare Web Analytics, which does not collect persona
 ## Risks / Trade-offs
 
 - [Preview writes into production] Version URLs share the Worker's bindings. Mitigation: a separate
-  preview Worker and database (D2, Clarifications call 3).
+  preview Worker and database (D2, Clarifications call 3), whose bindings the upload always takes from
+  `main`, never from the pull request (D5, koinori #2925 F3).
 - [Support section vanishes] `KOFI_URL` missing in CI. Mitigation: the smoke script fails without the
   "Support the studio" button on production.
 - [Counts inflated by scripts] Mitigation: Origin check, allowlist, rate limit; the counts are a rough
