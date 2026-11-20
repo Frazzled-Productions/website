@@ -166,7 +166,7 @@ Each surface from the house rules (ops `openspec/config.yaml`), plus the website
   `scripts/check-node-version-drift.mjs:8,21` comments.
 - Requirements: none removed; eleven are rewritten (RENAMED and MODIFIED) where they named Vercel.
 - Deletion count: workflow and script lines added about 120 (`deploy.yml` about 80, `scripts/smoke.mjs`
-  about 40), removed 0; requirements added 15 (8 in `site-hosting`, 7 in `site-privacy-and-analytics`),
+  about 40), removed 0; requirements added 16 (9 in `site-hosting`, 7 in `site-privacy-and-analytics`),
   removed 0.
 - Why it adds more: the deploy, preview and smoke steps Vercel did for us now live in the repo.
 
@@ -195,3 +195,13 @@ Each surface from the house rules (ops `openspec/config.yaml`), plus the website
   secret is absent, the `main` deploy job skips with a notice and passes instead of failing, so merging
   the build PR does not turn CI red and Vercel keeps serving the site until the DNS switch. A token
   that is present but rejected still fails the job (`site-hosting` "Main deploys through CI").
+- 20 November 2026, preview deploy guard (koinori #2925 F3 and F4; Fraser approved finishing the
+  Cloudflare leftovers, ops #610): the pull request job no longer uses the `preview` environment or
+  any Cloudflare secret. It builds and keeps `.open-next/` as an artefact, and the new
+  `preview-upload.yml` (`workflow_run`, run from `main`) uploads it with `main`'s `wrangler.jsonc` and
+  dependencies and the new, distinct secret `CLOUDFLARE_PREVIEW_API_TOKEN`; the `Preview` environment
+  admits only `main` once this is merged. Before this, a pull request could edit `env.preview` to bind
+  the production database (Workers bindings need no permission on the bound resource) or edit the
+  workflow itself, and the job's `CLOUDFLARE_API_TOKEN` could fall back to a repository or
+  organisation secret of that name. The `cf:upload-preview` script is removed with it (design D5,
+  `site-hosting` "Each pull request gets a preview version on a separate Worker").

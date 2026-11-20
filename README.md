@@ -50,7 +50,6 @@ Environment variables (see `.env.example`):
 | `npm test` | Run the tests in `tests/` with Node's built-in test runner |
 | `npm run cf:build` | Build the site as a Cloudflare Worker with OpenNext (output in `.open-next/`) |
 | `npm run cf:preview` | Build, then serve the Worker locally under `wrangler dev` at http://localhost:8787 |
-| `npm run cf:upload-preview` | Upload a preview version to the `website-preview` Worker, aliased `pr-$PR_NUMBER` (CI only) |
 | `npm run cf:deploy` | Deploy the production Worker `website` (CI only) |
 | `npm run check:node-version` | Check that nothing contradicts the Node major in `.nvmrc` |
 | `npm run check:structure` | Check the **Project structure** block below against the contents of `app/` |
@@ -111,20 +110,27 @@ November 2026). The two hostnames are Worker Custom Domains attached in Cloudfla
 
 - **Push to `main`:** tests, `npm run cf:build`, D1 migrations applied to `website-events` and to
   `website-events-preview`, then `npm run cf:deploy` to the Worker `website`.
-- **Pull request from this repo:** the same build without the analytics token, and a preview version
-  uploaded to the separate `website-preview` Worker with the alias `pr-<number>`; a comment on the PR
-  gives its URL. Previews never touch production data, because version URLs share their Worker's
-  bindings. A migration the PR adds reaches the preview database only after it merges.
-- **No `CLOUDFLARE_API_TOKEN` in the job's environment** (Dependabot, forks, or the preview token not
-  created yet): the Cloudflare steps are skipped with a notice and the job passes.
+- **Pull request:** tests and the same build without the analytics token, with no Cloudflare token;
+  the built `.open-next/` is kept for a day as the artefact `preview-bundle`. When that run passes
+  for a branch of this repo into `main`, `.github/workflows/preview-upload.yml` uploads it as a preview
+  version of the separate `website-preview` Worker with the alias `pr-<number>`, and a comment on
+  the PR gives its URL. Previews never touch production data, because version URLs share their
+  Worker's bindings. A migration the PR adds reaches the preview database only after it merges.
+- **No token in the job's environment** (the preview token not created yet, or before the account is
+  set up): the Cloudflare steps are skipped with a notice and the job passes.
 
-**Deploy guard** (ops #610, 19 November 2026). The token is not a repository secret. Each job reads
-`CLOUDFLARE_API_TOKEN` from its GitHub environment: `production` admits only `main` and holds the
-account token (D1, R2 and Workers write); `preview` holds a token limited to the preview Workers (no
-D1 or R2: Cloudflare cannot limit a token to one D1 database), or nothing, so a pull request cannot
-write a live database or deploy the live Worker. The repository variables are `CLOUDFLARE_ACCOUNT_ID`,
-`KOFI_URL` and `NEXT_PUBLIC_CF_BEACON_TOKEN`. `wrangler.jsonc` holds the two D1 database ids, both
-created with `--jurisdiction=eu`.
+**Deploy guard** (ops #610, 19 November 2026; koinori #2925 F3 and F4, 20 November 2026). No
+Cloudflare token is a repository secret, and no pull request job reads one. `production` admits only
+`main` and holds `CLOUDFLARE_API_TOKEN`, the account token (D1, R2 and Workers write). `Preview` also
+admits only `main`, so only `preview-upload.yml` can use it; that workflow runs from `main` (GitHub
+runs `workflow_run` workflows from the default branch), takes `wrangler.jsonc`, `package.json`, the
+lockfile and `open-next.config.ts` from `main` rather than the PR, so a PR cannot point the preview at
+the production database, and runs nothing from the artefact. The preview token is stored only as the
+environment secret `CLOUDFLARE_PREVIEW_API_TOKEN` in `Preview`, never as `CLOUDFLARE_API_TOKEN`, and
+is limited to the `website-preview` Worker (no D1 or R2: Cloudflare cannot limit a token to one D1
+database). The repository variables are `CLOUDFLARE_ACCOUNT_ID`, `KOFI_URL` and
+`NEXT_PUBLIC_CF_BEACON_TOKEN`. `wrangler.jsonc` holds the two D1 database ids, both created with
+`--jurisdiction=eu`.
 
 ### Click counts
 

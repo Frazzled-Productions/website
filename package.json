@@ -16,7 +16,6 @@
     "test": "node --test 'tests/*.test.ts'",
     "cf:build": "opennextjs-cloudflare build",
     "cf:preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
-    "cf:upload-preview": "opennextjs-cloudflare upload --env preview --preview-alias \"pr-${PR_NUMBER:?set PR_NUMBER}\"",
     "cf:deploy": "opennextjs-cloudflare deploy"
   },
   "dependencies": {
