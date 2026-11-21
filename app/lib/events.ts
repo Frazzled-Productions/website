@@ -84,3 +84,4 @@ export function sendEvent(name: EventName): void {
     // Counting is best effort; the click itself must never fail.
   }
 }
+// Preview proof for ops #612: throwaway branch, closed unmerged.
