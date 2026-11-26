@@ -370,7 +370,7 @@ Source: `app/roast-conductor/support/page.tsx:21-26`, `app/roast-conductor/suppo
 
 ### Requirement: Roast Conductor free and unlock lists
 
-The support page SHALL list what is free and what the one-time unlock adds, at £2.99 in the UK, and state that later paid features join the same unlock. Cook together is in neither list (open issue #59).
+The support page SHALL list what is free and what the one-time unlock adds, at £4.99 in the UK and $4.99 in the US, and state that later paid features join the same unlock. Cook together is in neither list (open issue #59).
 
 Source: `app/roast-conductor/support/page.tsx:56-90`.
 
