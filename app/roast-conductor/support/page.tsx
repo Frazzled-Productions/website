@@ -70,7 +70,7 @@ export default function RoastConductorSupportPage() {
         <li>the Christmas and Easter themes</li>
       </ul>
       <p>
-        The one-time unlock (£2.99 in the UK) is for bigger and more personal meals:
+        The one-time unlock (£4.99 in the UK, $4.99 in the US) is for bigger and more personal meals:
       </p>
       <ul>
         <li>more than four dishes in a menu, for a full Christmas dinner or Thanksgiving</li>

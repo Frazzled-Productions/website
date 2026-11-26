@@ -169,13 +169,14 @@ PDF or text, and the Christmas and Easter themes (`app/roast-conductor/page.tsx:
 - **THEN** eight items appear under "Free, with every built-in dish and cut of meat:"
 
 ### Requirement: Unlock price (baseline, current behaviour)
-The product page SHALL state "A single £2.99 purchase adds:" with no country qualifier
-(`app/roast-conductor/page.tsx:124`). The price is hard-coded and does not vary by visitor. Issue #62
-records the difference from the support page.
+The product page SHALL state "A single £4.99 purchase ($4.99 in the US) adds:"
+(`app/roast-conductor/page.tsx:124`), matching the support page. The price is hard-coded and does not
+vary by visitor. The unlock went from £2.99 / $2.99 to £4.99 / $4.99 for new buyers on 26 November
+2026; existing buyers keep everything. The US qualifier closes issue #62.
 
 #### Scenario: Price shown to every visitor
 - **WHEN** a visitor anywhere opens the product page
-- **THEN** the price reads £2.99
+- **THEN** the price reads £4.99, with $4.99 given for the US
 
 ### Requirement: What the page says the unlock adds (baseline, current behaviour)
 The product page SHALL list ten items after the price: unlimited dishes, recipes from links (a pasted

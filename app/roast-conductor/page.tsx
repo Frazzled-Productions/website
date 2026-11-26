@@ -121,7 +121,7 @@ export default function RoastConductorPage() {
             <li key={item}>{item}</li>
           ))}
         </ul>
-        <p>A single £2.99 purchase adds:</p>
+        <p>A single £4.99 purchase ($4.99 in the US) adds:</p>
         <ul>
           {unlock.map((item) => (
             <li key={item}>{item}</li>
